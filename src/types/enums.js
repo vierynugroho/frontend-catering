@@ -4,6 +4,7 @@ const {
   ChartBarIcon,
   FolderIcon,
   UsersIcon,
+  FactoryIcon,
 } = require("lucide-react");
 
 export const navByRole = {
@@ -36,9 +37,9 @@ export const navByRole = {
       icon: <ChartBarIcon />,
     },
     {
-      title: "Settings",
-      url: "#",
-      icon: <FolderIcon />,
+      title: "Category",
+      url: "/admin/category",
+      icon: <FactoryIcon />,
     },
   ],
 };
