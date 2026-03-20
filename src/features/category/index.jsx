@@ -49,6 +49,7 @@ export default function CategoryTableData() {
 
   const handleOpenAddModal = () => {
     setModalMode("add");
+    setPayloadData(defaultValues);
     openModal();
   };
   const handleOpenEditModal = (data) => {
