@@ -171,7 +171,6 @@ export function useTableData({ onEdit, onDelete }) {
     },
   });
 
-
   return {
     table,
     currentPage,

@@ -1,0 +1,23 @@
+import { createMenu } from "@/services/menu";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+
+export function useCreateMenu({ onSuccessCallback } = {}) {
+  const queryClient = useQueryClient();
+
+  const create = useMutation({
+    mutationFn: createMenu,
+    onSuccess: (res) => {
+      queryClient.invalidateQueries({ queryKey: ["admin-menu"] });
+      toast.success(res.message);
+
+      onSuccessCallback?.();
+    },
+    onError: (error) => {
+      const message = error?.response?.data?.message || "Terjadi kesalahan";
+      toast.error(message);
+    },
+  });
+
+  return { create };
+}

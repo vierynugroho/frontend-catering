@@ -5,6 +5,7 @@ const {
   FolderIcon,
   UsersIcon,
   FactoryIcon,
+  SoupIcon,
 } = require("lucide-react");
 
 export const navByRole = {
@@ -29,15 +30,15 @@ export const navByRole = {
     {
       title: "Menu",
       url: "/admin/menu",
-      icon: <ListIcon />,
+      icon: <SoupIcon />,
     },
     {
-      title: "Users",
-      url: "#",
-      icon: <ChartBarIcon />,
+      title: "Pengguna",
+      url: "/admin/user",
+      icon: <UsersIcon />,
     },
     {
-      title: "Category",
+      title: "Kategori",
       url: "/admin/category",
       icon: <FactoryIcon />,
     },

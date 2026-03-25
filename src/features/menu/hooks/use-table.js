@@ -21,8 +21,18 @@ import {
   XCircleIcon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useCategories } from "./use-list";
-import { formatWIB } from "@/lib/utils";
+import { useMenus } from "./use-list";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
+import { formatRupiah } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
 export function useTableData({ onEdit, onDelete }) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,7 +44,7 @@ export function useTableData({ onEdit, onDelete }) {
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
 
-  const { data, isPending } = useCategories({
+  const { data, isPending } = useMenus({
     page: currentPage,
     ...(debouncedSearchParams && { name: debouncedSearchParams }),
     limit: 10,
@@ -94,28 +104,116 @@ export function useTableData({ onEdit, onDelete }) {
         },
       },
       {
-        accessorKey: "created_at",
-        header: "Tanggal dibuat",
-
+        accessorKey: "price",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Harga
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
         cell: ({ row }) => {
           return (
-            <div className="font-medium">
-              {formatWIB(row.original.created_at)}
+            <div className="ps-3 font-medium">
+              {formatRupiah(row.original.price)}
             </div>
           );
         },
       },
       {
-        accessorKey: "updated_at",
-        header: "Tanggal diperbarui",
+        accessorKey: "category",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Kategori
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+        cell: ({ row }) => {
+          return (
+            <div className="ps-3 font-medium">{row.original.category.name}</div>
+          );
+        },
+      },
+      {
+        accessorKey: "is_active",
+        header: "Status",
+
         cell: ({ row }) => {
           return (
             <div className="font-medium">
-              {formatWIB(row.original.updated_at)}
+              {row.original.is_active ? (
+                <Badge
+                  variant="secondary"
+                  className="border border-green-400 bg-green-50 text-green-800 dark:bg-green-900/70 dark:text-white/80"
+                >
+                  <BadgeCheckIcon />
+                  Aktif
+                </Badge>
+              ) : (
+                <Badge
+                  variant="secondary"
+                  className="border border-red-400 bg-red-50 text-red-800 dark:bg-red-900/70 dark:text-white/80"
+                >
+                  <XCircleIcon />
+                  Tidak Aktif
+                </Badge>
+              )}
             </div>
           );
         },
       },
+      {
+        accessorKey: "description",
+        header: "Deskripsi",
+
+        cell: ({ row }) => {
+          return <div className="font-medium">{row.original.description}</div>;
+        },
+      },
+      {
+        accessorKey: "images",
+        header: "Gambar",
+        cell: ({ row }) => {
+          return (
+            <Carousel
+              className="w-full"
+              plugins={[
+                Autoplay({
+                  delay: 2000,
+                }),
+              ]}
+            >
+              <CarouselContent className="cursor-pointer">
+                {row.original.images.map((_, index) => (
+                  <CarouselItem key={index}>
+                    <img
+                      src={_.url}
+                      alt={_.url}
+                      className="object-cover w-full h-32 rounded-sm"
+                    />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              {/* <CarouselPrevious />
+              <CarouselNext /> */}
+            </Carousel>
+          );
+        },
+      },
+
       {
         id: "actions",
 
@@ -170,7 +268,6 @@ export function useTableData({ onEdit, onDelete }) {
       },
     },
   });
-
 
   return {
     table,
