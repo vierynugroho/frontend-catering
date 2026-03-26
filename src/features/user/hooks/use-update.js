@@ -1,14 +1,14 @@
-import { updateCategory } from "@/services/category";
+import { updateUser } from "@/services/user";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export function useUpdateCategory({ onSuccessCallback } = {}) {
+export function useUpdateUser({ onSuccessCallback } = {}) {
   const queryClient = useQueryClient();
 
   const update = useMutation({
-    mutationFn: ({ id, payload }) => updateCategory(id, payload),
+    mutationFn: ({ id, payload }) => updateUser(id, payload),
     onSuccess: (res) => {
-      queryClient.invalidateQueries({ queryKey: ["admin-category"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-user"] });
       toast.success(res.message);
       onSuccessCallback?.();
     },

@@ -10,6 +10,7 @@ export const useLogout = () => {
   return useMutation({
     mutationFn: async () => {
       Cookies.remove("access_token", { path: "/" });
+      Cookies.remove("role", { path: "/" });
     },
     onSuccess: () => {
       queryClient.removeQueries({ queryKey: ["current-user"] });

@@ -5,29 +5,29 @@ import { TableData } from "./components/table-data";
 import { TableToolbar } from "./components/table-toolbar";
 import { CreateEditModal } from "./components/create-edit-modal";
 import { useModal } from "@/hooks/use-modal";
-import { categorySchema, defaultValues } from "./schema";
-import { useCreateCategory } from "./hooks/use-create";
-import { useUpdateCategory } from "./hooks/use-update";
+import { userSchema, defaultValues } from "./schema";
+import { useCreateUser } from "./hooks/use-create";
+import { useUpdateUser } from "./hooks/use-update";
 import { DeleteModal } from "@/components/modal/delete-modal";
-import { useDeleteCategory } from "./hooks/use-delete";
+import { useDeleteUser } from "./hooks/use-delete";
 
 export default function UserTableData() {
   // hooks
-  const { create } = useCreateCategory({
+  const { create } = useCreateUser({
     onSuccessCallback: () => {
       closeModal();
       setPayloadData(defaultValues);
       setErrors({});
     },
   });
-  const { update } = useUpdateCategory({
+  const { update } = useUpdateUser({
     onSuccessCallback: () => {
       closeModal();
       setPayloadData(defaultValues);
       setErrors({});
     },
   });
-  const { deleted } = useDeleteCategory({
+  const { deleted } = useDeleteUser({
     onSuccessCallback: () => {
       closeModal();
       setPayloadData(defaultValues);
@@ -37,11 +37,7 @@ export default function UserTableData() {
 
   // payload data
   const [errors, setErrors] = useState({});
-  const [payloadData, setPayloadData] = useState({
-    id: "",
-    name: "",
-    slug: "",
-  });
+  const [payloadData, setPayloadData] = useState(defaultValues);
 
   // modal handler
   const { isOpen, openModal, closeModal } = useModal();
@@ -56,8 +52,13 @@ export default function UserTableData() {
     setModalMode("edit");
     setPayloadData({
       id: data.id,
-      name: data.name,
-      slug: data.slug,
+      fullname: data.fullname,
+      email: data.email,
+      customer_type: data.customer_type,
+      role: data.role,
+      password: "",
+      phone: data.phone ?? "",
+      adress: data.adress ?? "",
     });
     openModal();
   };
@@ -75,7 +76,7 @@ export default function UserTableData() {
   const handleSubmitModal = async () => {
     console.log("error", errors);
 
-    const result = categorySchema.safeParse(payloadData);
+    const result = userSchema.safeParse(payloadData);
     if (!result.success) {
       const fieldErrors = result.error.flatten().fieldErrors;
       setErrors(fieldErrors);
@@ -87,7 +88,13 @@ export default function UserTableData() {
       create.mutate(payload);
     }
     if (modalMode === "edit") {
-      const { id, ...payload } = payloadData;
+      const { id, password, ...rest } = payloadData;
+
+      const payload = {
+        ...rest,
+        ...(password !== "" ? { password } : {}),
+      };
+
       update.mutate({ id, payload });
     }
   };
@@ -119,7 +126,7 @@ export default function UserTableData() {
         queryParams={queryParams}
         setQueryParams={setQueryParams}
         onAdd={handleOpenAddModal}
-        addLabel="Tambah Kategori"
+        addLabel="Tambah Pengguna"
       />
       {/* table */}
       <TableData
@@ -153,7 +160,7 @@ export default function UserTableData() {
           onSubmit={handleDeleteModal}
           selectedData={payloadData}
           isPending={deleted.isPending}
-          title="Hapus Kategori"
+          title="Hapus Pengguna"
         />
       )}
     </>

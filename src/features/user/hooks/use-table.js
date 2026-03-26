@@ -13,16 +13,16 @@ import {
 } from "@tanstack/react-table";
 import {
   ArrowUpDown,
-  BadgeCheckIcon,
-  Grid2X2,
   Pencil,
   Trash2,
   EllipsisVerticalIcon,
+  BadgeCheckIcon,
   XCircleIcon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useCategories } from "./use-list";
+import { useUser } from "./use-list";
 import { formatWIB } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
 export function useTableData({ onEdit, onDelete }) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,9 +34,9 @@ export function useTableData({ onEdit, onDelete }) {
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
 
-  const { data, isPending } = useCategories({
+  const { data, isPending } = useUser({
     page: currentPage,
-    ...(debouncedSearchParams && { name: debouncedSearchParams }),
+    ...(debouncedSearchParams && { search: debouncedSearchParams }),
     limit: 10,
   });
 
@@ -56,7 +56,7 @@ export function useTableData({ onEdit, onDelete }) {
     data: data?.data || [],
     columns: [
       {
-        accessorKey: "name",
+        accessorKey: "fullname",
         header: ({ column }) => {
           return (
             <Button
@@ -71,11 +71,13 @@ export function useTableData({ onEdit, onDelete }) {
           );
         },
         cell: ({ row }) => {
-          return <div className="ps-3 font-medium"> {row.original.name} </div>;
+          return (
+            <div className="ps-3 font-medium"> {row.original.fullname} </div>
+          );
         },
       },
       {
-        accessorKey: "slug",
+        accessorKey: "email",
         header: ({ column }) => {
           return (
             <Button
@@ -84,39 +86,165 @@ export function useTableData({ onEdit, onDelete }) {
                 column.toggleSorting(column.getIsSorted() === "asc")
               }
             >
-              Slug
+              Email
               <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
           );
         },
         cell: ({ row }) => {
-          return <div className="ps-3 font-medium"> {row.original.slug} </div>;
+          return <div className="ps-3 font-medium"> {row.original.email} </div>;
         },
       },
       {
-        accessorKey: "created_at",
-        header: "Tanggal dibuat",
+        accessorKey: "role",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Role
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+        cell: ({ row }) => {
+          return <div className="ps-3 font-medium"> {row.original.role} </div>;
+        },
+      },
+      {
+        accessorKey: "customer_type",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Tipe Pelanggan
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+        cell: ({ row }) => {
+          return (
+            <div className="ps-3 font-medium">
+              {" "}
+              {row.original.customer_type}{" "}
+            </div>
+          );
+        },
+      },
+      {
+        accessorKey: "phone",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Telepon
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+        cell: ({ row }) => {
+          return (
+            <div className="ps-3 font-medium">{row.original.phone ?? "-"}</div>
+          );
+        },
+      },
+      {
+        accessorKey: "adress",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Alamat
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+        cell: ({ row }) => {
+          return (
+            <div className="ps-3 font-medium">{row.original.adress ?? "-"}</div>
+          );
+        },
+      },
+      {
+        accessorKey: "is_active",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Status
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+        cell: ({ row }) => {
+          return (
+            <div className="ps-3 font-medium">
+              {row.original.is_active === true ? (
+                <Badge
+                  variant="secondary"
+                  className="border border-green-400 bg-green-50 text-green-800 dark:bg-green-900/70 dark:text-white/80"
+                >
+                  <BadgeCheckIcon />
+                  Aktif
+                </Badge>
+              ) : (
+                <Badge
+                  variant="secondary"
+                  className="border border-red-400 bg-red-50 text-red-800 dark:bg-red-900/70 dark:text-white/80"
+                >
+                  <XCircleIcon />
+                  Tidak Aktif
+                </Badge>
+              )}
+            </div>
+          );
+        },
+      },
 
-        cell: ({ row }) => {
-          return (
-            <div className="font-medium">
-              {formatWIB(row.original.created_at)}
-            </div>
-          );
-        },
-      },
+      // {
+      //   accessorKey: "created_at",
+      //   header: "Tanggal dibuat",
+
+      //   cell: ({ row }) => {
+      //     return (
+      //       <div className="font-medium">
+      //         {formatWIB(row.original.created_at)}
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   accessorKey: "updated_at",
+      //   header: "Tanggal diperbarui",
+      //   cell: ({ row }) => {
+      //     return (
+      //       <div className="font-medium">
+      //         {formatWIB(row.original.updated_at)}
+      //       </div>
+      //     );
+      //   },
+      // },
       {
-        accessorKey: "updated_at",
-        header: "Tanggal diperbarui",
-        cell: ({ row }) => {
-          return (
-            <div className="font-medium">
-              {formatWIB(row.original.updated_at)}
-            </div>
-          );
-        },
-      },
-      {
+        size: 10,
         id: "actions",
 
         cell: ({ row }) => {

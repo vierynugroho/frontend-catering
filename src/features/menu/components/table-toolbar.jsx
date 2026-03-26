@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { format } from "date-fns";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -6,7 +7,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { ChevronDown, SearchIcon, PlusIcon, Columns } from "lucide-react";
+import {
+  ChevronDown,
+  SearchIcon,
+  PlusIcon,
+  Columns,
+  RefreshCcw,
+} from "lucide-react";
+import { FormDatePicker } from "@/components/form/form-datepicker";
+import { useState } from "react";
 
 export const TableToolbar = ({
   table,
@@ -28,22 +37,58 @@ export const TableToolbar = ({
         )}
       </div>
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        {/* Input with search icon */}
-        <div className="relative ">
-          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-            <SearchIcon className="h-5 w-5" />
-          </span>
-          <Input
-            placeholder="Cari berdasarkan nama..."
-            value={queryParams.search}
-            onChange={(e) =>
-              setQueryParams((prev) => ({
-                ...prev,
-                search: e.target.value,
-              }))
-            }
-            className="h-10 pl-10"
-          />
+        <div className="flex gap-4 items-center">
+          <div className="grid grid-cols-3 gap-4 items-center">
+            {/* Input with search icon */}
+            <div className="relative">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                <SearchIcon className="h-5 w-5" />
+              </span>
+              <Input
+                placeholder="Cari berdasarkan nama..."
+                value={queryParams.search}
+                onChange={(e) =>
+                  setQueryParams((prev) => ({
+                    ...prev,
+                    search: e.target.value,
+                  }))
+                }
+                className="h-10 pl-10"
+              />
+            </div>
+
+            <FormDatePicker
+              name="from"
+              placeholder="Tanggal mulai"
+              value={queryParams.from}
+              onChange={(val) =>
+                setQueryParams((prev) => ({
+                  ...prev,
+                  from: val,
+                }))
+              }
+              showLabel={false}
+            />
+            <FormDatePicker
+              placeholder="Tanggal selesai"
+              name="to"
+              value={queryParams.to}
+              onChange={(val) =>
+                setQueryParams((prev) => ({
+                  ...prev,
+                  to: val,
+                }))
+              }
+              showLabel={false}
+            />
+          </div>
+          <Button
+            className="rounded-full"
+            variant="outline"
+            onClick={() => setQueryParams({ from: "", to: "" })}
+          >
+            <RefreshCcw className="h-4 w-4" />
+          </Button>
         </div>
 
         <div className="flex w-full items-center gap-3 sm:w-auto">

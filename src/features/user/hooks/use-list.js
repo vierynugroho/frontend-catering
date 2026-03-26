@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { getCategory } from "@/services/category";
+import { getUser } from "@/services/user";
 
-export const useCategories = (params) => {
+export const useUser = (params) => {
   return useQuery({
-    queryKey: ["admin-category", params],
+    queryKey: ["admin-user", params],
     queryFn: async () => {
-      const res = await getCategory(params);
+      const res = await getUser(params);
       return res;
     },
   });

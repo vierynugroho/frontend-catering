@@ -1,14 +1,14 @@
-import { deleteCategory } from "@/services/category";
+import { deleteUser } from "@/services/user";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export function useDeleteCategory({ onSuccessCallback } = {}) {
+export function useDeleteUser({ onSuccessCallback } = {}) {
   const queryClient = useQueryClient();
 
   const deleted = useMutation({
-    mutationFn: ({ id }) => deleteCategory(id),
+    mutationFn: ({ id }) => deleteUser(id),
     onSuccess: (res) => {
-      queryClient.invalidateQueries({ queryKey: ["admin-category"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-user"] });
       toast.success(res.message);
       onSuccessCallback?.();
     },

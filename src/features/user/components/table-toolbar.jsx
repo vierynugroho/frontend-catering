@@ -18,7 +18,7 @@ export const TableToolbar = ({
   return (
     <div className="grid grid-cols-1 gap-4 ">
       <div className="flex justify-between items-center">
-        <h1 className="font-bold text-2xl">Kategori</h1>
+        <h1 className="font-bold text-2xl">Pengguna</h1>
 
         {onAdd && (
           <Button variant="default" onClick={onAdd}>

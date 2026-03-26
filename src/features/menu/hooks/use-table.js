@@ -38,6 +38,8 @@ export function useTableData({ onEdit, onDelete }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [queryParams, setQueryParams] = useState({
     search: "",
+    from: "",
+    to: "",
   });
   const [debouncedSearchParams, setDebouncedSearchParams] = useState("");
   const [sorting, setSorting] = useState([]);
@@ -47,6 +49,8 @@ export function useTableData({ onEdit, onDelete }) {
   const { data, isPending } = useMenus({
     page: currentPage,
     ...(debouncedSearchParams && { name: debouncedSearchParams }),
+    ...(queryParams.from && { from: queryParams.from }),
+    ...(queryParams.to && { to: queryParams.to }),
     limit: 10,
   });
 
@@ -149,12 +153,23 @@ export function useTableData({ onEdit, onDelete }) {
       },
       {
         accessorKey: "is_active",
-        header: "Status",
-
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Status
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
         cell: ({ row }) => {
           return (
-            <div className="font-medium">
-              {row.original.is_active ? (
+            <div className="ps-3 font-medium">
+              {row.original.is_active === true ? (
                 <Badge
                   variant="secondary"
                   className="border border-green-400 bg-green-50 text-green-800 dark:bg-green-900/70 dark:text-white/80"

@@ -37,11 +37,7 @@ export default function CategoryTableData() {
 
   // payload data
   const [errors, setErrors] = useState({});
-  const [payloadData, setPayloadData] = useState({
-    id: "",
-    name: "",
-    slug: "",
-  });
+  const [payloadData, setPayloadData] = useState(defaultValues);
 
   // modal handler
   const { isOpen, openModal, closeModal } = useModal();

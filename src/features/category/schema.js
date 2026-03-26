@@ -6,6 +6,7 @@ export const categorySchema = z.object({
 });
 
 export const defaultValues = {
+  id: "",
   name: "",
   slug: "",
 };

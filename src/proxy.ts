@@ -3,13 +3,30 @@ import { NextResponse } from "next/server";
 export function proxy(request) {
   const { pathname } = request.nextUrl;
 
-  // Allow public
-  const publicRoutes = ["/", "/customer/menu", "/login", "/register"];
+  const token = request.cookies.get("access_token")?.value;
+  const role = request.cookies.get("role")?.value;
+
+  if (pathname === "/") {
+    if (!token) {
+      return NextResponse.redirect(new URL("/customer/menu", request.url));
+    }
+
+    if (role === "admin") {
+      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+    }
+
+    if (role === "customer") {
+      return NextResponse.redirect(new URL("/customer/menu", request.url));
+    }
+
+    return NextResponse.next();
+  }
+
+  const publicRoutes = ["/customer/menu", "/login", "/register"];
   if (publicRoutes.includes(pathname)) {
     return NextResponse.next();
   }
 
-  // Allow next internals & static files
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/favicon.ico") ||
@@ -18,11 +35,16 @@ export function proxy(request) {
     return NextResponse.next();
   }
 
-  const token = request.cookies.get("access_token")?.value;
-
   if (!token) {
-    const url = new URL("/login", request.url);
-    return NextResponse.redirect(url);
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  if (pathname.startsWith("/admin") && role !== "admin") {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
+  if (pathname.startsWith("/customer") && role !== "customer") {
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return NextResponse.next();
