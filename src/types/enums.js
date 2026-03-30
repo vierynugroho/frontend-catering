@@ -42,5 +42,10 @@ export const navByRole = {
       url: "/admin/category",
       icon: <FactoryIcon />,
     },
+    {
+      title: "Stock",
+      url: "/admin/stock",
+      icon: <FactoryIcon />,
+    },
   ],
 };
