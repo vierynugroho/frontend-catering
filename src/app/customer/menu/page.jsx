@@ -1,9 +1,5 @@
-import React from "react";
+import MenuData from "@/features/customer-menu";
 
 export default function MenuPages() {
-  return (
-    <>
-      <h1>Menu public customer</h1>
-    </>
-  );
+  return <MenuData />;
 }

@@ -62,13 +62,13 @@ export default function MenuTableData() {
     });
     openModal();
   };
+  console.log("payload data", payloadData);
 
   const handleOpenDeleteModal = (data) => {
     setModalMode("delete");
     setPayloadData({
       id: data.id,
       name: data.name,
-      slug: data.slug,
     });
     openModal();
   };

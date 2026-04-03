@@ -12,7 +12,9 @@ export const menuSchema = z.object({
   is_active: z.boolean(),
 
   images: z
-    .array(z.instanceof(File))
+    .array(
+      z.union([z.instanceof(File), z.object({}).passthrough(), z.string()]),
+    )
     .min(1, "Minimal 1 gambar")
     .max(5, "Maksimal 5 gambar"),
 });
