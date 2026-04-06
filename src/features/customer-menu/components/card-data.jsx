@@ -32,7 +32,6 @@ export const CardData = ({ queryParams }) => {
     ...(queryParams.to && { to: queryParams.to }),
   });
 
-  console.log("dari card", queryParams);
 
   useEffect(() => {
     const timer = setTimeout(

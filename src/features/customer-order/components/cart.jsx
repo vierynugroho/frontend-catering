@@ -5,16 +5,15 @@ import useCartStore from "@/store/use-cart-store";
 import { formatRupiah } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
+import { Spinner } from "@/components/ui/spinner";
 
-export const Cart = () => {
+export const Cart = ({ handleOrder, orderIsPending }) => {
   const { cart, addToCart, removeFromCart, getSubtotal, updateQuantity } =
     useCartStore();
 
-  const router = useRouter();
-
   return (
     <>
-      <Card className="rounded-md   flex-1 overflow-auto">
+      <Card className="rounded-md flex-1 overflow-auto ring-0">
         <CardHeader>
           <CardTitle className="font-semibold">Keranjang</CardTitle>
         </CardHeader>
@@ -73,7 +72,8 @@ export const Cart = () => {
           )}
         </CardContent>
       </Card>
-      <Card className={`rounded-md bg-muted ${cart.length <= 0 && "hidden"}`}>
+      {/* ${cart.length <= 0 && "hidden"} */}
+      <Card className={`rounded-md bg-muted `}>
         <div data-slot="card-content" className="px-6">
           <div className="space-y-2">
             <div className="flex justify-between">
@@ -84,9 +84,11 @@ export const Cart = () => {
           <div className="mt-6 flex gap-2">
             <Button
               className="w-full"
-              onClick={() => router.push("/customer/order")}
+              onClick={() => handleOrder()}
+              disabled={orderIsPending}
             >
-              Buat Pesanan
+              {orderIsPending && <Spinner />}
+              Pesan
             </Button>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 const useCartStore = create((set, get) => ({
-  cart: [], // Struktur: [{ id, quantity, price }]
+  cart: [],
 
   // Action: Tambah / On Add
   addToCart: (product) => {
@@ -66,7 +66,7 @@ const useCartStore = create((set, get) => ({
       });
     }
   },
-
+  clearCart: () => set({ cart: [] }),
   // Selector: Menghitung Subtotal
   // Kamu bisa panggil ini langsung di UI: const subtotal = useCartStore(state => state.getSubtotal())
   getSubtotal: () => {

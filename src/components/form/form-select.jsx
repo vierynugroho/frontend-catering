@@ -39,7 +39,9 @@ export function FormSelect({
       )}
 
       <Select value={value ?? ""} onValueChange={(val) => onChange?.(val)}>
-        <SelectTrigger className={cn("w-full", triggerClassName)}>
+        <SelectTrigger
+          className={cn("w-full", error && "border-red-500", triggerClassName)}
+        >
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
 
