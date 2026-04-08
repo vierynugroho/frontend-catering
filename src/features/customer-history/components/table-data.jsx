@@ -8,13 +8,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { formatRupiah, formatWIB } from "@/lib/utils";
 import { flexRender } from "@tanstack/react-table";
 import {
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
+  ReceiptText,
 } from "lucide-react";
+import { renderOrderStatus } from "../utils";
+import { useRouter } from "next/navigation";
 
 export function TableData({
   table,
@@ -24,11 +28,12 @@ export function TableData({
   isPending,
 }) {
   console.log("from table map", data?.data);
+  const router = useRouter();
 
   return (
     <div>
       {/* Table */}
-      <div className="overflow-hidden rounded-md border">
+      <div className="hidden md:block overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -85,6 +90,70 @@ export function TableData({
             )}
           </TableBody>
         </Table>
+      </div>
+
+      {/* --- MOBILE VIEW (CARDS) --- */}
+      <div className="grid grid-cols-1 gap-3 md:hidden">
+        {isPending ? (
+          <div className="flex justify-center py-10">
+            <Spinner />
+          </div>
+        ) : (
+          data?.data?.map((order) => (
+            <div
+              key={order.id}
+              className="group overflow-hidden rounded-xl border bg-card shadow-sm active:scale-[0.98] transition-transform"
+              onClick={() => router.push(`/customer/history/${order.id}`)}
+            >
+              {/* Card Header: Tanggal & Status */}
+              <div className="flex flex-col gap-2  p-4 bg-muted/20 border-b">
+                <div className="flex justify-between items-center gap-2">
+                  <ReceiptText className="w-6 h-6 text-muted-foreground" />
+                  {renderOrderStatus(order.order_status)}
+                </div>
+                <span className="text-[11px] text-end font-medium text-muted-foreground uppercase tracking-wider">
+                  {formatWIB(order.order_date)}
+                </span>
+              </div>
+
+              {/* Card Body: Menu & Info Utama */}
+              <div className="p-4 space-y-3">
+                <div>
+                  <h3 className="text-base font-bold text-foreground leading-tight">
+                    {order.code}
+                  </h3>
+                  <p className="text-sm text-muted-foreground mt-1 line-clamp-1">
+                    {order.items[0]?.menu_name}
+                    {order.items.length > 1 && (
+                      <span className="text-primary font-medium">
+                        {` +${order.items.length - 1} menu lainnya`}
+                      </span>
+                    )}
+                  </p>
+                </div>
+
+                <div className="flex justify-between items-end pt-2">
+                  <div>
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold">
+                      Total Pembayaran
+                    </p>
+                    <p className="text-lg font-extrabold text-primary">
+                      {formatRupiah(order.final_price)}
+                    </p>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    className="h-8 text-xs font-bold px-4 rounded-full"
+                    onClick={() => router.push(`/customer/history/${order.id}`)}
+                  >
+                    Lihat Detail
+                  </Button>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
       {/* Pagination */}
