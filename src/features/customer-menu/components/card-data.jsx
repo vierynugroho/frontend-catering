@@ -50,11 +50,11 @@ export const CardData = ({ queryParams }) => {
   }
 
   return (
-    <div className="grid grid-cols-4 gap-4 pb-20">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-3 lg:gap-4 pb-20">
       {data?.data?.map((item) => (
         <Card
           key={item.id}
-          className="relative rounded-md mx-auto w-full max-w-sm pt-0"
+          className="relative rounded-md w-full pt-0 hover:shadow-lg transition-shadow overflow-hidden"
         >
           <Carousel
             className="w-full"
@@ -70,19 +70,27 @@ export const CardData = ({ queryParams }) => {
                   <img
                     src={_.url}
                     alt={_.url}
-                    className="relative z-20 aspect-video w-full object-cover h-40"
+                    className="relative z-20 aspect-video w-full object-cover h-24 sm:h-28 md:h-32 lg:h-40"
                   />
                 </CarouselItem>
               ))}
             </CarouselContent>
           </Carousel>
-          <CardHeader>
-            <CardTitle className="text-sm">{item.name}</CardTitle>
+          <CardHeader className="p-2 sm:p-3 md:p-4">
+            <CardTitle className="text-xs sm:text-sm md:text-sm line-clamp-2">
+              {item.name}
+            </CardTitle>
             <CardDescription>
-              <div className="flex items-center justify-between">
-                <p>{formatRupiah(item.price)}</p>
-                <Button variant="outline" onClick={() => addToCart(item)}>
-                  <ShoppingCart />
+              <div className="flex sm:flex-row sm:justify-between flex-col gap-2 mt-2">
+                <p className="text-xs sm:text-sm font-semibold">
+                  {formatRupiah(item.price)}
+                </p>
+                <Button
+                  variant="outline"
+                  onClick={() => addToCart(item)}
+                  className="py-1.5 sm:py-2 px-2 sm:px-3 text-xs sm:text-sm"
+                >
+                  <ShoppingCart className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                 </Button>
               </div>
             </CardDescription>

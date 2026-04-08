@@ -4,6 +4,8 @@ import { TableToolbar } from "./components/table-toolbar";
 import { CardData } from "./components/card-data";
 import { Cart } from "./components/cart";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { FloatingCart } from "./components/floating-cart";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function MenuData() {
   const [queryParams, setQueryParams] = useState({
@@ -11,21 +13,35 @@ export default function MenuData() {
     from: "",
     to: "",
   });
+  const isMobile = useIsMobile();
+  const [showMobileCart, setShowMobileCart] = useState(false);
+
   return (
-    <div className="flex gap-6 flex-row h-[calc(100vh-12rem)] min-h-0 overflow-hidden">
-      <div className="w-9/12 pt-1">
+    <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 h-[calc(100vh-12rem)] min-h-0 overflow-hidden">
+      <div className="flex-1 pt-1 min-w-0 flex flex-col overflow-hidden">
         <TableToolbar
           queryParams={queryParams}
           setQueryParams={setQueryParams}
         />
-        {/* Gunakan ScrollArea dengan flex-1 h-full */}
-        <ScrollArea className="flex-1 h-full mt-6 pr-4">
-          <CardData queryParams={queryParams} />
+        <ScrollArea className="flex-1 mt-6">
+          <div className="sm:pr-4">
+            <CardData queryParams={queryParams} />
+          </div>
         </ScrollArea>
       </div>
-      <div className="w-3/12 hidden flex-col gap-4 group-data-[theme-content-layout=centered]/layout:h-[calc(100vh-8rem)] group-data-[theme-content-layout=full]/layout:h-[calc(100vh-6rem)] lg:col-span-2 lg:flex ">
+
+      {/* Desktop Cart Sidebar */}
+      <div className="hidden lg:flex lg:w-3/12 flex-col gap-4 group-data-[theme-content-layout=centered]/layout:h-[calc(100vh-8rem)] group-data-[theme-content-layout=full]/layout:h-[calc(100vh-6rem)]">
         <Cart />
       </div>
+
+      {/* Mobile Floating Cart Button */}
+      {isMobile && (
+        <FloatingCart
+          isOpen={showMobileCart}
+          onOpenChange={setShowMobileCart}
+        />
+      )}
     </div>
   );
 }

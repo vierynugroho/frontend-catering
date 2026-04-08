@@ -4,7 +4,6 @@ import { Minus, Plus } from "lucide-react";
 import useCartStore from "@/store/use-cart-store";
 import { formatRupiah } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
 
 export const Cart = ({ handleOrder, orderIsPending }) => {

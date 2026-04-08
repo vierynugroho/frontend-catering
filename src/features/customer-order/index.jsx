@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { FormData } from "./components/form-data";
 import { Cart } from "./components/cart";
+import { FloatingCart } from "./components/floating-cart";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { orderSchema } from "./schema";
 import { useCheckOrderStock } from "./hooks/use-check-order-stock";
@@ -9,6 +10,7 @@ import useCartStore from "@/store/use-cart-store";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useCreateOrder } from "./hooks/use-create-order";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function OrderPageData() {
   const [payloadData, setPayloadData] = useState({
@@ -23,6 +25,7 @@ export default function OrderPageData() {
 
   // hooks
   const route = useRouter();
+  const isMobile = useIsMobile();
   const { checkStock, checkStockResult } = useCheckOrderStock();
   const { cart, clearCart } = useCartStore();
   const { create } = useCreateOrder({
@@ -31,6 +34,7 @@ export default function OrderPageData() {
     },
   });
   const [errors, setErrors] = useState({});
+  const [showMobileCart, setShowMobileCart] = useState(false);
 
   const handleOrder = async () => {
     console.log("errors", errors);
@@ -70,8 +74,8 @@ export default function OrderPageData() {
   };
 
   return (
-    <div className="flex gap-6 flex-row h-[calc(100vh-12rem)] min-h-0 overflow-hidden">
-      <div className="w-9/12 ">
+    <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 h-[calc(100vh-12rem)] min-h-0 overflow-hidden">
+      <div className="flex-1 min-w-0 flex flex-col overflow-hidden">
         <FormData
           payloadData={payloadData}
           setPayloadData={setPayloadData}
@@ -80,9 +84,22 @@ export default function OrderPageData() {
           checkStockResult={checkStockResult}
         />
       </div>
-      <div className="w-3/12 hidden flex-col gap-4 group-data-[theme-content-layout=centered]/layout:h-[calc(100vh-8rem)] group-data-[theme-content-layout=full]/layout:h-[calc(100vh-6rem)] lg:col-span-2 lg:flex ">
+
+      {/* Desktop Cart Sidebar */}
+      <div className="hidden lg:flex lg:w-3/12 flex-col gap-4 group-data-[theme-content-layout=centered]/layout:h-[calc(100vh-8rem)] group-data-[theme-content-layout=full]/layout:h-[calc(100vh-6rem)]">
         <Cart orderIsPending={create.isPending} handleOrder={handleOrder} />
       </div>
+
+      {/* Mobile Floating Cart Button */}
+      {isMobile && (
+        <FloatingCart
+          isOpen={showMobileCart}
+          onOpenChange={setShowMobileCart}
+          orderIsPending={create.isPending}
+          handleOrder={handleOrder}
+          payloadData={payloadData}
+        />
+      )}
     </div>
   );
 }
