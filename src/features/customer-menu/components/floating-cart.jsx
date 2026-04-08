@@ -31,7 +31,7 @@ export const FloatingCart = ({ isOpen, onOpenChange }) => {
       {/* Floating Button */}
       <Button
         onClick={() => onOpenChange(true)}
-        className="fixed bottom-6 right-6 rounded-full w-14 h-14 p-0 shadow-lg z-40 flex items-center justify-center"
+        className="fixed bottom-16 right-6 rounded-full w-14 h-14 p-0 shadow-lg z-100 flex items-center justify-center"
       >
         <div className="relative">
           <ShoppingCart className="w-6 h-6" />
