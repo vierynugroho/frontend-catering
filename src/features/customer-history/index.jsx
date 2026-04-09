@@ -1,4 +1,6 @@
 "use client";
+import Cookies from "js-cookie";
+
 import React from "react";
 import { useTableData } from "./hooks/use-table";
 import { TableData } from "./components/table-data";
@@ -15,6 +17,8 @@ export default function OrderHistoryTableData() {
     data,
     isPending,
   } = useTableData();
+
+  console.log("cookies", Cookies.get("access_token"));
 
   return (
     <>

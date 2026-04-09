@@ -15,4 +15,22 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// Handle 401/403 responses
+// api.interceptors.response.use(
+//   (response) => response,
+//   (error) => {
+//     if (error.response?.status === 401 || error.response?.status === 403) {
+//       // Clear invalid token
+//       Cookies.remove("access_token", { path: "/" });
+//       Cookies.remove("role", { path: "/" });
+      
+//       // Redirect to login
+//       if (typeof window !== "undefined") {
+//         window.location.href = "/auth/login";
+//       }
+//     }
+//     return Promise.reject(error);
+//   }
+// );
+
 export default api;

@@ -11,6 +11,8 @@ import {
   ClipboardList,
   CheckCircle2,
   Clock,
+  ReceiptText,
+  MessageCircle,
 } from "lucide-react";
 
 import { TableToolbar } from "./components/table-toolbar";
@@ -28,13 +30,22 @@ import {
 import { useCustomerOrderDetail } from "./hooks/use-detail-order";
 import { formatRupiah, formatWIB } from "@/lib/utils";
 import { Spinner } from "@/components/ui/spinner";
+import { Button } from "@/components/ui/button";
+import { useCustomerValidateInvoice } from "./hooks/use-validate-invoice";
+import { useCustomerDownloadInvoice } from "./hooks/use-download-invoice";
 
 export default function OrderDetailHistoryTableData() {
   const { id } = useParams();
   const { data: response, isLoading } = useCustomerOrderDetail(id);
-  const orderData = response?.data;
+  const { data: validateResponse, isLoading: isValidateLoading } =
+    useCustomerValidateInvoice(id);
+  const { mutate: downloadInvoice, isPending: isDownloading } =
+    useCustomerDownloadInvoice();
 
-  if (isLoading) {
+  const orderData = response?.data;
+  const validateData = validateResponse?.data;
+
+  if (isLoading || isValidateLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px] animate-pulse">
         <Spinner />
@@ -49,6 +60,7 @@ export default function OrderDetailHistoryTableData() {
       </div>
     );
   }
+
   const statuses = [
     { label: "Disiapkan", key: "pesanan_disiapkan", icon: Package },
     {
@@ -66,6 +78,18 @@ export default function OrderDetailHistoryTableData() {
   );
   const safeStatusIndex =
     currentStatusIndex !== -1 ? currentStatusIndex : isCancelled ? -1 : 0;
+
+  const handleWhatsApp = () => {
+    const adminPhone = "6282234187211";
+
+    const message = `Halo Admin Catering Dhewi, saya ingin melakukan konfirmasi/mengajukan pembayaran untuk pesanan dengan kode invoice: *${orderData?.code || id}*.`;
+
+    const encodedMessage = encodeURIComponent(message);
+
+    const waUrl = `https://wa.me/${adminPhone}?text=${encodedMessage}`;
+
+    window.open(waUrl, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <div className="max-w-6xl mx-auto p-4 md:p-6 space-y-6 min-h-screen text-foreground sm:pb-0 pb-20">
@@ -238,6 +262,37 @@ export default function OrderDetailHistoryTableData() {
             </CardContent>
           </Card>
 
+          {/* WA */}
+          <Card className="border-border shadow-sm">
+            <CardHeader>
+              <CardTitle className="text-md font-bold flex justify-between">
+                Konfirmasi Pembayaran
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className=" flex-col flex gap-4">
+                <Button variant="secondary" onClick={handleWhatsApp}>
+                  <MessageCircle />
+                  Ajukan Pembayaran
+                </Button>
+                <Button
+                  variant="default"
+                  disabled={
+                    !validateData?.is_valid_to_download || isDownloading
+                  }
+                  onClick={() =>
+                    downloadInvoice({
+                      order_id: id,
+                      order_code: orderData?.code,
+                    })
+                  }
+                >
+                  {isDownloading ? <Spinner /> : <ReceiptText />}
+                  Download Invoice
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
           {/* Tracking Stepper */}
           <Card className="border-border shadow-sm">
             <CardHeader>

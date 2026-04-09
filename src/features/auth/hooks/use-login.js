@@ -16,7 +16,9 @@ export const useLogin = () => {
     Cookies.set("access_token", token, { path: "/", expires: 7 });
     Cookies.set("role", user.role, { path: "/", expires: 7 });
 
-    route.push(user.role === "admin" ? "/admin/dashboard" : "/");
+    
+
+    route.push(user.role === "admin" ? "/admin/dashboard" : "/customer/menu");
 
     queryClient.invalidateQueries({ queryKey: ["current-user"] });
     },

@@ -10,6 +10,18 @@ export const getPublicDetailOrder = async (id, params) => {
   return res.data;
 };
 
+export const validatePublicDownloadInvoice = async (order_id) => {
+  const res = await api.get(`/orders/${order_id}/invoice/validate`);
+  return res.data;
+};
+
+export const publicDownloadInvoice = async (order_id) => {
+  const res = await api.get(`/orders/${order_id}/invoice`, {
+    responseType: "blob",
+  });
+  return res.data;
+};
+
 export const checkDateOrderStock = async (payload) => {
   const res = await api.post("/orders/check-date-order-stock", payload);
   return res.data;
@@ -32,5 +44,14 @@ export const updateOrder = async (id, payload) => {
 
 export const deleteOrder = async (id) => {
   const res = await api.delete(`/orders/${id}`);
+  return res.data;
+};
+
+export const validateAdminDownloadInvoice = async (order_id) => {
+  const res = await api.get(`/admin/orders/${order_id}/invoice/validate`);
+  return res.data;
+};
+export const adminDownloadInvoice = async (order_id) => {
+  const res = await api.get(`/admin/orders/${order_id}/invoice`);
   return res.data;
 };
