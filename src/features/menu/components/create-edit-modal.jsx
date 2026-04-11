@@ -33,7 +33,6 @@ export function CreateEditModal({
     limit: 200,
   });
 
-  console.log("all", data);
 
   const categoryOptions = useMemo(() => {
     return (
@@ -43,7 +42,6 @@ export function CreateEditModal({
       })) || []
     );
   }, [data]);
-  console.log("aa", payloadData);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

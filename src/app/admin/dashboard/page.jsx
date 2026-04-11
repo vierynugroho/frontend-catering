@@ -1,9 +1,3 @@
-import React from "react";
+import DashboardData from "@/features/dashboard";
 
-export default function DashboardPages() {
-  return (
-    <>
-      <h1>Ini AdMIN</h1>
-    </>
-  );
-}
+export default DashboardData;

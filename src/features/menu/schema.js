@@ -1,4 +1,5 @@
 import { z } from "zod";
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 export const menuSchema = z.object({
   id: z.string().optional(),
@@ -12,11 +13,22 @@ export const menuSchema = z.object({
   is_active: z.boolean(),
 
   images: z
-    .array(
-      z.union([z.instanceof(File), z.object({}).passthrough(), z.string()]),
-    )
+    .array(z.any())
     .min(1, "Minimal 1 gambar")
-    .max(5, "Maksimal 5 gambar"),
+    .max(5, "Maksimal 5 gambar")
+    .refine(
+      (items) => {
+        return items.every((item) => {
+          if (item instanceof File) {
+            return item.size <= MAX_FILE_SIZE;
+          }
+          return true;
+        });
+      },
+      {
+        message: "Ukuran salah satu gambar melebihi 5MB",
+      },
+    ),
 });
 
 export const defaultValues = {

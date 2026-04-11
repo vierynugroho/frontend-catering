@@ -1,5 +1,5 @@
 import UserTableData from "@/features/user";
 
-export default function CategoryPage() {
+export default function UserPage() {
   return <UserTableData />;
 }

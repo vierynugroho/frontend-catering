@@ -153,8 +153,9 @@ export function AppSidebar({ currentUser, ...props }) {
               className="data-[slot=sidebar-menu-button]:p-1.5!"
             >
               <a href="#">
-                <CommandIcon className="size-5!" />
-                <span className="text-base font-semibold">Kateringin</span>
+                <CommandIcon className="size-4!" />
+                <span className="text-base font-semibold">Catering Dhewi</span>
+                <span className="text-xs font-semibold">Bu Bambang</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>

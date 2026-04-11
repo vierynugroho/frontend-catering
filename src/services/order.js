@@ -31,6 +31,10 @@ export const getOrder = async (params) => {
   const res = await api.get("/admin/orders", { params });
   return res.data;
 };
+export const getDetailOrder = async (id, params) => {
+  const res = await api.get(`/admin/orders/${id}`, { params });
+  return res.data;
+};
 
 export const createOrder = async (payload) => {
   const res = await api.post("/orders", payload);
@@ -38,12 +42,12 @@ export const createOrder = async (payload) => {
 };
 
 export const updateOrder = async (id, payload) => {
-  const res = await api.put(`/orders/${id}`, payload);
+  const res = await api.put(`/admin/orders/${id}`, payload);
   return res.data;
 };
 
 export const deleteOrder = async (id) => {
-  const res = await api.delete(`/orders/${id}`);
+  const res = await api.delete(`/admin/orders/${id}`);
   return res.data;
 };
 

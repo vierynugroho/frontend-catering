@@ -22,6 +22,11 @@ export const orderSchema = z.object({
       }),
     )
     .min(1, "Minimal 1 item"),
+
+  shipping_cost: z.number().optional(),
+  discount: z.number().optional(),
+  order_status: z.string().optional(),
+  shipping_status: z.string().optional(),
 });
 
 export const defaultValues = {

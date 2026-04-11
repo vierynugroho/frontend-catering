@@ -6,27 +6,15 @@ export function proxy(request) {
   const token = request.cookies.get("access_token")?.value;
   const role = request.cookies.get("role")?.value;
 
-  if (pathname === "/") {
-    if (!token) {
-      return NextResponse.redirect(new URL("/customer/menu", request.url));
-    }
+  console.log("[PROXY]", {
+    pathname,
+    hasToken: !!token,
+    tokenValue: token?.substring(0, 20), // sebagian saja
+    role,
+    allCookies: request.cookies.getAll().map((c) => c.name),
+  });
 
-    if (role === "admin") {
-      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
-    }
-
-    if (role === "customer") {
-      return NextResponse.redirect(new URL("/customer/menu", request.url));
-    }
-
-    return NextResponse.next();
-  }
-
-  const publicRoutes = ["/customer/menu", "/login", "/register"];
-  if (publicRoutes.includes(pathname)) {
-    return NextResponse.next();
-  }
-
+  // Bypass: Next.js internals & static files
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/favicon.ico") ||
@@ -35,10 +23,31 @@ export function proxy(request) {
     return NextResponse.next();
   }
 
-  if (!token) {
-    return NextResponse.redirect(new URL("/login", request.url));
+  // Public routes — selalu boleh diakses
+  const publicRoutes = ["/customer/menu", "/login", "/register"];
+  if (publicRoutes.some((route) => pathname.startsWith(route))) {
+    return NextResponse.next();
   }
 
+  // Root redirect
+  if (pathname === "/") {
+    if (!token) {
+      return NextResponse.redirect(new URL("/login", request.url)); // ← fix
+    }
+    if (role === "admin") {
+      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+    }
+    return NextResponse.redirect(new URL("/customer/menu", request.url));
+  }
+
+  // Protected routes — wajib login
+  if (!token) {
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("callbackUrl", pathname); // bonus: simpan tujuan asal
+    return NextResponse.redirect(loginUrl);
+  }
+
+  // Role guard
   if (pathname.startsWith("/admin") && role !== "admin") {
     return NextResponse.redirect(new URL("/", request.url));
   }
@@ -51,8 +60,5 @@ export function proxy(request) {
 }
 
 export const config = {
-  matcher: [
-    // Exclude API routes, static files, image optimizations, and .png files
-    "/((?!api|_next/static|_next/image|.*\\.png$).*)",
-  ],
+  matcher: ["/", "/login", "/register", "/admin/:path*", "/customer/:path*"],
 };

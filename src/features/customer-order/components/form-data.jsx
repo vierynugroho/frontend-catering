@@ -1,6 +1,6 @@
 import { FormInput } from "@/components/form/form-input";
 import { FormSelect } from "@/components/form/form-select";
-import { FormSimpleDatePicker } from "@/components/form/form-simple-datepicker";
+import { FormDateTimePicker } from "@/components/form/form-simple-datepicker";
 import { FormTextarea } from "@/components/form/form-textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -14,15 +14,14 @@ export const FormData = ({
 }) => {
   const isStockUnavailable =
     checkStockResult && checkStockResult?.data?.is_available === false;
-  console.log("hasil", isStockUnavailable);
   return (
     <Card className="rounded-md ring-0">
       <CardHeader>
         <CardTitle className="font-semibold">Data Diri</CardTitle>
       </CardHeader>
       <CardContent className="px-4 grid grid-cols-1 gap-6">
-        <FormSimpleDatePicker
-          label="Tanggal Order"
+        <FormDateTimePicker
+          label="Waktu Pengambilan Pesanan"
           required
           name="order_date"
           placeholder="Tanggal order"
@@ -92,22 +91,23 @@ export const FormData = ({
             ]}
             error={errors?.delivery_method?.[0]}
           />
-
-          <FormInput
-            label="Destinasi"
-            name="destination"
-            type="text"
-            placeholder="Jakarta, Bandung, dsb"
-            required
-            value={payloadData.destination}
-            onChange={(e) =>
-              setPayloadData((prev) => ({
-                ...prev,
-                destination: e.target.value,
-              }))
-            }
-            error={errors?.destination?.[0]}
-          />
+          {payloadData.delivery_method === "dikirim" && (
+            <FormInput
+              label="Tempat Pengiriman"
+              name="destination"
+              type="text"
+              placeholder="Jakarta, Bandung, dsb"
+              required
+              value={payloadData.destination}
+              onChange={(e) =>
+                setPayloadData((prev) => ({
+                  ...prev,
+                  destination: e.target.value,
+                }))
+              }
+              error={errors?.destination?.[0]}
+            />
+          )}
         </div>
 
         <FormTextarea

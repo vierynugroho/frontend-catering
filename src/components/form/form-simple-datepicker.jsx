@@ -13,15 +13,16 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
-export function FormSimpleDatePicker({
+export function FormDateTimePicker({
   label,
   name,
   value,
   onChange,
   error,
   required,
-  placeholder = "Pick a date",
+  placeholder = "Pilih tanggal dan waktu",
   containerClassName,
   className,
   showLabel = true,
@@ -29,9 +30,40 @@ export function FormSimpleDatePicker({
 }) {
   const [open, setOpen] = React.useState(false);
 
-  const handleSelect = (selectedDate) => {
-    onChange?.(selectedDate);
-    setOpen(false);
+  const hours = Array.from({ length: 12 }, (_, i) => i + 1);
+  const minutes = Array.from({ length: 12 }, (_, i) => i * 5);
+
+  const handleDateSelect = (selectedDate) => {
+    if (selectedDate) {
+      if (value) {
+        const newDate = new Date(selectedDate);
+        newDate.setHours(value.getHours());
+        newDate.setMinutes(value.getMinutes());
+        onChange?.(newDate);
+      } else {
+        onChange?.(selectedDate);
+      }
+    }
+  };
+
+  const handleTimeChange = (type, timeValue) => {
+    const baseDate = value ? new Date(value) : new Date();
+
+    if (type === "hour") {
+      const isPM = baseDate.getHours() >= 12;
+      const h = parseInt(timeValue);
+      baseDate.setHours(isPM ? (h % 12) + 12 : h % 12);
+    } else if (type === "minute") {
+      baseDate.setMinutes(parseInt(timeValue));
+    } else if (type === "ampm") {
+      const currentHours = baseDate.getHours();
+      if (timeValue === "PM" && currentHours < 12) {
+        baseDate.setHours(currentHours + 12);
+      } else if (timeValue === "AM" && currentHours >= 12) {
+        baseDate.setHours(currentHours - 12);
+      }
+    }
+    onChange?.(baseDate);
   };
 
   return (
@@ -39,7 +71,7 @@ export function FormSimpleDatePicker({
       {showLabel && label && (
         <FieldLabel htmlFor={name}>
           {label}
-          {required && <span className=" text-red-500">*</span>}
+          {required && <span className="text-red-500 ">*</span>}
         </FieldLabel>
       )}
 
@@ -58,21 +90,95 @@ export function FormSimpleDatePicker({
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
             {value ? (
-              format(value, "d MMMM yyyy", { locale: id })
+              format(value, "d MMMM yyyy HH:mm", { locale: id })
             ) : (
               <span>{placeholder}</span>
             )}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
-          <Calendar
-            mode="single"
-            selected={value}
-            onSelect={handleSelect}
-            initialFocus
-            defaultMonth={value}
-            locale={id}
-          />
+          <div className="sm:flex">
+            {/* Bagian Kalender */}
+            <Calendar
+              mode="single"
+              selected={value}
+              onSelect={handleDateSelect}
+              initialFocus
+              locale={id}
+            />
+
+            {/* Bagian Seleksi Waktu */}
+            <div className="flex flex-col sm:flex-row sm:h-[300px] divide-y sm:divide-y-0 sm:divide-x border-t sm:border-t-0">
+              {/* Jam */}
+              <ScrollArea className="w-64 sm:w-auto">
+                <div className="flex sm:flex-col p-2">
+                  {hours.map((hour) => (
+                    <Button
+                      key={hour}
+                      size="icon"
+                      variant={
+                        value && value.getHours() % 12 === hour % 12
+                          ? "default"
+                          : "ghost"
+                      }
+                      className="sm:w-full shrink-0 aspect-square"
+                      onClick={() => handleTimeChange("hour", hour.toString())}
+                    >
+                      {hour}
+                    </Button>
+                  ))}
+                </div>
+                <ScrollBar orientation="horizontal" className="sm:hidden" />
+              </ScrollArea>
+
+              {/* Menit */}
+              <ScrollArea className="w-64 sm:w-auto">
+                <div className="flex sm:flex-col p-2">
+                  {minutes.map((minute) => (
+                    <Button
+                      key={minute}
+                      size="icon"
+                      variant={
+                        value && value.getMinutes() === minute
+                          ? "default"
+                          : "ghost"
+                      }
+                      className="sm:w-full shrink-0 aspect-square"
+                      onClick={() =>
+                        handleTimeChange("minute", minute.toString())
+                      }
+                    >
+                      {minute.toString().padStart(2, "0")}
+                    </Button>
+                  ))}
+                </div>
+                <ScrollBar orientation="horizontal" className="sm:hidden" />
+              </ScrollArea>
+
+              {/* AM/PM */}
+              <ScrollArea className="">
+                <div className="flex sm:flex-col p-2">
+                  {["AM", "PM"].map((ampm) => (
+                    <Button
+                      key={ampm}
+                      size="icon"
+                      variant={
+                        value &&
+                        ((ampm === "AM" && value.getHours() < 12) ||
+                          (ampm === "PM" && value.getHours() >= 12))
+                          ? "default"
+                          : "ghost"
+                      }
+                      className="sm:w-full shrink-0 aspect-square"
+                      onClick={() => handleTimeChange("ampm", ampm)}
+                    >
+                      {ampm}
+                    </Button>
+                  ))}
+                </div>
+              </ScrollArea>
+            </div>
+          </div>
         </PopoverContent>
       </Popover>
 

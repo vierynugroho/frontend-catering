@@ -13,47 +13,37 @@ import {
 } from "@tanstack/react-table";
 import {
   ArrowUpDown,
-  BadgeCheckIcon,
-  Grid2X2,
   Pencil,
   Trash2,
   EllipsisVerticalIcon,
+  BadgeCheckIcon,
   XCircleIcon,
+  ReceiptCentIcon,
+  BoxIcon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useMenus } from "./use-list";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
-import { formatRupiah } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
+import { useOrder } from "./use-list";
+import { formatRupiah, formatWIB } from "@/lib/utils";
+import { renderOrderStatus } from "@/features/customer-history/utils";
+import { useRouter } from "next/navigation";
 
-export function useTableData({ onEdit, onDelete }) {
+export function useTableData({ onDelete }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [queryParams, setQueryParams] = useState({
     search: "",
-    from: "",
-    to: "",
   });
   const [debouncedSearchParams, setDebouncedSearchParams] = useState("");
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
 
-  const { data, isPending } = useMenus({
+  const { data, isPending } = useOrder({
     page: currentPage,
-    ...(debouncedSearchParams && { name: debouncedSearchParams }),
-    ...(queryParams.from && { from: queryParams.from }),
-    ...(queryParams.to && { to: queryParams.to }),
+    ...(debouncedSearchParams && { search: debouncedSearchParams }),
     limit: 10,
   });
 
+  const route = useRouter();
   useEffect(() => {
     const timer = setTimeout(
       () => setDebouncedSearchParams(queryParams.search),
@@ -70,7 +60,7 @@ export function useTableData({ onEdit, onDelete }) {
     data: data?.data || [],
     columns: [
       {
-        accessorKey: "name",
+        accessorKey: "code",
         header: ({ column }) => {
           return (
             <Button
@@ -79,17 +69,25 @@ export function useTableData({ onEdit, onDelete }) {
                 column.toggleSorting(column.getIsSorted() === "asc")
               }
             >
-              Nama
+              Kode Order
               <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
           );
         },
         cell: ({ row }) => {
-          return <div className="ps-3 font-medium"> {row.original.name} </div>;
+          return (
+            <Button
+              variant="ghost"
+              onClick={() => route.push(`/admin/order/${row.original.id}`)}
+              className="ps-3 font-bold"
+            >
+              {row.original.code}
+            </Button>
+          );
         },
       },
       {
-        accessorKey: "slug",
+        accessorKey: "order_date",
         header: ({ column }) => {
           return (
             <Button
@@ -98,17 +96,17 @@ export function useTableData({ onEdit, onDelete }) {
                 column.toggleSorting(column.getIsSorted() === "asc")
               }
             >
-              Slug
+              Tanggal
               <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
           );
         },
         cell: ({ row }) => {
-          return <div className="ps-3 font-medium"> {row.original.slug} </div>;
+          return <p className="ps-3">{formatWIB(row.original.order_date)}</p>;
         },
       },
       {
-        accessorKey: "price",
+        accessorKey: "customer_name",
         header: ({ column }) => {
           return (
             <Button
@@ -117,21 +115,48 @@ export function useTableData({ onEdit, onDelete }) {
                 column.toggleSorting(column.getIsSorted() === "asc")
               }
             >
-              Harga
+              Nama Pelanggan
               <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
           );
         },
         cell: ({ row }) => {
+          return <p className="ps-3">{row.original.customer_name}</p>;
+        },
+      },
+      {
+        accessorKey: "items",
+        header: ({ column }) => {
           return (
-            <div className="ps-3 font-medium">
-              {formatRupiah(row.original.price)}
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Menu
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+        cell: ({ row }) => {
+          const items = row.original.items;
+          const firstItem = items[0]?.menu_name;
+          const extraItems = items.length - 1;
+          return (
+            <div className="text-sm ps-3">
+              {firstItem}
+              {extraItems > 0 && (
+                <span className="text-muted-foreground">
+                  (+{extraItems} lainnya)
+                </span>
+              )}
             </div>
           );
         },
       },
       {
-        accessorKey: "category",
+        accessorKey: "final_price",
         header: ({ column }) => {
           return (
             <Button
@@ -140,19 +165,22 @@ export function useTableData({ onEdit, onDelete }) {
                 column.toggleSorting(column.getIsSorted() === "asc")
               }
             >
-              Kategori
+              Total
               <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
           );
         },
         cell: ({ row }) => {
           return (
-            <div className="ps-3 font-medium">{row.original.category.name}</div>
+            <div className="font-semibold ps-3">
+              {formatRupiah(row.original.final_price)}
+            </div>
           );
         },
       },
+
       {
-        accessorKey: "is_active",
+        accessorKey: "order_status",
         header: ({ column }) => {
           return (
             <Button
@@ -167,75 +195,15 @@ export function useTableData({ onEdit, onDelete }) {
           );
         },
         cell: ({ row }) => {
-          return (
-            <div className="ps-3 font-medium">
-              {row.original.is_active === true ? (
-                <Badge
-                  variant="secondary"
-                  className="border border-green-400 bg-green-50 text-green-800 dark:bg-green-900/70 dark:text-white/80"
-                >
-                  <BadgeCheckIcon />
-                  Aktif
-                </Badge>
-              ) : (
-                <Badge
-                  variant="secondary"
-                  className="border border-red-400 bg-red-50 text-red-800 dark:bg-red-900/70 dark:text-white/80"
-                >
-                  <XCircleIcon />
-                  Tidak Aktif
-                </Badge>
-              )}
-            </div>
-          );
-        },
-      },
-      {
-        accessorKey: "description",
-        header: "Deskripsi",
+          const status = row.original.order_status;
 
-        cell: ({ row }) => {
-          return (
-            <div className="font-medium truncate">
-              {row.original.description}
-            </div>
-          );
-        },
-      },
-      {
-        accessorKey: "images",
-        header: "Gambar",
-        cell: ({ row }) => {
-          return (
-            <Carousel
-              className="w-full"
-              plugins={[
-                Autoplay({
-                  delay: 2000,
-                }),
-              ]}
-            >
-              <CarouselContent className="cursor-pointer">
-                {row.original.images.map((_, index) => (
-                  <CarouselItem key={index}>
-                    <img
-                      src={_.url}
-                      alt={_.url}
-                      className="object-cover w-full h-32 rounded-sm"
-                    />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              {/* <CarouselPrevious />
-              <CarouselNext /> */}
-            </Carousel>
-          );
+          return <p className="ps-3">{renderOrderStatus(status)}</p>;
         },
       },
 
       {
         id: "actions",
-        size: 10,
+
         cell: ({ row }) => {
           return (
             <div className="flex justify-end">
@@ -250,8 +218,20 @@ export function useTableData({ onEdit, onDelete }) {
                     <span className="sr-only">Open menu</span>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="w-52">
-                  <DropdownMenuItem onClick={() => onEdit(row.original)}>
+                <DropdownMenuContent align="start" className="w-42">
+                  <DropdownMenuItem
+                    onClick={() =>
+                      route.push(`/admin/order/${row.original.id}`)
+                    }
+                  >
+                    <BoxIcon className="h-4 w-4" />
+                    Detail
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() =>
+                      route.push(`/admin/order/update/${row.original.id}`)
+                    }
+                  >
                     <Pencil className="h-4 w-4" />
                     Edit
                   </DropdownMenuItem>
