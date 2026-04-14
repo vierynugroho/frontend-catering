@@ -4,16 +4,17 @@ import { downloadReports } from "@/services/dashboard";
 
 export const useDownloadReport = () => {
   return useMutation({
-    mutationFn: async (params) => {
-      const blobData = await downloadReports(params);
+    mutationFn: async ({ type, params }) => {
+      const blobData = await downloadReports(type, params);
 
       // tentukan nama file & extension
       const fileType =
-        params.type === "pdf"
+        type === "pdf"
           ? "application/pdf"
           : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
-      const fileExtension = params.type === "pdf" ? "pdf" : "xlsx";
+      const fileExtension =
+        type === "pdf" ? "pdf" : type === "xlsx" ? "xlsx" : "csv";
 
       // buat blob
       const blob = new Blob([blobData], { type: fileType });

@@ -54,6 +54,8 @@ export default function OrderTableData() {
     setQueryParams,
     data,
     isPending,
+    range,
+    setRange,
   } = useTableData({
     onDelete: handleOpenDeleteModal,
   });
@@ -67,6 +69,8 @@ export default function OrderTableData() {
         setQueryParams={setQueryParams}
         onAdd={handleOpenAddModal}
         addLabel="Tambah Pesanan"
+        range={range}
+        setRange={setRange}
       />
       {/* table */}
       <TableData

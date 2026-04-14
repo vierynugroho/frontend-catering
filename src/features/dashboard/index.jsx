@@ -22,8 +22,8 @@ export default function DashboardData() {
   const [errors, setErrors] = useState({});
   const [range, setRange] = useState(undefined);
   const [payloadData, setPayloadData] = useState({
-    from: "",
-    to: "",
+    from: undefined,
+    to: undefined,
     type: "pdf",
   });
 
@@ -67,7 +67,8 @@ export default function DashboardData() {
       return;
     }
 
-    mutate(result.data);
+    const { type, ...params } = result.data;
+    mutate({ type, params });
   };
 
   return (

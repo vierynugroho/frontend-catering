@@ -1,4 +1,5 @@
 import { FormComboBox } from "@/components/form/combobox";
+import { FormDateRangePicker } from "@/components/form/form-simple-daterange";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -11,6 +12,8 @@ import { OrderStatus, ShippingStatus } from "@/types/enums";
 import { ChevronDown, SearchIcon, PlusIcon, Columns } from "lucide-react";
 
 export const TableToolbar = ({
+  range,
+  setRange,
   table,
   queryParams,
   setQueryParams,
@@ -48,6 +51,43 @@ export const TableToolbar = ({
               className="h-10 pl-10 w-60"
             />
           </div>
+          <FormDateRangePicker
+            containerClassName="w-120"
+            showLabel={false}
+            value={range}
+            onChange={setRange}
+          />
+        </div>
+
+        <div className="flex w-full items-center gap-3 sm:w-auto">
+          {/* Column visibility dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                <Columns className=" h-4 w-4" /> Kolom
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                ?.getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+        <div className="flex gap-4 items-center">
           <FormComboBox
             containerClassName="w-80"
             name="shipping_status"
@@ -95,34 +135,6 @@ export const TableToolbar = ({
               }))
             }
           />
-        </div>
-
-        <div className="flex w-full items-center gap-3 sm:w-auto">
-          {/* Column visibility dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline">
-                <Columns className=" h-4 w-4" /> Kolom
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {table
-                ?.getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       </div>
     </div>

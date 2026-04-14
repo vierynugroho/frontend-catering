@@ -21,8 +21,8 @@ export const getCustomerReports = async (params) => {
   return res.data;
 };
 
-export const downloadReports = async (params) => {
-  const res = await api.get("/reports/customer", {
+export const downloadReports = async (type, params) => {
+  const res = await api.get(`/orders/export/${type}`, {
     params,
     responseType: "blob",
   });

@@ -69,9 +69,9 @@ export function DownloadModal({
               label="Jenis FIle"
               placeholder="Pilih Jenis File"
               options={[
-                { label: "Pdf", value: "pdf" },
-                { label: "Csv", value: "csv" },
-                { label: "Xlsx", value: "xlsx" },
+                { label: "PDF", value: "pdf" },
+                { label: "CSV", value: "csv" },
+                { label: "XLSX", value: "xlsx" },
               ]}
               value={payloadData.type}
               onChange={(val) =>

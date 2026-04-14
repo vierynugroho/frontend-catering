@@ -39,254 +39,263 @@ export function useTableData({ onDelete }) {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
+    const [range, setRange] = useState(undefined);
 
-  const { data, isPending } = useOrder({
-    page: currentPage,
-    ...(debouncedSearchParams && { search: debouncedSearchParams }),
-    limit: 10,
-    ...(queryParams.shipping_status !== "" && {
-      shipping_status: queryParams.shipping_status,
-    }),
-    ...(queryParams.order_status !== "" && {
-      order_status: queryParams.order_status,
-    }),
-    ...(queryParams.delivery_method !== "" && {
-      delivery_method: queryParams.shipping_status,
-    }),
-  });
+    const { data, isPending } = useOrder({
+      page: currentPage,
+      ...(debouncedSearchParams && { search: debouncedSearchParams }),
+      limit: 10,
+      ...(queryParams.shipping_status !== "" && {
+        shipping_status: queryParams.shipping_status,
+      }),
+      ...(queryParams.order_status !== "" && {
+        order_status: queryParams.order_status,
+      }),
+      ...(queryParams.delivery_method !== "" && {
+        delivery_method: queryParams.shipping_status,
+      }),
+      ...(range?.from && {
+        from: range?.from,
+      }),
+      ...(range?.to && {
+        to: range?.to,
+      }),
+    });
 
-  const route = useRouter();
-  useEffect(() => {
-    const timer = setTimeout(
-      () => setDebouncedSearchParams(queryParams.search),
-      1000,
-    );
-    return () => clearTimeout(timer);
-  }, [queryParams.search]);
+    const route = useRouter();
+    useEffect(() => {
+      const timer = setTimeout(
+        () => setDebouncedSearchParams(queryParams.search),
+        1000,
+      );
+      return () => clearTimeout(timer);
+    }, [queryParams.search]);
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [debouncedSearchParams]);
+    useEffect(() => {
+      setCurrentPage(1);
+    }, [debouncedSearchParams]);
 
-  const table = useReactTable({
-    data: data?.data || [],
-    columns: [
-      {
-        accessorKey: "code",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              onClick={() =>
-                column.toggleSorting(column.getIsSorted() === "asc")
-              }
-            >
-              Kode Order
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-          );
+    const table = useReactTable({
+      data: data?.data || [],
+      columns: [
+        {
+          accessorKey: "code",
+          header: ({ column }) => {
+            return (
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  column.toggleSorting(column.getIsSorted() === "asc")
+                }
+              >
+                Kode Order
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+              </Button>
+            );
+          },
+          cell: ({ row }) => {
+            return (
+              <Button
+                variant="ghost"
+                onClick={() => route.push(`/admin/order/${row.original.id}`)}
+                className="ps-3 font-bold"
+              >
+                {row.original.code}
+              </Button>
+            );
+          },
         },
-        cell: ({ row }) => {
-          return (
-            <Button
-              variant="ghost"
-              onClick={() => route.push(`/admin/order/${row.original.id}`)}
-              className="ps-3 font-bold"
-            >
-              {row.original.code}
-            </Button>
-          );
+        {
+          accessorKey: "order_date",
+          header: ({ column }) => {
+            return (
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  column.toggleSorting(column.getIsSorted() === "asc")
+                }
+              >
+                Tanggal
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+              </Button>
+            );
+          },
+          cell: ({ row }) => {
+            return <p className="ps-3">{formatWIB(row.original.order_date)}</p>;
+          },
+        },
+        {
+          accessorKey: "customer_name",
+          header: ({ column }) => {
+            return (
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  column.toggleSorting(column.getIsSorted() === "asc")
+                }
+              >
+                Nama Pelanggan
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+              </Button>
+            );
+          },
+          cell: ({ row }) => {
+            return <p className="ps-3">{row.original.customer_name}</p>;
+          },
+        },
+        {
+          accessorKey: "items",
+          header: ({ column }) => {
+            return (
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  column.toggleSorting(column.getIsSorted() === "asc")
+                }
+              >
+                Menu
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+              </Button>
+            );
+          },
+          cell: ({ row }) => {
+            const items = row.original.items;
+            const firstItem = items[0]?.menu_name;
+            const extraItems = items.length - 1;
+            return (
+              <div className="text-sm ps-3">
+                {firstItem}
+                {extraItems > 0 && (
+                  <span className="text-muted-foreground">
+                    (+{extraItems} lainnya)
+                  </span>
+                )}
+              </div>
+            );
+          },
+        },
+        {
+          accessorKey: "final_price",
+          header: ({ column }) => {
+            return (
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  column.toggleSorting(column.getIsSorted() === "asc")
+                }
+              >
+                Total
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+              </Button>
+            );
+          },
+          cell: ({ row }) => {
+            return (
+              <div className="font-semibold ps-3">
+                {formatRupiah(row.original.final_price)}
+              </div>
+            );
+          },
+        },
+
+        {
+          accessorKey: "order_status",
+          header: ({ column }) => {
+            return (
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  column.toggleSorting(column.getIsSorted() === "asc")
+                }
+              >
+                Status
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+              </Button>
+            );
+          },
+          cell: ({ row }) => {
+            const status = row.original.order_status;
+
+            return <p className="ps-3">{renderOrderStatus(status)}</p>;
+          },
+        },
+
+        {
+          id: "actions",
+
+          cell: ({ row }) => {
+            return (
+              <div className="flex justify-end">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      className="flex size-8 text-muted-foreground data-[state=open]:bg-muted"
+                      size="icon"
+                    >
+                      <EllipsisVerticalIcon />
+                      <span className="sr-only">Open menu</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="w-42">
+                    <DropdownMenuItem
+                      onClick={() =>
+                        route.push(`/admin/order/${row.original.id}`)
+                      }
+                    >
+                      <BoxIcon className="h-4 w-4" />
+                      Detail
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() =>
+                        route.push(`/admin/order/update/${row.original.id}`)
+                      }
+                    >
+                      <Pencil className="h-4 w-4" />
+                      Edit
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      variant="destructive"
+                      onClick={() => onDelete(row.original)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      Hapus
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            );
+          },
+        },
+      ],
+      onSortingChange: setSorting,
+      onColumnFiltersChange: setColumnFilters,
+      getCoreRowModel: getCoreRowModel(),
+      getSortedRowModel: getSortedRowModel(),
+      getFilteredRowModel: getFilteredRowModel(),
+      onColumnVisibilityChange: setColumnVisibility,
+      manualPagination: true,
+      pageCount: data?.pagination?.total_pages || 1,
+      state: {
+        sorting,
+        columnFilters,
+        columnVisibility,
+        pagination: {
+          pageIndex: currentPage - 1,
+          pageSize: 10,
         },
       },
-      {
-        accessorKey: "order_date",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              onClick={() =>
-                column.toggleSorting(column.getIsSorted() === "asc")
-              }
-            >
-              Tanggal
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-        cell: ({ row }) => {
-          return <p className="ps-3">{formatWIB(row.original.order_date)}</p>;
-        },
-      },
-      {
-        accessorKey: "customer_name",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              onClick={() =>
-                column.toggleSorting(column.getIsSorted() === "asc")
-              }
-            >
-              Nama Pelanggan
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-        cell: ({ row }) => {
-          return <p className="ps-3">{row.original.customer_name}</p>;
-        },
-      },
-      {
-        accessorKey: "items",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              onClick={() =>
-                column.toggleSorting(column.getIsSorted() === "asc")
-              }
-            >
-              Menu
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-        cell: ({ row }) => {
-          const items = row.original.items;
-          const firstItem = items[0]?.menu_name;
-          const extraItems = items.length - 1;
-          return (
-            <div className="text-sm ps-3">
-              {firstItem}
-              {extraItems > 0 && (
-                <span className="text-muted-foreground">
-                  (+{extraItems} lainnya)
-                </span>
-              )}
-            </div>
-          );
-        },
-      },
-      {
-        accessorKey: "final_price",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              onClick={() =>
-                column.toggleSorting(column.getIsSorted() === "asc")
-              }
-            >
-              Total
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-        cell: ({ row }) => {
-          return (
-            <div className="font-semibold ps-3">
-              {formatRupiah(row.original.final_price)}
-            </div>
-          );
-        },
-      },
+    });
 
-      {
-        accessorKey: "order_status",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              onClick={() =>
-                column.toggleSorting(column.getIsSorted() === "asc")
-              }
-            >
-              Status
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-        cell: ({ row }) => {
-          const status = row.original.order_status;
-
-          return <p className="ps-3">{renderOrderStatus(status)}</p>;
-        },
-      },
-
-      {
-        id: "actions",
-
-        cell: ({ row }) => {
-          return (
-            <div className="flex justify-end">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="flex size-8 text-muted-foreground data-[state=open]:bg-muted"
-                    size="icon"
-                  >
-                    <EllipsisVerticalIcon />
-                    <span className="sr-only">Open menu</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="w-42">
-                  <DropdownMenuItem
-                    onClick={() =>
-                      route.push(`/admin/order/${row.original.id}`)
-                    }
-                  >
-                    <BoxIcon className="h-4 w-4" />
-                    Detail
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() =>
-                      route.push(`/admin/order/update/${row.original.id}`)
-                    }
-                  >
-                    <Pencil className="h-4 w-4" />
-                    Edit
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    variant="destructive"
-                    onClick={() => onDelete(row.original)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                    Hapus
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          );
-        },
-      },
-    ],
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    manualPagination: true,
-    pageCount: data?.pagination?.total_pages || 1,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      pagination: {
-        pageIndex: currentPage - 1,
-        pageSize: 10,
-      },
-    },
-  });
-
-  return {
-    table,
-    currentPage,
-    setCurrentPage,
-    queryParams,
-    setQueryParams,
-    data,
-    isPending,
-  };
+    return {
+      setRange,
+      range,
+      table,
+      currentPage,
+      setCurrentPage,
+      queryParams,
+      setQueryParams,
+      data,
+      isPending,
+    };
 }
