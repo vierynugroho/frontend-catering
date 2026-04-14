@@ -30,6 +30,9 @@ import { useRouter } from "next/navigation";
 export function useTableData({ onDelete }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [queryParams, setQueryParams] = useState({
+    shipping_status: "",
+    order_status: "",
+    delivery_method: "",
     search: "",
   });
   const [debouncedSearchParams, setDebouncedSearchParams] = useState("");
@@ -41,6 +44,15 @@ export function useTableData({ onDelete }) {
     page: currentPage,
     ...(debouncedSearchParams && { search: debouncedSearchParams }),
     limit: 10,
+    ...(queryParams.shipping_status !== "" && {
+      shipping_status: queryParams.shipping_status,
+    }),
+    ...(queryParams.order_status !== "" && {
+      order_status: queryParams.order_status,
+    }),
+    ...(queryParams.delivery_method !== "" && {
+      delivery_method: queryParams.shipping_status,
+    }),
   });
 
   const route = useRouter();

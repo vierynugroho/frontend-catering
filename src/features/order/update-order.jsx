@@ -9,6 +9,7 @@ import { useParams } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
 import UpdateOrderForm from "./components/update-form";
 import { useUpdateOrder } from "./hooks/use-update";
+import { formatPhoneToLocal } from "@/lib/utils";
 
 export default function UpdateOrderData() {
   // hooks
@@ -69,7 +70,7 @@ export default function UpdateOrderData() {
     if (detailData) {
       setPayloadData({
         customer_name: detailData.customer_name || "",
-        phone: detailData.phone || "",
+        phone: formatPhoneToLocal(detailData.phone) || "",
         destination: detailData.destination || "",
         order_date: detailData.order_date
           ? new Date(detailData.order_date)

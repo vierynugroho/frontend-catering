@@ -42,10 +42,12 @@ export function FormComboBox({
 
   return (
     <Field className={containerClassName}>
-      <FieldLabel htmlFor={name}>
-        {label}
-        {required && <span className="text-red-500">*</span>}
-      </FieldLabel>
+      {label && (
+        <FieldLabel htmlFor={name}>
+          {label}
+          {required && <span className="text-red-500">*</span>}
+        </FieldLabel>
+      )}
 
       <Popover open={open} onOpenChange={setOpen} modal={true}>
         <PopoverTrigger asChild>

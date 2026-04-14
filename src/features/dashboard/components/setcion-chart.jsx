@@ -16,7 +16,8 @@ import {
 } from "@/components/ui/chart";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
-import { PieChart, Pie, Cell, ResponsiveContainer, Label } from "recharts";
+// 1. Tambahkan 'Legend' pada import recharts di bawah ini:
+import { PieChart, Pie, Cell, ResponsiveContainer, Label, Legend } from "recharts";
 import { CalendarX, CheckCircle, Package } from "lucide-react";
 
 export function SectionCharts({ orderReport, stockReport }) {
@@ -80,9 +81,10 @@ export function SectionCharts({ orderReport, stockReport }) {
           </CardDescription>
         </CardHeader>
         <CardContent className="flex-1 pb-0">
+          {/* Tambahkan margin bawah pada ChartContainer jika Legend terpotong */}
           <ChartContainer
             config={chartConfig}
-            className="mx-auto aspect-square max-h-[300px] w-full"
+            className="mx-auto aspect-square max-h-[350px] w-full pb-4" 
           >
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -133,6 +135,16 @@ export function SectionCharts({ orderReport, stockReport }) {
                     <Cell key={`cell-${index}`} fill={entry.fill} />
                   ))}
                 </Pie>
+                
+                {/* 2. Tambahkan komponen Legend di sini */}
+                <Legend 
+                  layout="horizontal" 
+                  verticalAlign="bottom" 
+                  align="center"
+                  iconType="circle" // Mengubah icon legend menjadi bulat agar lebih modern
+                  wrapperStyle={{ fontSize: "12px", paddingTop: "20px" }} 
+                />
+
               </PieChart>
             </ResponsiveContainer>
           </ChartContainer>

@@ -24,3 +24,10 @@ export function formatRupiah(number) {
     currency: "IDR",
   }).format(number);
 }
+
+export const formatPhoneToLocal = (phone) => {
+  if (phone.startsWith("+62")) {
+    return String("0" + phone.slice(3));
+  }
+  return String(phone);
+};

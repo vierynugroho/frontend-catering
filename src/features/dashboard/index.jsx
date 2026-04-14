@@ -12,10 +12,20 @@ import { SectionCharts } from "./components/setcion-chart";
 import { Spinner } from "@/components/ui/spinner";
 import { SectionLeaderboards } from "./components/section-leaderboard";
 import HeaderSection from "./components/section-header";
+import { DownloadModal } from "./components/modal-download";
+import { useModal } from "@/hooks/use-modal";
+import { useDownloadReport } from "./hooks/use-download-report";
+import { downloadSchema } from "./schema";
 export default function DashboardData() {
+  const { isOpen, openModal, closeModal } = useModal();
+  const { mutate, isPending: isDownloading } = useDownloadReport();
+  const [errors, setErrors] = useState({});
   const [range, setRange] = useState(undefined);
-
-  console.log("ngal tangal", range);
+  const [payloadData, setPayloadData] = useState({
+    from: "",
+    to: "",
+    type: "pdf",
+  });
 
   const { data: menuReport, isPending: menuIsPending } = useMenuReport({
     from: range?.from,
@@ -47,9 +57,26 @@ export default function DashboardData() {
     customerIsPending ||
     orderIsPending;
 
+  const handleSubmitModal = async () => {
+    console.log("error", errors);
+
+    const result = downloadSchema.safeParse(payloadData);
+    if (!result.success) {
+      const fieldErrors = result.error.flatten().fieldErrors;
+      setErrors(fieldErrors);
+      return;
+    }
+
+    mutate(result.data);
+  };
+
   return (
     <>
-      <HeaderSection setRange={setRange} range={range} />
+      <HeaderSection
+        onOpenModal={openModal}
+        setRange={setRange}
+        range={range}
+      />
 
       {isPending && (
         <div className="flex items-center justify-center">
@@ -71,6 +98,18 @@ export default function DashboardData() {
           />
         </>
       )}
+
+      <DownloadModal
+        isOpen={isOpen}
+        onClose={() => {
+          closeModal();
+        }}
+        onSubmit={handleSubmitModal}
+        isPending={isDownloading}
+        errors={errors}
+        payloadData={payloadData}
+        setPayloadData={setPayloadData}
+      />
     </>
   );
 }

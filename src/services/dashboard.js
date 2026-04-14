@@ -20,3 +20,13 @@ export const getCustomerReports = async (params) => {
   const res = await api.get("/reports/customer", { params });
   return res.data;
 };
+
+export const downloadReports = async (params) => {
+  const res = await api.get("/reports/customer", {
+    params,
+    responseType: "blob",
+  });
+  return res.data;
+};
+
+

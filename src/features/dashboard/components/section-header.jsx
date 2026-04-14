@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { DownloadIcon } from "lucide-react";
 import React from "react";
 
-export default function HeaderSection({ range, setRange }) {
+export default function HeaderSection({ range, setRange, onOpenModal }) {
   return (
     <div className="flex items-center justify-between items-center lg:px-6 px-4 mb-4">
       <h1 className="font-bold text-2xl">Dashboard Catering Dhewi</h1>
@@ -15,9 +15,9 @@ export default function HeaderSection({ range, setRange }) {
           value={range}
           onChange={setRange}
         />
-        <Button variant="default">
+        <Button variant="default" onClick={onOpenModal}>
           <DownloadIcon />
-          Download Excel
+          Download
         </Button>
       </div>
     </div>
