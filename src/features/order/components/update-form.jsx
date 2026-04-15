@@ -330,7 +330,7 @@ export default function UpdateOrderForm({
           variant="outline"
           onClick={() => route.push("/admin/order")}
         >
-          Cancel
+          Batalkan
         </Button>
         <Button className="h-11" disabled={isPending} onClick={handleOrder}>
           {isPending && <Spinner />}

@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { publicDownloadInvoice } from "@/services/order";
 import { toast } from "sonner";
+import { extractErrorMessage } from "@/lib/utils";
 
 export const useCustomerDownloadInvoice = () => {
   return useMutation({
@@ -25,7 +26,7 @@ export const useCustomerDownloadInvoice = () => {
       toast.success("Berhasil mengunduh invoice");
     },
     onError: (error) => {
-      const message = error?.response?.data?.message || "Terjadi kesalahan";
+      const message = extractErrorMessage(error);
       toast.error(message);
     },
   });

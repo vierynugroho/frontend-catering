@@ -1,3 +1,4 @@
+import { extractErrorMessage } from "@/lib/utils";
 import { createOrder } from "@/services/order";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -16,7 +17,7 @@ export function useCreateOrder({ onSuccessCallback } = {}) {
       onSuccessCallback?.();
     },
     onError: (error) => {
-      const message = error?.response?.data?.message || "Terjadi kesalahan";
+      const message = extractErrorMessage(error);
       toast.error(message);
     },
   });

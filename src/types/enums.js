@@ -50,7 +50,7 @@ export const navByRole = {
     },
 
     {
-      title: "Stock",
+      title: "Jadwal",
       url: "/admin/stock",
       icon: <FactoryIcon />,
     },

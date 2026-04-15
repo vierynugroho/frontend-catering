@@ -1,3 +1,4 @@
+import { extractErrorMessage } from "@/lib/utils";
 import { deleteStock } from "@/services/stock";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -13,7 +14,7 @@ export function useDeleteStock({ onSuccessCallback } = {}) {
       onSuccessCallback?.();
     },
     onError: (error) => {
-      const message = error?.response?.data?.message || "Terjadi kesalahan";
+      const message = extractErrorMessage(error);
       toast.error(message);
     },
   });

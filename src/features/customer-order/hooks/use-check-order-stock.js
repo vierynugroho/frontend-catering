@@ -1,3 +1,4 @@
+import { extractErrorMessage } from "@/lib/utils";
 import { checkDateOrderStock } from "@/services/order";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -16,7 +17,7 @@ export function useCheckOrderStock() {
           );
     },
     onError: (error) => {
-      const message = error?.response?.data?.message || "Terjadi kesalahan";
+      const message = extractErrorMessage(error);
       toast.error(message);
     },
   });

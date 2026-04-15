@@ -14,7 +14,7 @@ export function useCreateMenu({ onSuccessCallback } = {}) {
       onSuccessCallback?.();
     },
     onError: (error) => {
-      const message = error?.response?.data?.message || "Terjadi kesalahan";
+      const message = extractErrorMessage(error);
       toast.error(message);
     },
   });

@@ -139,7 +139,7 @@ export function OrderStockCalendar({
             size="sm"
             onClick={() => setMonth(new Date())}
           >
-            Today
+            Hari ini
           </Button>
           <Button
             variant="ghost"
@@ -161,12 +161,12 @@ export function OrderStockCalendar({
         <div className="flex flex-col items-center">
           <div className="text-2xl font-bold">{monthLabel}</div>
           <div className="text-xs text-muted-foreground">
-            {loading ? "Loading…" : `${items.length} days configured`}
+            {loading ? "Loading…" : `${items.length} hari dikonfigurasi`}
           </div>
         </div>
 
         <Button size="sm" onClick={() => openForDate(new Date())}>
-          <PlusIcon className="h-4 w-4" /> Set day stock
+          <PlusIcon className="h-4 w-4" /> Tetapkan Stok Harian
         </Button>
       </div>
 
@@ -229,9 +229,9 @@ export function OrderStockCalendar({
               <div className="mt-2 space-y-1">
                 {it ? (
                   <div className="truncate rounded-md bg-primary/10 px-2 py-1 text-xs">
-                    Max: {it.max_stock}{" "}
+                    Maksimal: {it.max_stock}{" "}
                     <span className="text-muted-foreground hidden sm:inline">
-                      (current {it.current_stock})
+                      (saat ini {it.current_stock})
                     </span>
                   </div>
                 ) : (
@@ -259,13 +259,15 @@ export function OrderStockCalendar({
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              {editor?.mode === "edit" ? "Edit day stock" : "Create day stock"}
+              {editor?.mode === "edit"
+                ? "Edit stok pesanan harian"
+                : "Buat stok pesanan harian"}
             </DialogTitle>
           </DialogHeader>
 
           <div className="space-y-3">
             <div className="text-sm text-muted-foreground">
-              Date:{" "}
+              Tanggal:{" "}
               <span className="font-medium text-foreground">
                 {editor?.mode === "edit"
                   ? isoToUTCDateOnly(editor.item.event_date)
@@ -276,7 +278,7 @@ export function OrderStockCalendar({
             </div>
 
             <div className="space-y-1">
-              <div className="text-sm font-medium">Max stock</div>
+              <div className="text-sm font-medium">Stok Maksimal</div>
               <Input
                 type="number"
                 min={0}
@@ -286,7 +288,7 @@ export function OrderStockCalendar({
 
               {editor?.mode === "edit" && (
                 <div className="text-xs text-muted-foreground">
-                  Current stock (readonly): {editor.item.current_stock}
+                  Stok saat ini: {editor.item.current_stock}
                 </div>
               )}
             </div>
@@ -297,17 +299,17 @@ export function OrderStockCalendar({
               <div>
                 {editor?.mode === "edit" && (
                   <Button variant="destructive" onClick={handleDelete}>
-                    Delete
+                    Hapus
                   </Button>
                 )}
               </div>
 
               <div className="flex gap-2">
                 <Button variant="outline" onClick={() => setOpen(false)}>
-                  Cancel
+                  Batalkan
                 </Button>
                 <Button onClick={handleSave}>
-                  {editor?.mode === "edit" ? "Update" : "Save"}
+                  {editor?.mode === "edit" ? "Edit" : "Simpan"}
                 </Button>
               </div>
             </div>

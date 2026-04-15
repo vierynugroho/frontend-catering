@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { downloadReports } from "@/services/dashboard";
+import { extractErrorMessage } from "@/lib/utils";
 
 export const useDownloadReport = () => {
   return useMutation({
@@ -39,7 +40,7 @@ export const useDownloadReport = () => {
       toast.success("Berhasil mengunduh data");
     },
     onError: (error) => {
-      const message = error?.response?.data?.message || "Terjadi kesalahan";
+      const message = extractErrorMessage(error);
       toast.error(message);
     },
   });

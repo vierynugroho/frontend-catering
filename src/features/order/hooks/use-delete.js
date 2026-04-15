@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { deleteOrder } from "@/services/order";
+import { extractErrorMessage } from "@/lib/utils";
 
 export function useDeleteOrder({ onSuccessCallback } = {}) {
   const queryClient = useQueryClient();
@@ -13,7 +14,7 @@ export function useDeleteOrder({ onSuccessCallback } = {}) {
       onSuccessCallback?.();
     },
     onError: (error) => {
-      const message = error?.response?.data?.message || "Terjadi kesalahan";
+      const message = extractErrorMessage(error);
       toast.error(message);
     },
   });

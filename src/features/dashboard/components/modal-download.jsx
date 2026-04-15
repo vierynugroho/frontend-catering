@@ -65,7 +65,6 @@ export function DownloadModal({
             </div>
             <FormComboBox
               name="type"
-              required
               label="Jenis FIle"
               placeholder="Pilih Jenis File"
               options={[
@@ -87,12 +86,12 @@ export function DownloadModal({
         <DialogFooter>
           <DialogClose asChild>
             <Button type="button" className="h-11" variant="outline">
-              Cancel
+              Batalkan
             </Button>
           </DialogClose>
           <Button className="h-11" onClick={onSubmit} disabled={isPending}>
             {isPending && <Spinner />}
-            Submit
+            Download
           </Button>
         </DialogFooter>
       </DialogContent>

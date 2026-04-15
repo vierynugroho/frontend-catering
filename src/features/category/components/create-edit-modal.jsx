@@ -73,12 +73,12 @@ export function CreateEditModal({
         <DialogFooter>
           <DialogClose asChild>
             <Button type="button" className="h-11" variant="outline">
-              Cancel
+              Batalkan
             </Button>
           </DialogClose>
           <Button className="h-11" onClick={onSubmit} disabled={isPending}>
             {isPending && <Spinner />}
-            Submit
+            {mode === "edit" ? "Simpan" : "Buat"}
           </Button>
         </DialogFooter>
       </DialogContent>

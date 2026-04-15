@@ -34,7 +34,7 @@ export function DeleteModal({
         <DialogFooter className="mt-4">
           <DialogClose asChild>
             <Button type="button" variant="outline">
-              Cancel
+              Batalkan
             </Button>
           </DialogClose>
           <Button
