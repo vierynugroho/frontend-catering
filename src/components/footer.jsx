@@ -9,6 +9,16 @@ export default function Footer() {
           BTN Asabri, Jl. Sriti Blok N2, Gedog, Kec. Sananwetan, Kota Blitar,
           Jawa Timur
         </p>
+        <p className="text-xs text-muted-foreground mt-1">
+          Whatsapp :{" "}
+          <a
+            href="https://wa.me/6282234187211"
+            target="_blank"
+            className="font-bold"
+          >
+            082234187211
+          </a>
+        </p>
       </div>
     </footer>
   );

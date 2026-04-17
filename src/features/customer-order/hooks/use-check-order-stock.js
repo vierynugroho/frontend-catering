@@ -13,7 +13,7 @@ export function useCheckOrderStock() {
       res.data.is_available
         ? toast.success("Stok tersedia pada tanggal ini")
         : toast.error(
-            "Stok tidak tersedia pada tanggal ini, silakan pilih tanggal lain",
+            "Stok tidak tersedia pada tanggal ini, silakan pilih tanggal lain atau silahkan hubungi admin untuk perubahan jadwal pesanan",
           );
     },
     onError: (error) => {

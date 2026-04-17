@@ -78,8 +78,8 @@ export default function UpdateOrderData() {
         delivery_method: detailData.delivery_method || "",
         note: detailData.note || "",
         items: detailData.items || [],
-        shipping_cost: detailData.shipping_cost || 0,
-        discount: detailData.discount || 0,
+        shipping_cost: detailData.shipping_cost || "",
+        discount: detailData.discount || "",
         order_status: detailData.order_status || "",
         shipping_status: detailData.shipping_status || "",
       });

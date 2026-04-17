@@ -73,7 +73,7 @@ export default function OrderDetailHistoryTableData() {
   ];
 
   const isCancelled =
-    orderData.order_status ||
+    orderData.order_status === "pesanan_dibatalkan" ||
     orderData.shipping_status === "pesanan_dibatalkan";
 
   const currentStatusIndex = statuses.findIndex(
@@ -149,11 +149,13 @@ export default function OrderDetailHistoryTableData() {
                   <div className="p-1.5 bg-secondary rounded-md">
                     <MapPin className="w-4 h-4 text-secondary-foreground" />
                   </div>
-                  Lokasi Pengiriman
+                  {orderData.destination
+                    ? "Lokasi Pengiriman"
+                    : "Lokasi Pengambilan"}
                 </div>
                 <div className="pl-9 space-y-2">
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    {orderData.destination}
+                    {orderData.destination || "Catering Dhewi"}
                   </p>
                   {orderData.note && (
                     <div className="bg-amber-500/10 border border-amber-500/20 p-3 rounded-lg text-xs text-amber-600 dark:text-amber-400 italic">
@@ -276,10 +278,12 @@ export default function OrderDetailHistoryTableData() {
             </CardHeader>
             <CardContent>
               <div className=" flex-col flex gap-4">
-                <Button variant="secondary" onClick={handleWhatsApp}>
-                  <MessageCircle />
-                  Ajukan Pembayaran
-                </Button>
+                {!isCancelled && (
+                  <Button variant="secondary" onClick={handleWhatsApp}>
+                    <MessageCircle />
+                    Ajukan Pembayaran
+                  </Button>
+                )}
                 <Button
                   variant="default"
                   disabled={

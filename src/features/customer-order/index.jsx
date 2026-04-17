@@ -64,7 +64,7 @@ export default function OrderPageData() {
 
     if (checkStockResult && !checkStockResult?.data?.is_available) {
       toast.error(
-        "Stok tidak tersedia pada tanggal ini, silakan pilih tanggal lain",
+        "Stok tidak tersedia pada tanggal ini, silakan pilih tanggal lain atau silahkan hubungi admin untuk perubahan jadwal pesanan",
       );
       return;
     }
