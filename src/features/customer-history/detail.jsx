@@ -256,6 +256,14 @@ export default function OrderDetailHistoryTableData() {
                       : formatRupiah(orderData.shipping_cost)}
                   </span>
                 </div>
+                <div className="flex justify-between text-sm opacity-80">
+                  <span>Diskon</span>
+                  <span>
+                    {orderData.discount === 0
+                      ? "0"
+                      : formatRupiah(orderData.discount)}
+                  </span>
+                </div>
               </div>
               <Separator className="bg-primary-foreground/20" />
               <div className="flex justify-between items-end">

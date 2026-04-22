@@ -56,6 +56,8 @@ export const validateAdminDownloadInvoice = async (order_id) => {
   return res.data;
 };
 export const adminDownloadInvoice = async (order_id) => {
-  const res = await api.get(`/admin/orders/${order_id}/invoice`);
+  const res = await api.get(`/admin/orders/${order_id}/invoice`, {
+    responseType: "blob",
+  });
   return res.data;
 };
