@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import { FormDatePicker } from "@/components/form/form-datepicker";
 import { useState } from "react";
+import { FormComboBox } from "@/components/form/combobox";
+import { useCategories } from "@/features/category/hooks/use-list";
 
 export const TableToolbar = ({
   table,
@@ -24,6 +26,15 @@ export const TableToolbar = ({
   onAdd,
   addLabel = "Tambah",
 }) => {
+  const { data: categoryData } = useCategories({
+    limit: 500,
+  });
+
+  const categoryOptions = categoryData?.data.map((item) => ({
+    label: item.name,
+    value: item.id,
+  }));
+
   return (
     <div className="grid grid-cols-1 gap-4 ">
       <div className="flex justify-between items-center">
@@ -38,7 +49,7 @@ export const TableToolbar = ({
       </div>
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div className="flex gap-4 items-center">
-          <div className="grid grid-cols-3 gap-4 items-center">
+          <div className="grid grid-cols-4 gap-4 items-center">
             {/* Input with search icon */}
             <div className="relative">
               <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
@@ -81,11 +92,26 @@ export const TableToolbar = ({
               }
               showLabel={false}
             />
+            <FormComboBox
+              name="category_id"
+              required
+              placeholder="Kategori"
+              options={categoryOptions}
+              value={queryParams.category_id}
+              onChange={(val) =>
+                setQueryParams((prev) => ({
+                  ...prev,
+                  category_id: val,
+                }))
+              }
+            />
           </div>
           <Button
             className="rounded-full"
             variant="outline"
-            onClick={() => setQueryParams({ from: "", to: "" })}
+            onClick={() =>
+              setQueryParams({ from: "", to: "", category_id: "" })
+            }
           >
             <RefreshCcw className="h-4 w-4" />
           </Button>

@@ -62,7 +62,7 @@ export default function Navbar({ user }) {
 
           {!token && (
             <Button asChild>
-              <Link href="/auth/login">Masuk</Link>
+              <Link href="/login">Masuk</Link>
             </Button>
           )}
           {token && (

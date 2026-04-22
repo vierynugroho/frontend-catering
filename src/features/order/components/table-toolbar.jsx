@@ -32,7 +32,7 @@ export const TableToolbar = ({
           </Button>
         )}
       </div>
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         {/* Input with search icon */}
         <div className="flex items-center gap-4">
           <div className="relative ">
@@ -86,56 +86,55 @@ export const TableToolbar = ({
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
+      </div>
+      <div className="mb-4  flex gap-4 items-center">
+        <FormComboBox
+          containerClassName="w-80"
+          name="shipping_status"
+          required
+          placeholder="Status Pengiriman"
+          options={ShippingStatus}
+          value={queryParams.shipping_status}
+          onChange={(val) =>
+            setQueryParams((prev) => ({
+              ...prev,
+              shipping_status: val,
+            }))
+          }
+        />
 
-        <div className="flex gap-4 items-center">
-          <FormComboBox
-            containerClassName="w-80"
-            name="shipping_status"
-            required
-            placeholder="Status Pengiriman"
-            options={ShippingStatus}
-            value={queryParams.shipping_status}
-            onChange={(val) =>
-              setQueryParams((prev) => ({
-                ...prev,
-                shipping_status: val,
-              }))
-            }
-          />
+        <FormComboBox
+          containerClassName="w-52"
+          name="order_status"
+          required
+          placeholder="Status Pesanan"
+          options={OrderStatus}
+          value={queryParams.order_status}
+          onChange={(val) =>
+            setQueryParams((prev) => ({
+              ...prev,
+              order_status: val,
+            }))
+          }
+        />
 
-          <FormComboBox
-            containerClassName="w-52"
-            name="order_status"
-            required
-            placeholder="Status Pesanan"
-            options={OrderStatus}
-            value={queryParams.order_status}
-            onChange={(val) =>
-              setQueryParams((prev) => ({
-                ...prev,
-                order_status: val,
-              }))
-            }
-          />
-
-          <FormComboBox
-            containerClassName="w-52"
-            name="delivery_method"
-            required
-            placeholder="Jenis Pengiriman"
-            options={[
-              { label: "Dikirim", value: "dikirim" },
-              { label: "Ambil Sendiri", value: "ambil_sendiri" },
-            ]}
-            value={queryParams.delivery_method}
-            onChange={(val) =>
-              setQueryParams((prev) => ({
-                ...prev,
-                delivery_method: val,
-              }))
-            }
-          />
-        </div>
+        <FormComboBox
+          containerClassName="w-52"
+          name="delivery_method"
+          required
+          placeholder="Jenis Pengiriman"
+          options={[
+            { label: "Dikirim", value: "dikirim" },
+            { label: "Ambil Sendiri", value: "ambil_sendiri" },
+          ]}
+          value={queryParams.delivery_method}
+          onChange={(val) =>
+            setQueryParams((prev) => ({
+              ...prev,
+              delivery_method: val,
+            }))
+          }
+        />
       </div>
     </div>
   );

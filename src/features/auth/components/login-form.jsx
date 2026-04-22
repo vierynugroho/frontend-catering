@@ -87,12 +87,10 @@ export function LoginForm({ className, ...props }) {
             </FieldGroup>
           </form>
           <div className="bg-muted relative hidden md:block">
-            <Image
-              width={100}
-              height={100}
-              src="/placeholder.svg"
+            <img
+              src="../images/food-hero.jpg"
               alt="Image"
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+              className="absolute inset-0 h-full w-full object-cover "
             />
           </div>
         </CardContent>

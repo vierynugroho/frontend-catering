@@ -22,13 +22,10 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useMenus } from "./use-list";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { formatRupiah } from "@/lib/utils";
@@ -38,6 +35,7 @@ export function useTableData({ onEdit, onDelete }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [queryParams, setQueryParams] = useState({
     search: "",
+    category_id: "",
     from: "",
     to: "",
   });
@@ -51,6 +49,7 @@ export function useTableData({ onEdit, onDelete }) {
     ...(debouncedSearchParams && { name: debouncedSearchParams }),
     ...(queryParams.from && { from: queryParams.from }),
     ...(queryParams.to && { to: queryParams.to }),
+    ...(queryParams.category_id && { category_id: queryParams.category_id }),
     limit: 10,
   });
 
