@@ -21,6 +21,13 @@ export const updateMenu = async (id, payload) => {
 };
 
 export const deleteMenu = async (id) => {
+  const res = await api.delete(`/menus/${id}?force-delete=true`);
+  return res.data;
+};
+
+export const disableMenu = async (id) => {
   const res = await api.delete(`/menus/${id}`);
   return res.data;
 };
+
+

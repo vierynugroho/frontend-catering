@@ -5,37 +5,29 @@ import { TableData } from "./components/table-data";
 import { TableToolbar } from "./components/table-toolbar";
 import { CreateEditModal } from "./components/create-edit-modal";
 import { useModal } from "@/hooks/use-modal";
-import { menuSchema, defaultValues } from "./schema";
-import { useCreateMenu } from "./hooks/use-create";
-import { useUpdateMenu } from "./hooks/use-update";
+import { userSchema, defaultValues } from "./schema";
+import { useCreateUser } from "./hooks/use-create";
+import { useUpdateUser } from "./hooks/use-update";
 import { DeleteModal } from "@/components/modal/delete-modal";
-import { useDeleteMenu } from "./hooks/use-delete";
-import { useDisableMenu } from "./hooks/use-disable";
+import { useDeleteUser } from "./hooks/use-delete";
 
-export default function MenuTableData() {
+export default function CustomerTableData() {
   // hooks
-  const { create } = useCreateMenu({
+  const { create } = useCreateUser({
     onSuccessCallback: () => {
       closeModal();
       setPayloadData(defaultValues);
       setErrors({});
     },
   });
-  const { update } = useUpdateMenu({
+  const { update } = useUpdateUser({
     onSuccessCallback: () => {
       closeModal();
       setPayloadData(defaultValues);
       setErrors({});
     },
   });
-  const { deleted } = useDeleteMenu({
-    onSuccessCallback: () => {
-      closeModal();
-      setPayloadData(defaultValues);
-      setErrors({});
-    },
-  });
-  const { disable } = useDisableMenu({
+  const { deleted } = useDeleteUser({
     onSuccessCallback: () => {
       closeModal();
       setPayloadData(defaultValues);
@@ -60,31 +52,23 @@ export default function MenuTableData() {
     setModalMode("edit");
     setPayloadData({
       id: data.id,
-      name: data.name,
-      slug: data.slug,
-      is_active: data.is_active,
-      category_id: data.category?.id,
-      price: data.price.toString(),
-      description: data.description,
-      images: data.images,
+      fullname: data.fullname,
+      email: data.email,
+      customer_type: data.customer_type,
+      role: data.role,
+      password: "",
+      phone: data.phone ?? "",
+      adress: data.adress ?? "",
     });
     openModal();
   };
-  console.log("payload data", payloadData);
 
   const handleOpenDeleteModal = (data) => {
     setModalMode("delete");
     setPayloadData({
       id: data.id,
       name: data.name,
-    });
-    openModal();
-  };
-  const handleOpenDisableModal = (data) => {
-    setModalMode("disable");
-    setPayloadData({
-      id: data.id,
-      name: data.name,
+      slug: data.slug,
     });
     openModal();
   };
@@ -92,7 +76,7 @@ export default function MenuTableData() {
   const handleSubmitModal = async () => {
     console.log("error", errors);
 
-    const result = menuSchema.safeParse(payloadData);
+    const result = userSchema.safeParse(payloadData);
     if (!result.success) {
       const fieldErrors = result.error.flatten().fieldErrors;
       setErrors(fieldErrors);
@@ -100,53 +84,24 @@ export default function MenuTableData() {
     }
 
     if (modalMode === "add") {
-      const formData = new FormData();
-      formData.append("name", payloadData.name);
-      formData.append("slug", payloadData.slug);
-      formData.append("is_active", payloadData.is_active);
-      formData.append("category_id", payloadData.category_id);
-      formData.append("price", payloadData.price);
-      formData.append("description", payloadData.description);
-
-      if (payloadData.images) {
-        payloadData.images.forEach((item) => {
-          formData.append("images", item);
-        });
-      }
-
-      create.mutate(formData);
+      const { id, ...payload } = payloadData;
+      create.mutate(payload);
     }
     if (modalMode === "edit") {
-      const { id, ...payload } = payloadData;
+      const { id, password, ...rest } = payloadData;
 
-      const formData = new FormData();
-      formData.append("name", payload.name);
-      formData.append("slug", payload.slug);
-      formData.append("is_active", payload.is_active);
-      formData.append("category_id", payload.category_id);
-      formData.append("price", payload.price);
-      formData.append("description", payload.description);
+      const payload = {
+        ...rest,
+        ...(password !== "" ? { password } : {}),
+      };
 
-      if (payload.images && payload.images.length > 0) {
-        payload.images.forEach((item) => {
-          if (item instanceof File) {
-            formData.append("images", item);
-          }
-        });
-      }
-
-      update.mutate({ id, payload: formData });
+      update.mutate({ id, payload });
     }
   };
   const handleDeleteModal = () => {
     if (!payloadData?.id) return toast.error("Tidak ada data yang dipilih.");
 
-    if (modalMode === "delete") {
-      deleted.mutate({ id: payloadData.id });
-    }
-    if (modalMode === "disable") {
-      disable.mutate({ id: payloadData.id });
-    }
+    deleted.mutate({ id: payloadData.id });
   };
 
   // table data
@@ -161,7 +116,6 @@ export default function MenuTableData() {
   } = useTableData({
     onEdit: handleOpenEditModal,
     onDelete: handleOpenDeleteModal,
-    onDisable: handleOpenDisableModal,
   });
 
   return (
@@ -172,7 +126,7 @@ export default function MenuTableData() {
         queryParams={queryParams}
         setQueryParams={setQueryParams}
         onAdd={handleOpenAddModal}
-        addLabel="Tambah Menu"
+        addLabel="Tambah Pelanggan"
       />
       {/* table */}
       <TableData
@@ -197,17 +151,16 @@ export default function MenuTableData() {
           setPayloadData={setPayloadData}
         />
       )}
-      {(modalMode === "delete" || modalMode === "disable") && (
+      {modalMode === "delete" && (
         <DeleteModal
-          mode={modalMode}
           isOpen={isOpen}
           onClose={() => {
             closeModal();
           }}
           onSubmit={handleDeleteModal}
           selectedData={payloadData}
-          isPending={deleted.isPending || disable.isPending}
-          title={modalMode === "delete" ? "Hapus Menu" : "Nonaktifkan Menu"}
+          isPending={deleted.isPending}
+          title="Hapus Pelanggan"
         />
       )}
     </>

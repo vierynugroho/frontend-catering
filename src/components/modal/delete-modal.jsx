@@ -18,6 +18,7 @@ export function DeleteModal({
   selectedData,
   isPending,
   title = "Hapus Data",
+  mode,
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -25,9 +26,18 @@ export function DeleteModal({
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>
-            Apakah anda yakin ingin menghapus data{" "}
-            <span className="font-semibold">{selectedData?.name}</span>?
-            Tindakan ini tidak dapat dibatalkan.
+            {mode === "delete" ? (
+              <>
+                Apakah anda yakin ingin menghapus data{" "}
+                <span className="font-semibold">{selectedData?.name}</span>?
+                Tindakan ini tidak dapat dibatalkan.
+              </>
+            ) : (
+              <>
+                Apakah anda yakin ingin menonaktifkan data{" "}
+                <span className="font-semibold">{selectedData?.name}</span>?
+              </>
+            )}
           </DialogDescription>
         </DialogHeader>
 
@@ -44,7 +54,7 @@ export function DeleteModal({
             onClick={onSubmit}
           >
             {isPending && <Spinner></Spinner>}
-            Hapus
+            {mode === "delete" ? "Hapus" : "Nonaktifkan"}
           </Button>
         </DialogFooter>
       </DialogContent>

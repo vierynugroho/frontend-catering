@@ -12,6 +12,7 @@ import {
 import { FieldGroup } from "@/components/ui/field";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Spinner } from "@/components/ui/spinner";
+import { generateSlug } from "@/lib/utils";
 
 export function CreateEditModal({
   isOpen,
@@ -49,6 +50,7 @@ export function CreateEditModal({
                 setPayloadData((prev) => ({
                   ...prev,
                   name: e.target.value,
+                  slug: generateSlug(e.target.value),
                 }))
               }
               error={errors?.name?.[0]}
@@ -63,7 +65,7 @@ export function CreateEditModal({
               onChange={(e) =>
                 setPayloadData((prev) => ({
                   ...prev,
-                  slug: e.target.value,
+                  slug: generateSlug(e.target.value),
                 }))
               }
               error={errors?.slug?.[0]}

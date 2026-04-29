@@ -19,6 +19,7 @@ import { FormTextarea } from "@/components/form/form-textarea";
 import { FormImageUpload } from "@/components/form/form-image-select";
 import { useAllCategories } from "@/features/category/hooks/use-list-all";
 import { useMemo } from "react";
+import { generateSlug } from "@/lib/utils";
 export function CreateEditModal({
   isOpen,
   mode,
@@ -32,7 +33,6 @@ export function CreateEditModal({
   const { data } = useAllCategories({
     limit: 200,
   });
-
 
   const categoryOptions = useMemo(() => {
     return (
@@ -69,6 +69,7 @@ export function CreateEditModal({
                 setPayloadData((prev) => ({
                   ...prev,
                   name: e.target.value,
+                  slug: generateSlug(e.target.value),
                 }))
               }
               error={errors?.name?.[0]}
@@ -83,7 +84,7 @@ export function CreateEditModal({
               onChange={(e) =>
                 setPayloadData((prev) => ({
                   ...prev,
-                  slug: e.target.value,
+                  slug: generateSlug(e.target.value),
                 }))
               }
               error={errors?.slug?.[0]}

@@ -7,6 +7,7 @@ const {
   FactoryIcon,
   SoupIcon,
   ShoppingBagIcon,
+  UserCheck2,
 } = require("lucide-react");
 
 export const navByRole = {
@@ -47,6 +48,11 @@ export const navByRole = {
       title: "Pengguna",
       url: "/admin/user",
       icon: <UsersIcon />,
+    },
+    {
+      title: "Pelanggan",
+      url: "/admin/customer",
+      icon: <UserCheck2 />,
     },
 
     {

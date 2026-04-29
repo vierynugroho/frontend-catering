@@ -19,12 +19,13 @@ import {
   Trash2,
   EllipsisVerticalIcon,
   XCircleIcon,
+  Ban,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useCategories } from "./use-list";
 import { formatWIB } from "@/lib/utils";
 
-export function useTableData({ onEdit, onDelete }) {
+export function useTableData({ onEdit, onDelete, onDisable }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [queryParams, setQueryParams] = useState({
     search: "",
@@ -138,6 +139,10 @@ export function useTableData({ onEdit, onDelete }) {
                     <Pencil className="h-4 w-4" />
                     Edit
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => onDisable(row.original)}>
+                    <Ban className="h-4 w-4" />
+                    Nonaktifkan
+                  </DropdownMenuItem>
                   <DropdownMenuItem
                     variant="destructive"
                     onClick={() => onDelete(row.original)}
@@ -170,7 +175,6 @@ export function useTableData({ onEdit, onDelete }) {
       },
     },
   });
-
 
   return {
     table,

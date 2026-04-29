@@ -13,45 +13,32 @@ import {
 } from "@tanstack/react-table";
 import {
   ArrowUpDown,
-  BadgeCheckIcon,
-  Grid2X2,
   Pencil,
   Trash2,
   EllipsisVerticalIcon,
+  BadgeCheckIcon,
   XCircleIcon,
-  Ban,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useMenus } from "./use-list";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
-import { formatRupiah } from "@/lib/utils";
+import { useUser } from "./use-list";
+import { formatWIB } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 
-export function useTableData({ onEdit, onDelete, onDisable }) {
+export function useTableData({ onEdit, onDelete }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [queryParams, setQueryParams] = useState({
     search: "",
-    category_id: "",
-    from: "",
-    to: "",
   });
   const [debouncedSearchParams, setDebouncedSearchParams] = useState("");
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
 
-  const { data, isPending } = useMenus({
+  const { data, isPending } = useUser({
     page: currentPage,
-    ...(debouncedSearchParams && { name: debouncedSearchParams }),
-    ...(queryParams.from && { from: queryParams.from }),
-    ...(queryParams.to && { to: queryParams.to }),
-    ...(queryParams.category_id && { category_id: queryParams.category_id }),
+    ...(debouncedSearchParams && { search: debouncedSearchParams }),
     limit: 10,
+    type: "customer",
   });
 
   useEffect(() => {
@@ -70,7 +57,7 @@ export function useTableData({ onEdit, onDelete, onDisable }) {
     data: data?.data || [],
     columns: [
       {
-        accessorKey: "name",
+        accessorKey: "fullname",
         header: ({ column }) => {
           return (
             <Button
@@ -85,11 +72,14 @@ export function useTableData({ onEdit, onDelete, onDisable }) {
           );
         },
         cell: ({ row }) => {
-          return <div className="ps-3 font-medium"> {row.original.name} </div>;
+          return (
+            <div className="ps-3 font-medium"> {row.original.fullname} </div>
+          );
         },
       },
+
       {
-        accessorKey: "slug",
+        accessorKey: "role",
         header: ({ column }) => {
           return (
             <Button
@@ -98,17 +88,17 @@ export function useTableData({ onEdit, onDelete, onDisable }) {
                 column.toggleSorting(column.getIsSorted() === "asc")
               }
             >
-              Slug
+              Role
               <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
           );
         },
         cell: ({ row }) => {
-          return <div className="ps-3 font-medium"> {row.original.slug} </div>;
+          return <div className="ps-3 font-medium"> {row.original.role} </div>;
         },
       },
       {
-        accessorKey: "price",
+        accessorKey: "customer_type",
         header: ({ column }) => {
           return (
             <Button
@@ -117,7 +107,7 @@ export function useTableData({ onEdit, onDelete, onDisable }) {
                 column.toggleSorting(column.getIsSorted() === "asc")
               }
             >
-              Harga
+              Tipe Pelanggan
               <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
           );
@@ -125,13 +115,14 @@ export function useTableData({ onEdit, onDelete, onDisable }) {
         cell: ({ row }) => {
           return (
             <div className="ps-3 font-medium">
-              {formatRupiah(row.original.price)}
+              {" "}
+              {row.original.customer_type}{" "}
             </div>
           );
         },
       },
       {
-        accessorKey: "category",
+        accessorKey: "phone",
         header: ({ column }) => {
           return (
             <Button
@@ -140,19 +131,19 @@ export function useTableData({ onEdit, onDelete, onDisable }) {
                 column.toggleSorting(column.getIsSorted() === "asc")
               }
             >
-              Kategori
+              Telepon
               <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
           );
         },
         cell: ({ row }) => {
           return (
-            <div className="ps-3 font-medium">{row.original.category.name}</div>
+            <div className="ps-3 font-medium">{row.original.phone ?? "-"}</div>
           );
         },
       },
       {
-        accessorKey: "is_active",
+        accessorKey: "adress",
         header: ({ column }) => {
           return (
             <Button
@@ -161,81 +152,45 @@ export function useTableData({ onEdit, onDelete, onDisable }) {
                 column.toggleSorting(column.getIsSorted() === "asc")
               }
             >
-              Status
+              Alamat
               <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
           );
         },
         cell: ({ row }) => {
           return (
-            <div className="ps-3 font-medium">
-              {row.original.is_active === true ? (
-                <Badge
-                  variant="secondary"
-                  className="border border-green-400 bg-green-50 text-green-800 dark:bg-green-900/70 dark:text-white/80"
-                >
-                  <BadgeCheckIcon />
-                  Aktif
-                </Badge>
-              ) : (
-                <Badge
-                  variant="secondary"
-                  className="border border-red-400 bg-red-50 text-red-800 dark:bg-red-900/70 dark:text-white/80"
-                >
-                  <XCircleIcon />
-                  Tidak Aktif
-                </Badge>
-              )}
-            </div>
-          );
-        },
-      },
-      {
-        accessorKey: "description",
-        header: "Deskripsi",
-
-        cell: ({ row }) => {
-          return (
-            <div className="font-medium truncate">
-              {row.original.description}
-            </div>
-          );
-        },
-      },
-      {
-        accessorKey: "images",
-        header: "Gambar",
-        cell: ({ row }) => {
-          return (
-            <Carousel
-              className="w-full"
-              plugins={[
-                Autoplay({
-                  delay: 2000,
-                }),
-              ]}
-            >
-              <CarouselContent className="cursor-pointer">
-                {row.original.images.map((_, index) => (
-                  <CarouselItem key={index}>
-                    <img
-                      src={_.url}
-                      alt={_.url}
-                      className="object-cover w-full h-32 rounded-sm"
-                    />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              {/* <CarouselPrevious />
-              <CarouselNext /> */}
-            </Carousel>
+            <div className="ps-3 font-medium">{row.original.adress ?? "-"}</div>
           );
         },
       },
 
+      // {
+      //   accessorKey: "created_at",
+      //   header: "Tanggal dibuat",
+
+      //   cell: ({ row }) => {
+      //     return (
+      //       <div className="font-medium">
+      //         {formatWIB(row.original.created_at)}
+      //       </div>
+      //     );
+      //   },
+      // },
+      // {
+      //   accessorKey: "updated_at",
+      //   header: "Tanggal diperbarui",
+      //   cell: ({ row }) => {
+      //     return (
+      //       <div className="font-medium">
+      //         {formatWIB(row.original.updated_at)}
+      //       </div>
+      //     );
+      //   },
+      // },
       {
-        id: "actions",
         size: 10,
+        id: "actions",
+
         cell: ({ row }) => {
           return (
             <div className="flex justify-end">
@@ -254,10 +209,6 @@ export function useTableData({ onEdit, onDelete, onDisable }) {
                   <DropdownMenuItem onClick={() => onEdit(row.original)}>
                     <Pencil className="h-4 w-4" />
                     Edit
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => onDisable(row.original)}>
-                    <Ban className="h-4 w-4" />
-                    Nonaktifkan
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     variant="destructive"

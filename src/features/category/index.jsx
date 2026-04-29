@@ -10,6 +10,7 @@ import { useCreateCategory } from "./hooks/use-create";
 import { useUpdateCategory } from "./hooks/use-update";
 import { DeleteModal } from "@/components/modal/delete-modal";
 import { useDeleteCategory } from "./hooks/use-delete";
+import { useDisableCategory } from "./hooks/use-disable";
 
 export default function CategoryTableData() {
   // hooks
@@ -28,6 +29,13 @@ export default function CategoryTableData() {
     },
   });
   const { deleted } = useDeleteCategory({
+    onSuccessCallback: () => {
+      closeModal();
+      setPayloadData(defaultValues);
+      setErrors({});
+    },
+  });
+  const { disable } = useDisableCategory({
     onSuccessCallback: () => {
       closeModal();
       setPayloadData(defaultValues);
@@ -68,6 +76,16 @@ export default function CategoryTableData() {
     openModal();
   };
 
+  const handleOpenDisableModal = (data) => {
+    setModalMode("disable");
+    setPayloadData({
+      id: data.id,
+      name: data.name,
+      slug: data.slug,
+    });
+    openModal();
+  };
+
   const handleSubmitModal = async () => {
     console.log("error", errors);
 
@@ -87,10 +105,16 @@ export default function CategoryTableData() {
       update.mutate({ id, payload });
     }
   };
+
   const handleDeleteModal = () => {
     if (!payloadData?.id) return toast.error("Tidak ada data yang dipilih.");
 
-    deleted.mutate({ id: payloadData.id });
+    if (modalMode === "delete") {
+      deleted.mutate({ id: payloadData.id });
+    }
+    if (modalMode === "disable") {
+      disable.mutate({ id: payloadData.id });
+    }
   };
 
   // table data
@@ -105,6 +129,7 @@ export default function CategoryTableData() {
   } = useTableData({
     onEdit: handleOpenEditModal,
     onDelete: handleOpenDeleteModal,
+    onDisable: handleOpenDisableModal,
   });
 
   return (
@@ -140,16 +165,19 @@ export default function CategoryTableData() {
           setPayloadData={setPayloadData}
         />
       )}
-      {modalMode === "delete" && (
+      {(modalMode === "delete" || modalMode === "disable") && (
         <DeleteModal
+          mode={modalMode}
           isOpen={isOpen}
           onClose={() => {
             closeModal();
           }}
           onSubmit={handleDeleteModal}
           selectedData={payloadData}
-          isPending={deleted.isPending}
-          title="Hapus Kategori"
+          isPending={deleted.isPending || disable.isPending}
+          title={
+            modalMode === "delete" ? "Hapus Kategori" : "Nonaktifkan Kategori"
+          }
         />
       )}
     </>

@@ -1,0 +1,23 @@
+import { extractErrorMessage } from "@/lib/utils";
+import { deleteUser } from "@/services/user";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+
+export function useDeleteUser({ onSuccessCallback } = {}) {
+  const queryClient = useQueryClient();
+
+  const deleted = useMutation({
+    mutationFn: ({ id }) => deleteUser(id),
+    onSuccess: (res) => {
+      queryClient.invalidateQueries({ queryKey: ["admin-customer"] });
+      toast.success(res.message);
+      onSuccessCallback?.();
+    },
+    onError: (error) => {
+      const message = extractErrorMessage(error);
+      toast.error(message);
+    },
+  });
+
+  return { deleted };
+}

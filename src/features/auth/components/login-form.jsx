@@ -88,7 +88,7 @@ export function LoginForm({ className, ...props }) {
           </form>
           <div className="bg-muted relative hidden md:block">
             <img
-              src="../images/food-hero.jpg"
+              src="../images/food-hero.jpeg"
               alt="Image"
               className="absolute inset-0 h-full w-full object-cover "
             />

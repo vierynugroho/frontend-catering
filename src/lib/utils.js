@@ -43,3 +43,12 @@ export function extractErrorMessage(error) {
 
   return data.message || defaultMessage;
 }
+
+export const generateSlug = (text) => {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "") // hapus karakter spesial
+    .replace(/\s+/g, "-") // spasi jadi dash
+    .replace(/--+/g, "-"); // hindari double dash
+};
