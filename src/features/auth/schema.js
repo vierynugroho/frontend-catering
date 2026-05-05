@@ -5,8 +5,14 @@ export const loginSchema = z.object({
   password: z.string().min(6, "Password minimal 6 karakter"),
 });
 
-export const registerSchema = z.object({
-  email: z.string().email("Email tidak valid"),
-  fullname: z.string().min(2, "Nama minimal 3 karakter"),
-  password: z.string().min(6, "Password minimal 6 karakter"),
-});
+export const registerSchema = z
+  .object({
+    email: z.string().email("Email tidak valid"),
+    fullname: z.string().min(2, "Nama minimal 3 karakter"),
+    password: z.string().min(6, "Password minimal 6 karakter"),
+    confirmPassword: z.string().min(1, "Konfirmasi password wajib diisi"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Password tidak cocok",
+    path: ["confirmPassword"],
+  });

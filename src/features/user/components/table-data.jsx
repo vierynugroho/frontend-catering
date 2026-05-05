@@ -23,8 +23,6 @@ export function TableData({
   data,
   isPending,
 }) {
-  console.log("from table map", data?.data);
-
   return (
     <div>
       {/* Table */}

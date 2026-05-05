@@ -1,6 +1,6 @@
 "use client";
-import React from "react";
-import { useParams } from "next/navigation";
+import React, { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import {
   Package,
   Truck,
@@ -13,8 +13,17 @@ import {
   Clock,
   ReceiptText,
   MessageCircle,
+  Ban,
 } from "lucide-react";
-
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { AlertTriangle } from "lucide-react";
 import { TableToolbar } from "./components/table-toolbar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -28,20 +37,30 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useCustomerOrderDetail } from "./hooks/use-detail-order";
-import { formatRupiah, formatWIB } from "@/lib/utils";
+import { cn, formatRupiah, formatWIB } from "@/lib/utils";
 import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import { useCustomerValidateInvoice } from "./hooks/use-validate-invoice";
 import { useCustomerDownloadInvoice } from "./hooks/use-download-invoice";
 import { orderDetailStatusConfig } from "@/types/enums";
+import { useCancelOrder } from "./hooks/use-cancel-order";
+import { useConfirmOrder } from "./hooks/use-confirm-order";
+import useCartStore from "@/store/use-cart-store";
 
 export default function OrderDetailHistoryTableData() {
   const { id } = useParams();
+  const router = useRouter();
+  const { addToCart } = useCartStore();
   const { data: response, isLoading } = useCustomerOrderDetail(id);
   const { data: validateResponse, isLoading: isValidateLoading } =
     useCustomerValidateInvoice(id);
   const { mutate: downloadInvoice, isPending: isDownloading } =
     useCustomerDownloadInvoice();
+  const { cancel } = useCancelOrder();
+  const { confirm } = useConfirmOrder();
+
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
   const orderData = response?.data;
   const validateData = validateResponse?.data;
@@ -75,6 +94,16 @@ export default function OrderDetailHistoryTableData() {
   const isCancelled =
     orderData.order_status === "pesanan_dibatalkan" ||
     orderData.shipping_status === "pesanan_dibatalkan";
+  const isNewOrder = orderData.order_status === "pesanan_diterima";
+  const canConfirm =
+    orderData.order_status === "pesanan_diproses" &&
+    (orderData.shipping_status === "pesanan_dalam_proses_pengiriman" ||
+      orderData.shipping_status === "pesanan_selesai") &&
+    orderData.order_status !== "pesanan_selesai";
+
+  const canReorder =
+    orderData.order_status === "pesanan_selesai" ||
+    orderData.order_status === "pesanan_dibatalkan";
 
   const currentStatusIndex = statuses.findIndex(
     (s) => s.key === orderData.shipping_status,
@@ -84,7 +113,6 @@ export default function OrderDetailHistoryTableData() {
 
   const handleWhatsApp = () => {
     const adminPhone = "6282234187211";
-
     const message = `Halo Admin Catering Dhewi, saya ingin melakukan konfirmasi/mengajukan pembayaran untuk pesanan dengan kode invoice: *${orderData?.code || id}*.`;
 
     const encodedMessage = encodeURIComponent(message);
@@ -281,17 +309,66 @@ export default function OrderDetailHistoryTableData() {
           <Card className="border-border shadow-sm">
             <CardHeader>
               <CardTitle className="text-md font-bold flex justify-between">
-                Konfirmasi Pembayaran
+                Konfirmasi Pemesanan
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className=" flex-col flex gap-4">
-                {!isCancelled && (
+                {isNewOrder && !isCancelled && (
                   <Button variant="secondary" onClick={handleWhatsApp}>
                     <MessageCircle />
                     Ajukan Pembayaran
                   </Button>
                 )}
+
+                {isNewOrder && (
+                  <Button
+                    variant="destructive"
+                    className="w-full"
+                    onClick={() => setIsCancelModalOpen(true)}
+                  >
+                    <Ban className="w-4 h-4 mr-2" />
+                    Batalkan Pesanan
+                  </Button>
+                )}
+                {canConfirm && (
+                  <Button
+                    onClick={() => setIsConfirmModalOpen(true)}
+                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-500/20 transition-all active:scale-95"
+                  >
+                    <CheckCircle2 className="w-4 h-4 mr-2" />
+                    Pesanan Diterima
+                  </Button>
+                )}
+
+                {canReorder && (
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "w-full font-semibold transition-all",
+                      // Light Mode: Teks & Border Indigo, Hover tipis
+                      "border-indigo-600 text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700",
+                      // Dark Mode: Border & Teks Indigo terang agar kontras, Hover indigo gelap
+                      "dark:border-indigo-400 dark:text-indigo-400 dark:hover:bg-indigo-950 dark:hover:text-indigo-300",
+                    )}
+                    onClick={() => {
+                      orderData.items.forEach((item) => {
+                        addToCart({
+                          id: item.menu_id,
+                          name: item.menu_name,
+                          price: item.menu_price,
+                          images: item.menu_images,
+                          qty: item.quantity,
+                        });
+                      });
+                      router.push("/customer/order");
+                    }}
+                  >
+                    <Package className="w-4 h-4 mr-2" />
+                    Pesan Lagi
+                  </Button>
+                )}
+
                 <Button
                   variant="default"
                   disabled={
@@ -372,11 +449,94 @@ export default function OrderDetailHistoryTableData() {
                   })}
                 </div>
               )}
-              {/* ... sisanya tetap sama */}
             </CardContent>
           </Card>
         </div>
       </div>
+      <Dialog open={isCancelModalOpen} onOpenChange={setIsCancelModalOpen}>
+        <DialogContent className="sm:max-w-[400px]">
+          <DialogHeader>
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10 mb-4">
+              <AlertTriangle className="h-6 w-6 text-destructive" />
+            </div>
+            <DialogTitle className="text-center text-xl">
+              Konfirmasi Pembatalan
+            </DialogTitle>
+            <DialogDescription className="text-center pt-2">
+              Apakah Anda yakin ingin membatalkan pesanan{" "}
+              <span className="font-bold text-foreground">
+                {orderData.code}
+              </span>
+              ? Tindakan ini tidak dapat dipulihkan.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex flex-col sm:flex-row gap-2 mt-4">
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() => setIsCancelModalOpen(false)}
+            >
+              Kembali
+            </Button>
+            <Button
+              variant="destructive"
+              className="flex-1"
+              disabled={cancel.isPending}
+              onClick={() => {
+                cancel.mutate(
+                  { id: id },
+                  {
+                    onSuccess: () => setIsCancelModalOpen(false), // Tutup modal jika sukses
+                  },
+                );
+              }}
+            >
+              {cancel.isPending ? <Spinner /> : "Ya, Batalkan"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isConfirmModalOpen} onOpenChange={setIsConfirmModalOpen}>
+        <DialogContent className="sm:max-w-[400px]">
+          <DialogHeader>
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30 mb-4">
+              <CheckCircle2 className="h-6 w-6 text-emerald-600" />
+            </div>
+            <DialogTitle className="text-center text-xl font-bold">
+              Pesanan Sudah Sampai?
+            </DialogTitle>
+            <DialogDescription className="text-center pt-2">
+              Dengan menekan tombol di bawah, Anda menyatakan bahwa pesanan{" "}
+              <span className="font-bold text-foreground">
+                {orderData.code}
+              </span>{" "}
+              telah diterima dengan baik.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex flex-col sm:flex-row gap-2 mt-4">
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() => setIsConfirmModalOpen(false)}
+            >
+              Belum, Kembali
+            </Button>
+            <Button
+              className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white"
+              disabled={confirm.isPending}
+              onClick={() => {
+                confirm.mutate(
+                  { id: id },
+                  { onSuccess: () => setIsConfirmModalOpen(false) },
+                );
+              }}
+            >
+              {confirm.isPending ? <Spinner /> : "Ya, Saya Terima"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

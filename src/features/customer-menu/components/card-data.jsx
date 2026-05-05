@@ -1,5 +1,6 @@
 import { usePublicMenu } from "../hooks/use-list";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardAction,
@@ -30,8 +31,8 @@ export const CardData = ({ queryParams }) => {
     ...(debouncedSearchParams && { name: debouncedSearchParams }),
     ...(queryParams.from && { from: queryParams.from }),
     ...(queryParams.to && { to: queryParams.to }),
+    ...(queryParams.category_id && { category_id: queryParams.category_id }),
   });
-
 
   useEffect(() => {
     const timer = setTimeout(
@@ -56,6 +57,16 @@ export const CardData = ({ queryParams }) => {
           key={item.id}
           className="relative rounded-md w-full pt-0 hover:shadow-lg transition-shadow overflow-hidden"
         >
+          {item.category?.name && (
+            <div className="absolute top-2 right-2 z-30">
+              <Badge
+                variant="secondary"
+                className="bg-white/80 dark:bg-black/60 backdrop-blur-md text-[10px] sm:text-xs font-medium border-none shadow-sm capitalize"
+              >
+                {item.category.name}
+              </Badge>
+            </div>
+          )}
           <Carousel
             className="w-full"
             plugins={[

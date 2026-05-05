@@ -12,6 +12,8 @@ export const Cart = () => {
 
   const router = useRouter();
 
+  console.log("contoh cart", cart);
+  
   return (
     <>
       <Card className="rounded-md flex-1 overflow-auto">

@@ -18,7 +18,6 @@ export default function OrderHistoryTableData() {
     isPending,
   } = useTableData();
 
-  console.log("cookies", Cookies.get("access_token"));
 
   return (
     <>

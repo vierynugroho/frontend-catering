@@ -130,10 +130,25 @@ export function useTableData({ onEdit, onDelete }) {
           );
         },
         cell: ({ row }) => {
+          const type = row.original.customer_type;
+
+          const label = type ? type.replace(/_/g, " ") : "-";
+
+          const badgeStyles =
+            type === "new_customer"
+              ? "bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 border-blue-200 dark:border-blue-800"
+              : type === "reguler_customer"
+                ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:hover:bg-emerald-900/50 border-emerald-200 dark:border-emerald-800"
+                : "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400";
+
           return (
-            <div className="ps-3 font-medium">
-              {" "}
-              {row.original.customer_type}{" "}
+            <div className="ps-3">
+              <Badge
+                variant="outline"
+                className={`capitalize px-2.5 py-0.5 font-semibold transition-colors ${badgeStyles}`}
+              >
+                {label}
+              </Badge>
             </div>
           );
         },

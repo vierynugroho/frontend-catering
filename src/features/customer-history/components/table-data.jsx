@@ -27,7 +27,6 @@ export function TableData({
   data,
   isPending,
 }) {
-  console.log("from table map", data?.data);
   const router = useRouter();
 
   return (

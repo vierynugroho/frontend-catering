@@ -40,7 +40,6 @@ export default function Navbar({ user }) {
     setOpenMobile(false);
   };
 
-  console.log("user dari navbar", user);
 
   return (
     <div className="border-b bg-muted">

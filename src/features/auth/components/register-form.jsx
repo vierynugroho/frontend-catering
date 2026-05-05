@@ -16,11 +16,11 @@ export function RegisterForm({ className, ...props }) {
     email: "",
     password: "",
     fullname: "",
+    confirmPassword: "",
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("error", errors);
 
     const result = registerSchema.safeParse(registerPayload);
     if (!result.success) {
@@ -29,7 +29,8 @@ export function RegisterForm({ className, ...props }) {
       return;
     }
 
-    mutation.mutate(registerPayload);
+    const { confirmPassword, ...dataToSubmit } = registerPayload;
+    mutation.mutate(dataToSubmit);
   };
 
   return (
@@ -88,6 +89,22 @@ export function RegisterForm({ className, ...props }) {
                   }))
                 }
                 error={errors?.password?.[0]}
+              />
+
+              {/* Confirm Password - Baru */}
+              <FormInput
+                label="Konfirmasi Password"
+                name="confirmPassword"
+                type="password"
+                required
+                value={registerPayload.confirmPassword}
+                onChange={(e) =>
+                  setRegisterPayload((prev) => ({
+                    ...prev,
+                    confirmPassword: e.target.value,
+                  }))
+                }
+                error={errors?.confirmPassword?.[0]}
               />
 
               <Field>

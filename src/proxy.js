@@ -6,15 +6,14 @@ export function proxy(request) {
   const token = request.cookies.get("access_token")?.value;
   const role = request.cookies.get("role")?.value;
 
-  console.log("[PROXY]", {
-    pathname,
-    hasToken: !!token,
-    tokenValue: token?.substring(0, 20), // sebagian saja
-    role,
-    allCookies: request.cookies.getAll().map((c) => c.name),
-  });
+  // console.log("[PROXY]", {
+  //   pathname,
+  //   hasToken: !!token,
+  //   tokenValue: token?.substring(0, 20), // sebagian saja
+  //   role,
+  //   allCookies: request.cookies.getAll().map((c) => c.name),
+  // });
 
-  // Bypass: Next.js internals & static files
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/favicon.ico") ||

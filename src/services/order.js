@@ -10,6 +10,15 @@ export const getPublicDetailOrder = async (id, params) => {
   return res.data;
 };
 
+export const cancelPublicOrder = async (order_id) => {
+  const res = await api.post(`/orders/${order_id}/cancel`);
+  return res.data;
+};
+export const confirmPublicOrder = async (order_id) => {
+  const res = await api.post(`/orders/${order_id}/confirm`);
+  return res.data;
+};
+
 export const validatePublicDownloadInvoice = async (order_id) => {
   const res = await api.get(`/orders/${order_id}/invoice/validate`);
   return res.data;

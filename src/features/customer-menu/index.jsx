@@ -12,6 +12,7 @@ export default function MenuData() {
     search: "",
     from: "",
     to: "",
+    category_id: "",
   });
   const isMobile = useIsMobile();
   const [showMobileCart, setShowMobileCart] = useState(false);
