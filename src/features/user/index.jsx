@@ -58,7 +58,7 @@ export default function UserTableData() {
       role: data.role,
       password: "",
       phone: data.phone ?? "",
-      adress: data.adress ?? "",
+      address: data.address ?? "",
     });
     openModal();
   };

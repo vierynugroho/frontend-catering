@@ -11,12 +11,14 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useCreateOrder } from "./hooks/use-create-order";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 export default function OrderPageData() {
+  const { data: user } = useCurrentUser();
   const [payloadData, setPayloadData] = useState({
-    customer_name: "",
-    phone: "",
-    destination: "",
+    customer_name: user?.fullname || "",
+    phone: user?.phone || "",
+    destination: user?.address || "",
     order_date: "",
     delivery_method: "",
     note: "",
@@ -62,7 +64,11 @@ export default function OrderPageData() {
       return;
     }
 
-    if (checkStockResult && !checkStockResult?.data?.is_available) {
+    if (
+      checkStockResult &&
+      !checkStockResult?.data?.is_available &&
+      !checkStockResult?.data?.out_of_stock
+    ) {
       toast.error(
         "Stok tidak tersedia pada tanggal ini, silakan pilih tanggal lain atau silahkan hubungi admin untuk perubahan jadwal pesanan",
       );

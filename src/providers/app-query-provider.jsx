@@ -21,7 +21,7 @@ export default function AppQueryProvider({ children }) {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      {/* <ReactQueryDevtools position="top-right" initialIsOpen={false} /> */}
+      <ReactQueryDevtools position="top-right" initialIsOpen={false} />
     </QueryClientProvider>
   );
 }

@@ -58,7 +58,7 @@ export default function CustomerTableData() {
       role: data.role,
       password: "",
       phone: data.phone ?? "",
-      adress: data.adress ?? "",
+      address: data.address ?? "",
     });
     openModal();
   };

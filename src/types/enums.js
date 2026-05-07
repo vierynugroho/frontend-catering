@@ -49,11 +49,7 @@ export const navByRole = {
       url: "/admin/user",
       icon: <UsersIcon />,
     },
-    {
-      title: "Pelanggan",
-      url: "/admin/customer",
-      icon: <UserCheck2 />,
-    },
+
 
     {
       title: "Jadwal",

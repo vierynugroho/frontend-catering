@@ -4,6 +4,8 @@ export const profileSchema = z
   .object({
     email: z.string().email("Email tidak valid").optional(),
     fullname: z.string().min(2, "Nama minimal 2 karakter").optional(),
+    phone: z.string().min(2, "telefon minimal 2 karakter").optional(),
+    address: z.string().optional(),
     password: z.string().optional(),
     confirm_password: z.string().optional(),
   })

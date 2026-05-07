@@ -23,6 +23,8 @@ export function UpdateProfiles({ className, ...props }) {
   const [profilePayload, setProfilePayload] = useState({
     email: userData?.email || "",
     fullname: userData?.fullname || "",
+    phone: userData?.phone || "",
+    address: userData?.address || "",
     password: "",
     confirm_password: "",
   });
@@ -44,6 +46,8 @@ export function UpdateProfiles({ className, ...props }) {
     const payload = {
       email: profilePayload?.email,
       fullname: profilePayload?.fullname,
+      phone: profilePayload?.phone,
+      address: profilePayload?.address,
       ...(profilePayload.password && {
         password: profilePayload.password,
         confirm_password: profilePayload.confirm_password,
@@ -93,7 +97,7 @@ export function UpdateProfiles({ className, ...props }) {
               error={errors?.email?.[0]}
             />
             <FormInput
-              label="Fullname"
+              label="Nama Lengkap"
               name="fullname"
               type="text"
               placeholder="John doe"
@@ -105,6 +109,35 @@ export function UpdateProfiles({ className, ...props }) {
               }
               value={profilePayload?.fullname}
               error={errors?.fullname?.[0]}
+            />
+
+            <FormInput
+              label="Nomor Telepon"
+              name="phone"
+              type="number"
+              placeholder="089"
+              onChange={(e) =>
+                setProfilePayload((prev) => ({
+                  ...prev,
+                  phone: e.target.value,
+                }))
+              }
+              value={profilePayload?.phone}
+              error={errors?.phone?.[0]}
+            />
+            <FormInput
+              label="Alamat"
+              name="address"
+              type="text"
+              placeholder="Alamat lengkap"
+              onChange={(e) =>
+                setProfilePayload((prev) => ({
+                  ...prev,
+                  address: e.target.value,
+                }))
+              }
+              value={profilePayload?.address}
+              error={errors?.address?.[0]}
             />
             <FormInput
               label="Password"

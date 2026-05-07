@@ -13,7 +13,9 @@ export const FormData = ({
   checkStockResult,
 }) => {
   const isStockUnavailable =
-    checkStockResult && checkStockResult?.data?.is_available === false;
+    checkStockResult &&
+    !checkStockResult?.data?.is_available &&
+    !checkStockResult?.data?.out_of_stock;
   return (
     <Card className="rounded-md ring-0">
       <CardHeader>

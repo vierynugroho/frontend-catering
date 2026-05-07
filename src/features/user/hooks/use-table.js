@@ -175,7 +175,7 @@ export function useTableData({ onEdit, onDelete }) {
         },
       },
       {
-        accessorKey: "adress",
+        accessorKey: "address",
         header: ({ column }) => {
           return (
             <Button
@@ -191,7 +191,9 @@ export function useTableData({ onEdit, onDelete }) {
         },
         cell: ({ row }) => {
           return (
-            <div className="ps-3 font-medium">{row.original.adress ?? "-"}</div>
+            <div className="ps-3 font-medium">
+              {row.original.address ?? "-"}
+            </div>
           );
         },
       },

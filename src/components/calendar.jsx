@@ -26,7 +26,6 @@ import {
 import { Input } from "@/components/ui/input";
 
 // ================== DATE HELPERS ==================
-// Extracts YYYY-MM-DD in UTC from a Date object safely
 export function dateToUTCDateOnly(date) {
   const y = date.getUTCFullYear();
   const m = String(date.getUTCMonth() + 1).padStart(2, "0");
@@ -74,7 +73,6 @@ export function OrderStockCalendar({
   }, [items]);
 
   function openForDate(day) {
-    // Convert local day to a midnight UTC date safely
     const utc = new Date(
       Date.UTC(day.getFullYear(), day.getMonth(), day.getDate()),
     );
@@ -179,7 +177,6 @@ export function OrderStockCalendar({
         ))}
       </div>
 
-      {/* 2. Simplified to a single flat grid instead of mapping weeks -> days */}
       <div className="grid grid-cols-7 auto-rows-fr">
         {days.map((day, index) => {
           const isCurrent = isSameMonth(day, month);
@@ -190,7 +187,6 @@ export function OrderStockCalendar({
           const key = dateToUTCDateOnly(utc);
           const it = byDate.get(key);
 
-          // Calculate borders efficiently in a 1D flat map
           const isTopRow = index < 7;
           const isLeftCol = index % 7 === 0;
 
@@ -201,12 +197,17 @@ export function OrderStockCalendar({
               onClick={() => openForDate(day)}
               disabled={loading}
               className={[
-                "min-h-[110px] border-b border-r p-2 text-left transition-colors",
+                "group min-h-[110px] border-b border-r p-2 text-left transition-colors",
                 isTopRow ? "border-t" : "",
                 isLeftCol ? "border-l" : "",
                 "focus:outline-none focus:ring-2 focus:ring-ring focus:z-10",
-                loading ? "opacity-50 cursor-not-allowed" : "hover:bg-muted/30",
-                !isCurrent ? "bg-muted/10" : "bg-background",
+                loading ? "opacity-50 cursor-not-allowed" : "",
+                
+                !isCurrent 
+                  ? "bg-muted/10" // Bukan bulan ini
+                  : it 
+                    ? "bg-background hover:bg-muted/30" // Sudah diset
+                    : "bg-red-50/60 dark:bg-red-950/20 hover:bg-red-100/80 dark:hover:bg-red-900/40", 
               ].join(" ")}
             >
               <div className="flex items-start justify-between gap-1 sm:gap-2">
@@ -235,8 +236,15 @@ export function OrderStockCalendar({
                     </span>
                   </div>
                 ) : (
-                  <div className="text-xs text-muted-foreground opacity-0 hover:opacity-100 transition-opacity">
-                    + Set stock
+                  <div className="flex flex-col gap-1">
+                    {isCurrent && (
+                      <div className="text-[10px] font-medium text-red-600 bg-red-100/80 dark:bg-red-900/30 dark:text-red-400 px-1.5 py-0.5 rounded w-fit">
+                        Belum tersedia
+                      </div>
+                    )}
+                    <div className="text-[10px] font-medium text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
+                      + Set stock
+                    </div>
                   </div>
                 )}
               </div>
@@ -251,7 +259,6 @@ export function OrderStockCalendar({
         onOpenChange={(v) => {
           setOpen(v);
           if (!v) {
-            // Slight delay so the UI doesn't visually reset before animating out
             setTimeout(() => setEditor(null), 200);
           }
         }}
@@ -272,7 +279,7 @@ export function OrderStockCalendar({
                 {editor?.mode === "edit"
                   ? isoToUTCDateOnly(editor.item.event_date)
                   : editor?.mode === "create"
-                    ? format(editor.date, "yyyy-MM-dd") // Local date format fallback
+                    ? format(editor.date, "yyyy-MM-dd")
                     : "-"}
               </span>
             </div>

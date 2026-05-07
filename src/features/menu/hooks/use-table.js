@@ -147,7 +147,9 @@ export function useTableData({ onEdit, onDelete, onDisable }) {
         },
         cell: ({ row }) => {
           return (
-            <div className="ps-3 font-medium">{row.original.category.name}</div>
+            <div className="ps-3 font-medium">
+              {row?.original?.category?.name || ""}
+            </div>
           );
         },
       },
