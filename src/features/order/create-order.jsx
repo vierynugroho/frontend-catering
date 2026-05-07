@@ -50,7 +50,6 @@ export default function CreateOrderData() {
       return;
     }
 
-    console.log("Data Valid:", result.data);
     create.mutate(result.data);
   };
 

@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { formatRupiah } from "@/lib/utils";
 import {
   Wallet,
   ShoppingCart,
@@ -18,26 +19,15 @@ import {
   CheckCircle2,
 } from "lucide-react";
 
-// Formatter untuk Rupiah
-const formatRupiah = (number) => {
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    maximumFractionDigits: 0,
-  }).format(number);
-};
-
 export function SectionCards({ orderReport, shippingReport, stockReport }) {
-  // Extract data dengan optional chaining untuk keamanan
   const orders = orderReport?.data;
   const shipping = shippingReport?.data;
   const stocks = stockReport?.data;
 
-  // Hitung jumlah hari out of stock
   const outOfStockCount = stocks?.out_of_stock?.length || 0;
 
   return (
-    <div className="grid grid-cols-4 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4 dark:*:data-[slot=card]:bg-card">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 px-4 lg:px-6 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card *:data-[slot=card]:shadow-xs dark:*:data-[slot=card]:bg-card">
       {/* CARD 1: REVENUE */}
       <Card className="@container/card">
         <CardHeader>
@@ -76,7 +66,7 @@ export function SectionCards({ orderReport, shippingReport, stockReport }) {
             </Badge>
           </CardAction>
         </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm bg-base ">
+        <CardFooter className="flex-col items-start gap-1.5 text-sm bg-base">
           <div className="line-clamp-1 flex items-center gap-2 font-medium text-amber-600 dark:text-amber-400">
             <Clock className="size-4" />
             {orders?.must_be_processed_orders || 0} Perlu Diproses
@@ -103,7 +93,7 @@ export function SectionCards({ orderReport, shippingReport, stockReport }) {
             </Badge>
           </CardAction>
         </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm bg-base ">
+        <CardFooter className="flex-col items-start gap-1.5 text-sm bg-base">
           <div className="line-clamp-1 flex items-center gap-2 font-medium text-emerald-600 dark:text-emerald-400">
             <CheckCircle2 className="size-4" /> Selesai Dikirim
           </div>
@@ -141,7 +131,7 @@ export function SectionCards({ orderReport, shippingReport, stockReport }) {
             </Badge>
           </CardAction>
         </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm bg-base ">
+        <CardFooter className="flex-col items-start gap-1.5 text-sm bg-base">
           <div
             className={`line-clamp-1 flex items-center gap-2 font-medium ${outOfStockCount > 0 ? "text-red-600 dark:text-red-400" : "text-emerald-600 dark:text-emerald-400"}`}
           >

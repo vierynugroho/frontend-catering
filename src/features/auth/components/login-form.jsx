@@ -20,7 +20,6 @@ export function LoginForm({ className, ...props }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("error", errors);
 
     const result = loginSchema.safeParse(loginPayload);
     if (!result.success) {

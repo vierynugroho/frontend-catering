@@ -61,8 +61,6 @@ export default function UpdateOrderData() {
       return;
     }
 
-    console.log("Data Valid:", result.data);
-    console.log("Data Valid:", id);
     update.mutate({ id: id, payload: result.data });
   };
 
@@ -78,8 +76,8 @@ export default function UpdateOrderData() {
         delivery_method: detailData.delivery_method || "",
         note: detailData.note || "",
         items: detailData.items || [],
-        shipping_cost: detailData.shipping_cost || "",
-        discount: detailData.discount || "",
+        shipping_cost: String(detailData.shipping_cost) || "",
+        discount: String(detailData.discount) || "",
         order_status: detailData.order_status || "",
         shipping_status: detailData.shipping_status || "",
       });

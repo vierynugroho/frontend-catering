@@ -5,7 +5,6 @@ export const useCurrentUser = () => {
     queryKey: ["current-user"],
     queryFn: async () => {
       const res = await getCurrentUser();
-      console.log(res.data);
 
       return res.data;
     },

@@ -75,7 +75,6 @@ export default function OrderPageData() {
       return;
     }
 
-    console.log("Data Valid:", result.data);
     create.mutate(result.data);
   };
 

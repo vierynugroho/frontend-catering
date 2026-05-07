@@ -33,11 +33,9 @@ export function UpdateProfiles({ className, ...props }) {
     e.preventDefault();
 
     const result = profileSchema.safeParse(profilePayload);
-    console.log(result);
 
     if (!result.success) {
       const fieldErrors = result.error.flatten().fieldErrors;
-      console.log(fieldErrors);
 
       setErrors(fieldErrors);
       return;

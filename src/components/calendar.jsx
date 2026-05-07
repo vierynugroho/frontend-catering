@@ -25,7 +25,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 
-// ================== DATE HELPERS ==================
 export function dateToUTCDateOnly(date) {
   const y = date.getUTCFullYear();
   const m = String(date.getUTCMonth() + 1).padStart(2, "0");
@@ -37,7 +36,6 @@ export function isoToUTCDateOnly(iso) {
   return dateToUTCDateOnly(new Date(iso));
 }
 
-// ================== COMPONENT ==================
 export function OrderStockCalendar({
   data = [],
   loading = false,
@@ -129,50 +127,59 @@ export function OrderStockCalendar({
   }
 
   return (
-    <Card className="p-4">
-      <div className="flex items-center justify-between gap-2 pb-4">
-        <div className="flex items-center gap-2">
+    <Card className="p-2 sm:p-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4">
+        <div className="flex items-center justify-between md:justify-start gap-2 order-2 md:order-1">
           <Button
             variant="outline"
             size="sm"
             onClick={() => setMonth(new Date())}
+            className="text-xs sm:text-sm"
           >
             Hari ini
           </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setMonth((m) => addMonths(m, -1))}
-          >
-            <ChevronLeft />
-          </Button>
-
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setMonth((m) => addMonths(m, 1))}
-          >
-            <ChevronRight />
-          </Button>
+          <div className="flex items-center">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setMonth((m) => addMonths(m, -1))}
+              className="px-2"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setMonth((m) => addMonths(m, 1))}
+              className="px-2"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
 
-        <div className="flex flex-col items-center">
-          <div className="text-2xl font-bold">{monthLabel}</div>
-          <div className="text-xs text-muted-foreground">
+        <div className="flex flex-col items-center order-1 md:order-2">
+          <div className="text-xl sm:text-2xl font-bold">{monthLabel}</div>
+          <div className="text-[10px] sm:text-xs text-muted-foreground">
             {loading ? "Loading…" : `${items.length} hari dikonfigurasi`}
           </div>
         </div>
 
-        <Button size="sm" onClick={() => openForDate(new Date())}>
-          <PlusIcon className="h-4 w-4" /> Tetapkan Stok Harian
+        <Button
+          size="sm"
+          onClick={() => openForDate(new Date())}
+          className="w-full md:w-auto order-3"
+        >
+          <PlusIcon className="h-4 w-4 mr-1 sm:mr-2" />
+          <span className="text-xs sm:text-sm">Tetapkan Stok</span>
         </Button>
       </div>
 
-      {/* Days of the week header */}
-      <div className="grid grid-cols-7 text-xs text-muted-foreground">
+      <div className="grid grid-cols-7 text-[10px] sm:text-xs text-muted-foreground">
         {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
-          <div key={d} className="px-2 py-2 text-center">
-            {d}
+          <div key={d} className="px-1 sm:px-2 py-2 text-center truncate">
+            <span className="hidden sm:inline">{d}</span>
+            <span className="sm:hidden">{d.slice(0, 1)}</span>
           </div>
         ))}
       </div>
@@ -197,22 +204,21 @@ export function OrderStockCalendar({
               onClick={() => openForDate(day)}
               disabled={loading}
               className={[
-                "group min-h-[110px] border-b border-r p-2 text-left transition-colors",
+                "group min-h-[70px] sm:min-h-[110px] border-b border-r p-1 sm:p-2 text-left transition-colors",
                 isTopRow ? "border-t" : "",
                 isLeftCol ? "border-l" : "",
-                "focus:outline-none focus:ring-2 focus:ring-ring focus:z-10",
+                "focus:outline-none focus:ring-2 focus:ring-ring focus:z-10 w-full overflow-hidden",
                 loading ? "opacity-50 cursor-not-allowed" : "",
-                
-                !isCurrent 
-                  ? "bg-muted/10" // Bukan bulan ini
-                  : it 
-                    ? "bg-background hover:bg-muted/30" // Sudah diset
-                    : "bg-red-50/60 dark:bg-red-950/20 hover:bg-red-100/80 dark:hover:bg-red-900/40", 
+                !isCurrent
+                  ? "bg-muted/10"
+                  : it
+                    ? "bg-background hover:bg-muted/30"
+                    : "bg-red-50/60 dark:bg-red-950/20 hover:bg-red-100/80 dark:hover:bg-red-900/40",
               ].join(" ")}
             >
-              <div className="flex items-start justify-between gap-1 sm:gap-2">
+              <div className="flex flex-col xl:flex-row items-start xl:justify-between gap-1">
                 <div
-                  className={`text-xs font-medium ${!isCurrent ? "text-muted-foreground" : ""}`}
+                  className={`text-[10px] sm:text-xs font-medium ${!isCurrent ? "text-muted-foreground" : ""}`}
                 >
                   {format(day, "d")}
                 </div>
@@ -220,29 +226,32 @@ export function OrderStockCalendar({
                 {it && (
                   <Badge
                     variant="secondary"
-                    className="text-[10px] px-1.5 py-0"
+                    className="text-[8px] sm:text-[10px] px-1 sm:px-1.5 py-0 truncate max-w-full"
                   >
                     {it.current_stock}/{it.max_stock}
                   </Badge>
                 )}
               </div>
 
-              <div className="mt-2 space-y-1">
+              <div className="mt-1 sm:mt-2 space-y-1">
                 {it ? (
-                  <div className="truncate rounded-md bg-primary/10 px-2 py-1 text-xs">
-                    Maksimal: {it.max_stock}{" "}
-                    <span className="text-muted-foreground hidden sm:inline">
-                      (saat ini {it.current_stock})
+                  <div className="truncate rounded-md bg-primary/10 px-1 sm:px-2 py-0.5 sm:py-1 text-[8px] sm:text-xs">
+                    <span className="hidden sm:inline">Maks: </span>
+                    {it.max_stock}
+                    <span className="text-muted-foreground hidden lg:inline">
+                      {" "}
+                      (isi {it.current_stock})
                     </span>
                   </div>
                 ) : (
                   <div className="flex flex-col gap-1">
                     {isCurrent && (
-                      <div className="text-[10px] font-medium text-red-600 bg-red-100/80 dark:bg-red-900/30 dark:text-red-400 px-1.5 py-0.5 rounded w-fit">
-                        Belum tersedia
+                      <div className="text-[8px] sm:text-[10px] font-medium text-red-600 bg-red-100/80 dark:bg-red-900/30 dark:text-red-400 px-1 py-0.5 rounded w-fit truncate max-w-full">
+                        <span className="hidden sm:inline">Belum diset</span>
+                        <span className="sm:hidden">-</span>
                       </div>
                     )}
-                    <div className="text-[10px] font-medium text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="text-[8px] sm:text-[10px] font-medium text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity hidden sm:block">
                       + Set stock
                     </div>
                   </div>
@@ -253,7 +262,6 @@ export function OrderStockCalendar({
         })}
       </div>
 
-      {/* Editor Modal */}
       <Dialog
         open={open}
         onOpenChange={(v) => {
@@ -263,7 +271,7 @@ export function OrderStockCalendar({
           }
         }}
       >
-        <DialogContent>
+        <DialogContent className="sm:max-w-[425px] w-[95vw] rounded-lg">
           <DialogHeader>
             <DialogTitle>
               {editor?.mode === "edit"
@@ -301,21 +309,29 @@ export function OrderStockCalendar({
             </div>
           </div>
 
-          <DialogFooter className="gap-2 sm:gap-0 mt-4">
+          <DialogFooter className="gap-2 sm:gap-0 mt-4 flex-col sm:flex-row">
             <div className="flex w-full items-center justify-between gap-2">
               <div>
                 {editor?.mode === "edit" && (
-                  <Button variant="destructive" onClick={handleDelete}>
+                  <Button
+                    variant="destructive"
+                    onClick={handleDelete}
+                    className="w-full sm:w-auto"
+                  >
                     Hapus
                   </Button>
                 )}
               </div>
 
-              <div className="flex gap-2">
-                <Button variant="outline" onClick={() => setOpen(false)}>
-                  Batalkan
+              <div className="flex gap-2 w-full sm:w-auto justify-end">
+                <Button
+                  variant="outline"
+                  onClick={() => setOpen(false)}
+                  className="flex-1 sm:flex-none"
+                >
+                  Batal
                 </Button>
-                <Button onClick={handleSave}>
+                <Button onClick={handleSave} className="flex-1 sm:flex-none">
                   {editor?.mode === "edit" ? "Edit" : "Simpan"}
                 </Button>
               </div>

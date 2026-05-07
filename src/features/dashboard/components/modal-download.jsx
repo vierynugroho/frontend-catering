@@ -25,8 +25,6 @@ export function DownloadModal({
   payloadData,
   errors,
 }) {
-  console.log("isi", payloadData);
-
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-h-[100vh] md:max-w-2xl">

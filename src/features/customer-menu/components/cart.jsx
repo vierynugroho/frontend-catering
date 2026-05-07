@@ -12,7 +12,6 @@ export const Cart = () => {
 
   const router = useRouter();
 
-  console.log("contoh cart", cart);
   
   return (
     <>

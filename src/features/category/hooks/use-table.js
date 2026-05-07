@@ -72,7 +72,14 @@ export function useTableData({ onEdit, onDelete, onDisable }) {
           );
         },
         cell: ({ row }) => {
-          return <div className="ps-3 font-medium"> {row.original.name} </div>;
+          return (
+            <div
+              className="ps-2 sm:ps-3 font-medium truncate max-w-[100px] sm:max-w-[200px] md:max-w-xs"
+              title={row.original.name}
+            >
+              {row.original.name}
+            </div>
+          );
         },
       },
       {
@@ -91,7 +98,12 @@ export function useTableData({ onEdit, onDelete, onDisable }) {
           );
         },
         cell: ({ row }) => {
-          return <div className="ps-3 font-medium"> {row.original.slug} </div>;
+          return <div 
+              className="ps-2 sm:ps-3 font-medium truncate max-w-[100px] sm:max-w-[200px] md:max-w-xs"
+              title={row.original.slug}
+            >
+              {row.original.slug}
+            </div>;
         },
       },
       {

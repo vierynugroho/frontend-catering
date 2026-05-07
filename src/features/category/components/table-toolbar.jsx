@@ -16,20 +16,19 @@ export const TableToolbar = ({
   addLabel = "Tambah",
 }) => {
   return (
-    <div className="grid grid-cols-1 gap-4 ">
+    <div className="grid grid-cols-1 gap-4">
       <div className="flex justify-between items-center">
-        <h1 className="font-bold text-2xl">Kategori</h1>
+        <h1 className="font-bold text-xl sm:text-2xl">Kategori</h1>
 
         {onAdd && (
-          <Button variant="default" onClick={onAdd}>
-            <PlusIcon className="h-4 w-4" />
-            {addLabel}
+          <Button variant="default" onClick={onAdd} className="w-auto">
+            <PlusIcon className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline">{addLabel}</span>
           </Button>
         )}
       </div>
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        {/* Input with search icon */}
-        <div className="relative ">
+      <div className="mb-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+        <div className="relative w-full sm:w-72">
           <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
             <SearchIcon className="h-5 w-5" />
           </span>
@@ -42,16 +41,15 @@ export const TableToolbar = ({
                 search: e.target.value,
               }))
             }
-            className="h-10 pl-10"
+            className="h-10 pl-10 w-full"
           />
         </div>
 
-        <div className="flex w-full items-center gap-3 sm:w-auto">
-          {/* Column visibility dropdown */}
+        <div className="flex w-full sm:w-auto items-center gap-3">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline">
-                <Columns className=" h-4 w-4" /> Kolom
+              <Button variant="outline" className="w-full sm:w-auto">
+                <Columns className="mr-2 h-4 w-4" /> Kolom
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">

@@ -70,7 +70,6 @@ export default function MenuTableData() {
     });
     openModal();
   };
-  console.log("payload data", payloadData);
 
   const handleOpenDeleteModal = (data) => {
     setModalMode("delete");
