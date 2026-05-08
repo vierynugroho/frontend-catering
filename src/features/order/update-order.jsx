@@ -38,6 +38,17 @@ export default function UpdateOrderData() {
   });
   const [errors, setErrors] = useState({});
 
+  const resolvePickupShippingStatus = (orderStatus) => {
+    if (orderStatus === "pesanan_dibatalkan") return "pesanan_dibatalkan";
+    if (
+      orderStatus === "pesanan_diproses" ||
+      orderStatus === "pesanan_selesai"
+    ) {
+      return "pesanan_selesai";
+    }
+    return "pesanan_disiapkan";
+  };
+
   const handleOrder = async () => {
     console.log("errors", errors);
 
@@ -61,7 +72,17 @@ export default function UpdateOrderData() {
       return;
     }
 
-    update.mutate({ id: id, payload: result.data });
+    const finalPayload =
+      result.data.delivery_method === "ambil_sendiri"
+        ? {
+            ...result.data,
+            destination: "",
+            shipping_cost: "0",
+            shipping_status: resolvePickupShippingStatus(result.data.order_status),
+          }
+        : result.data;
+
+    update.mutate({ id: id, payload: finalPayload });
   };
 
   useEffect(() => {

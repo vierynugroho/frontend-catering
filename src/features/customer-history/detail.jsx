@@ -91,13 +91,15 @@ export default function OrderDetailHistoryTableData() {
     { label: "Selesai", key: "pesanan_selesai", icon: Home },
   ];
 
+  const isPickup = orderData.delivery_method === "ambil_sendiri";
   const isCancelled =
     orderData.order_status === "pesanan_dibatalkan" ||
-    orderData.shipping_status === "pesanan_dibatalkan";
+    (!isPickup && orderData.shipping_status === "pesanan_dibatalkan");
   const isNewOrder = orderData.order_status === "pesanan_diterima";
   const canConfirm =
     orderData.order_status === "pesanan_diproses" &&
-    (orderData.shipping_status === "pesanan_dalam_proses_pengiriman" ||
+    (isPickup ||
+      orderData.shipping_status === "pesanan_dalam_proses_pengiriman" ||
       orderData.shipping_status === "pesanan_selesai") &&
     orderData.order_status !== "pesanan_selesai";
 
@@ -276,14 +278,16 @@ export default function OrderDetailHistoryTableData() {
                   <span>Subtotal</span>
                   <span>{formatRupiah(orderData.normal_price)}</span>
                 </div>
-                <div className="flex justify-between text-sm opacity-80">
-                  <span>Ongkos Kirim</span>
-                  <span>
-                    {orderData.shipping_cost === 0
-                      ? "GRATIS"
-                      : formatRupiah(orderData.shipping_cost)}
-                  </span>
-                </div>
+                {!isPickup && (
+                  <div className="flex justify-between text-sm opacity-80">
+                    <span>Ongkos Kirim</span>
+                    <span>
+                      {orderData.shipping_cost === 0
+                        ? "GRATIS"
+                        : formatRupiah(orderData.shipping_cost)}
+                    </span>
+                  </div>
+                )}
                 <div className="flex justify-between text-sm opacity-80">
                   <span>Diskon</span>
                   <span>
@@ -388,6 +392,7 @@ export default function OrderDetailHistoryTableData() {
             </CardContent>
           </Card>
           {/* Tracking Stepper */}
+          {!isPickup && (
           <Card className="border-border shadow-sm">
             <CardHeader>
               <CardTitle className="text-md font-bold flex justify-between">
@@ -451,6 +456,7 @@ export default function OrderDetailHistoryTableData() {
               )}
             </CardContent>
           </Card>
+          )}
         </div>
       </div>
       <Dialog open={isCancelModalOpen} onOpenChange={setIsCancelModalOpen}>

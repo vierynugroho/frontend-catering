@@ -75,9 +75,10 @@ export default function DetailOrderData() {
     { label: "Selesai", key: "pesanan_selesai", icon: Home },
   ];
 
+  const isPickup = orderData.delivery_method === "ambil_sendiri";
   const isCancelled =
     orderData.order_status === "pesanan_dibatalkan" ||
-    orderData.shipping_status === "pesanan_dibatalkan";
+    (!isPickup && orderData.shipping_status === "pesanan_dibatalkan");
 
   const currentStatusIndex = statuses.findIndex(
     (s) => s.key === orderData.shipping_status,
@@ -253,14 +254,16 @@ export default function DetailOrderData() {
                   <span>Subtotal</span>
                   <span>{formatRupiah(orderData.normal_price)}</span>
                 </div>
-                <div className="flex justify-between text-sm opacity-80">
-                  <span>Ongkos Kirim</span>
-                  <span>
-                    {orderData.shipping_cost === 0
-                      ? "GRATIS"
-                      : formatRupiah(orderData.shipping_cost)}
-                  </span>
-                </div>
+                {!isPickup && (
+                  <div className="flex justify-between text-sm opacity-80">
+                    <span>Ongkos Kirim</span>
+                    <span>
+                      {orderData.shipping_cost === 0
+                        ? "GRATIS"
+                        : formatRupiah(orderData.shipping_cost)}
+                    </span>
+                  </div>
+                )}
                 <div className="flex justify-between text-sm opacity-80">
                   <span>Diskon</span>
                   <span>
@@ -310,6 +313,7 @@ export default function DetailOrderData() {
             </CardContent>
           </Card>
           {/* Tracking Stepper */}
+          {!isPickup && (
           <Card className="border-border shadow-sm">
             <CardHeader>
               <CardTitle className="text-md font-bold flex justify-between">
@@ -373,6 +377,7 @@ export default function DetailOrderData() {
               )}
             </CardContent>
           </Card>
+          )}
         </div>
       </div>
     </div>

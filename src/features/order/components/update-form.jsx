@@ -59,6 +59,8 @@ export default function UpdateOrderForm({
     }));
   };
 
+  const isPickup = payloadData.delivery_method === "ambil_sendiri";
+
   return (
     <div className="grid grid-cols-1 gap-6">
       {/* informasi umum */}
@@ -118,36 +120,40 @@ export default function UpdateOrderForm({
               }
               error={errors?.discount?.[0]}
             />
-            <FormComboBox
-              name="shipping_status"
-              required
-              label="Status Pengiriman"
-              placeholder="Pilih status Pengiriman..."
-              options={ShippingStatus}
-              value={payloadData.shipping_status}
-              onChange={(val) =>
-                setPayloadData((prev) => ({
-                  ...prev,
-                  shipping_status: val,
-                }))
-              }
-              error={errors?.shipping_status?.[0]}
-            />
+            {!isPickup && (
+              <>
+                <FormComboBox
+                  name="shipping_status"
+                  required
+                  label="Status Pengiriman"
+                  placeholder="Pilih status Pengiriman..."
+                  options={ShippingStatus}
+                  value={payloadData.shipping_status}
+                  onChange={(val) =>
+                    setPayloadData((prev) => ({
+                      ...prev,
+                      shipping_status: val,
+                    }))
+                  }
+                  error={errors?.shipping_status?.[0]}
+                />
 
-            <FormInput
-              label="Biaya Pengiriman"
-              name="shipping_cost"
-              type="number"
-              required
-              value={payloadData.shipping_cost}
-              onChange={(e) =>
-                setPayloadData((prev) => ({
-                  ...prev,
-                  shipping_cost: e.target.value,
-                }))
-              }
-              error={errors?.shipping_cost?.[0]}
-            />
+                <FormInput
+                  label="Biaya Pengiriman"
+                  name="shipping_cost"
+                  type="number"
+                  required
+                  value={payloadData.shipping_cost}
+                  onChange={(e) =>
+                    setPayloadData((prev) => ({
+                      ...prev,
+                      shipping_cost: e.target.value,
+                    }))
+                  }
+                  error={errors?.shipping_cost?.[0]}
+                />
+              </>
+            )}
           </div>
         </CardContent>
       </Card>

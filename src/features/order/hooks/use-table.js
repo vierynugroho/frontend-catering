@@ -52,7 +52,7 @@ export function useTableData({ onDelete }) {
         order_status: queryParams.order_status,
       }),
       ...(queryParams.delivery_method !== "" && {
-        delivery_method: queryParams.shipping_status,
+        delivery_method: queryParams.delivery_method,
       }),
       ...(range?.from && {
         from: range?.from,
