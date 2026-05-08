@@ -66,64 +66,36 @@ export const TableToolbar = ({
             />
           </div>
 
-          <div className="flex flex-col sm:flex-row w-full md:w-auto gap-3 items-stretch sm:items-center">
-            <FormDatePicker
-              containerClassName="w-full sm:w-40 md:w-44"
-              name="from"
-              placeholder="Tanggal mulai"
-              value={queryParams.from}
+          <div className="flex w-full sm:w-auto gap-2 items-center">
+            <FormComboBox
+              containerClassName="w-full sm:w-48"
+              name="category_id"
+              required
+              placeholder="Kategori"
+              options={categoryOptions}
+              value={queryParams.category_id}
               onChange={(val) =>
                 setQueryParams((prev) => ({
                   ...prev,
-                  from: val,
+                  category_id: val,
                 }))
               }
-              showLabel={false}
             />
-            <FormDatePicker
-              containerClassName="w-full sm:w-40 md:w-44"
-              placeholder="Tanggal selesai"
-              name="to"
-              value={queryParams.to}
-              onChange={(val) =>
+            <Button
+              className="rounded-full shrink-0"
+              variant="outline"
+              size="icon"
+              onClick={() =>
                 setQueryParams((prev) => ({
                   ...prev,
-                  to: val,
+                  from: "",
+                  to: "",
+                  category_id: "",
                 }))
               }
-              showLabel={false}
-            />
-            <div className="flex w-full sm:w-auto gap-2 items-center">
-              <FormComboBox
-                containerClassName="w-full sm:w-48"
-                name="category_id"
-                required
-                placeholder="Kategori"
-                options={categoryOptions}
-                value={queryParams.category_id}
-                onChange={(val) =>
-                  setQueryParams((prev) => ({
-                    ...prev,
-                    category_id: val,
-                  }))
-                }
-              />
-              <Button
-                className="rounded-full shrink-0"
-                variant="outline"
-                size="icon"
-                onClick={() =>
-                  setQueryParams((prev) => ({
-                    ...prev,
-                    from: "",
-                    to: "",
-                    category_id: "",
-                  }))
-                }
-              >
-                <RefreshCcw className="h-4 w-4" />
-              </Button>
-            </div>
+            >
+              <RefreshCcw className="h-4 w-4" />
+            </Button>
           </div>
         </div>
 

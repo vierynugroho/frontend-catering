@@ -14,10 +14,11 @@ export default function OrderHistoryTableData() {
     setCurrentPage,
     queryParams,
     setQueryParams,
+    range,
+    setRange,
     data,
     isPending,
   } = useTableData();
-
 
   return (
     <>

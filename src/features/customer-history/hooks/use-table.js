@@ -11,13 +11,18 @@ import { useCustomerOrderHistory } from "./use-list";
 import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
 import { formatRupiah, formatWIB } from "@/lib/utils";
-import { renderOrderStatus } from "../utils";
+import { renderOrderStatus, renderShippingStatus } from "../utils";
 
 export function useTableData() {
   const [currentPage, setCurrentPage] = useState(1);
   const [queryParams, setQueryParams] = useState({
+    shipping_status: "",
+    order_status: "",
+    delivery_method: "",
     search: "",
   });
+  const [range, setRange] = useState(undefined);
+
   const [debouncedSearchParams, setDebouncedSearchParams] = useState("");
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
@@ -27,6 +32,21 @@ export function useTableData() {
     page: currentPage,
     ...(debouncedSearchParams && { search: debouncedSearchParams }),
     limit: 10,
+    ...(queryParams.shipping_status !== "" && {
+      shipping_status: queryParams.shipping_status,
+    }),
+    ...(queryParams.order_status !== "" && {
+      order_status: queryParams.order_status,
+    }),
+    ...(queryParams.delivery_method !== "" && {
+      delivery_method: queryParams.delivery_method,
+    }),
+    ...(range?.from && {
+      from: range?.from,
+    }),
+    ...(range?.to && {
+      to: range?.to,
+    }),
   });
 
   const route = useRouter();
@@ -102,11 +122,20 @@ export function useTableData() {
       },
       {
         accessorKey: "order_status",
-        header: "Status",
+        header: "Status Pesanan",
         cell: ({ row }) => {
           const status = row.original.order_status;
 
           return renderOrderStatus(status);
+        },
+      },
+      {
+        accessorKey: "shipping_status",
+        header: "Status Pesanan",
+        cell: ({ row }) => {
+          const status = row.original.shipping_status;
+
+          return <p className="ps-3">{renderShippingStatus(status)}</p>;
         },
       },
       {
@@ -154,6 +183,8 @@ export function useTableData() {
     setCurrentPage,
     queryParams,
     setQueryParams,
+    range,
+    setRange,
     data,
     isPending,
   };
