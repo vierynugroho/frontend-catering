@@ -12,10 +12,11 @@ export const FormData = ({
   checkStock,
   checkStockResult,
 }) => {
-  const isStockUnavailable =
-    checkStockResult &&
-    !checkStockResult?.data?.is_available &&
+  const isStockAvailable =
+    checkStockResult?.data?.is_available &&
     !checkStockResult?.data?.out_of_stock;
+
+  const isStockUnavailable = !isStockAvailable;
   return (
     <Card className="rounded-md ring-0">
       <CardHeader>

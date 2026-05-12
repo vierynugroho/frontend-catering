@@ -10,8 +10,11 @@ export function useCheckOrderStock() {
     mutationFn: checkDateOrderStock,
     onSuccess: (res) => {
       queryClient.invalidateQueries({ queryKey: ["customer-check-stock"] });
-      const isOrderAvailable = res.data.is_available && res.data.out_of_stock;
-      !isOrderAvailable
+      const { is_available, out_of_stock } = res.data;
+
+      const isStockAvailable = is_available && !out_of_stock;
+
+      isStockAvailable
         ? toast.success("Stok tersedia pada tanggal ini")
         : toast.error(
             "Stok tidak tersedia pada tanggal ini, silakan pilih tanggal lain atau silahkan hubungi admin untuk perubahan jadwal pesanan",

@@ -98,12 +98,14 @@ export function useTableData({ onEdit, onDelete, onDisable }) {
           );
         },
         cell: ({ row }) => {
-          return <div 
+          return (
+            <div
               className="ps-2 sm:ps-3 font-medium truncate max-w-[100px] sm:max-w-[200px] md:max-w-xs"
               title={row.original.slug}
             >
               {row.original.slug}
-            </div>;
+            </div>
+          );
         },
       },
       {
@@ -151,10 +153,10 @@ export function useTableData({ onEdit, onDelete, onDisable }) {
                     <Pencil className="h-4 w-4" />
                     Edit
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => onDisable(row.original)}>
+                  {/* <DropdownMenuItem onClick={() => onDisable(row.original)}>
                     <Ban className="h-4 w-4" />
                     Nonaktifkan
-                  </DropdownMenuItem>
+                  </DropdownMenuItem> */}
                   <DropdownMenuItem
                     variant="destructive"
                     onClick={() => onDelete(row.original)}

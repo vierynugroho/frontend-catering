@@ -137,8 +137,25 @@ export function CreateEditModal({
                 error={errors?.customer_type?.[0]}
               />
             )}
+            <FormSelect
+              label="Status"
+              name="status"
+              placeholder="Select status"
+              required
+              value={payloadData.is_active}
+              onChange={(val) =>
+                setPayloadData((prev) => ({
+                  ...prev,
+                  is_active: val,
+                }))
+              }
+              options={[
+                { label: "Aktif", value: true },
+                { label: "Tidak Aktif", value: false },
+              ]}
+              error={errors?.is_active?.[0]}
+            />
             <FormTextarea
-              containerClassName="col-span-2"
               required
               label="Alamat"
               name="address"

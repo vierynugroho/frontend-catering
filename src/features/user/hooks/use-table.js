@@ -18,13 +18,14 @@ import {
   EllipsisVerticalIcon,
   BadgeCheckIcon,
   XCircleIcon,
+  Ban,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useUser } from "./use-list";
 import { formatWIB } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 
-export function useTableData({ onEdit, onDelete }) {
+export function useTableData({ onEdit, onDelete, onDisable }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [queryParams, setQueryParams] = useState({
     search: "",
@@ -237,29 +238,6 @@ export function useTableData({ onEdit, onDelete }) {
         },
       },
 
-      // {
-      //   accessorKey: "created_at",
-      //   header: "Tanggal dibuat",
-
-      //   cell: ({ row }) => {
-      //     return (
-      //       <div className="font-medium">
-      //         {formatWIB(row.original.created_at)}
-      //       </div>
-      //     );
-      //   },
-      // },
-      // {
-      //   accessorKey: "updated_at",
-      //   header: "Tanggal diperbarui",
-      //   cell: ({ row }) => {
-      //     return (
-      //       <div className="font-medium">
-      //         {formatWIB(row.original.updated_at)}
-      //       </div>
-      //     );
-      //   },
-      // },
       {
         size: 10,
         id: "actions",
@@ -282,6 +260,10 @@ export function useTableData({ onEdit, onDelete }) {
                   <DropdownMenuItem onClick={() => onEdit(row.original)}>
                     <Pencil className="h-4 w-4" />
                     Edit
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => onDisable(row.original)}>
+                    <Ban className="h-4 w-4" />
+                    Nonaktifkan
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     variant="destructive"

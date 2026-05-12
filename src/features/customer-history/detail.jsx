@@ -126,8 +126,6 @@ export default function OrderDetailHistoryTableData() {
 
   return (
     <div className="max-w-6xl mx-auto p-4 md:p-6 space-y-6 min-h-screen text-foreground sm:pb-0 pb-20">
-      <TableToolbar />
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Kolom Kiri: Detail Utama & Items */}
         <div className="lg:col-span-2 space-y-6">
@@ -393,69 +391,71 @@ export default function OrderDetailHistoryTableData() {
           </Card>
           {/* Tracking Stepper */}
           {!isPickup && (
-          <Card className="border-border shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-md font-bold flex justify-between">
-                Lacak Pengiriman
-                {isCancelled && <Badge variant="destructive">Dibatalkan</Badge>}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {isCancelled ? (
-                <div className="flex flex-col items-center justify-center py-6 text-center space-y-2">
-                  <div className="p-3 bg-destructive/10 rounded-full">
-                    <ClipboardList className="w-8 h-8 text-destructive" />
+            <Card className="border-border shadow-sm">
+              <CardHeader>
+                <CardTitle className="text-md font-bold flex justify-between">
+                  Lacak Pengiriman
+                  {isCancelled && (
+                    <Badge variant="destructive">Dibatalkan</Badge>
+                  )}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {isCancelled ? (
+                  <div className="flex flex-col items-center justify-center py-6 text-center space-y-2">
+                    <div className="p-3 bg-destructive/10 rounded-full">
+                      <ClipboardList className="w-8 h-8 text-destructive" />
+                    </div>
+                    <p className="text-sm font-medium text-destructive">
+                      Pesanan ini telah dibatalkan.
+                    </p>
                   </div>
-                  <p className="text-sm font-medium text-destructive">
-                    Pesanan ini telah dibatalkan.
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-6 relative before:absolute before:left-[19px] before:top-2 before:bottom-2 before:w-0.5 before:bg-muted">
-                  {statuses.map((step, idx) => {
-                    const Icon = step.icon;
-                    const isDone = idx <= safeStatusIndex;
-                    const isCurrent = idx === safeStatusIndex;
+                ) : (
+                  <div className="space-y-6 relative before:absolute before:left-[19px] before:top-2 before:bottom-2 before:w-0.5 before:bg-muted">
+                    {statuses.map((step, idx) => {
+                      const Icon = step.icon;
+                      const isDone = idx <= safeStatusIndex;
+                      const isCurrent = idx === safeStatusIndex;
 
-                    return (
-                      <div
-                        key={idx}
-                        className="relative flex items-start gap-4"
-                      >
+                      return (
                         <div
-                          className={`z-10 flex h-10 w-10 items-center justify-center rounded-full border-4 transition-all duration-300 ${
-                            isDone
-                              ? "border-primary bg-background text-primary shadow-sm"
-                              : "border-muted bg-background text-muted-foreground"
-                          }`}
+                          key={idx}
+                          className="relative flex items-start gap-4"
                         >
-                          {isDone && idx !== safeStatusIndex ? (
-                            <CheckCircle2 className="w-5 h-5" />
-                          ) : (
-                            <Icon
-                              className={`w-5 h-5 ${isCurrent ? "animate-pulse" : ""}`}
-                            />
-                          )}
-                        </div>
-                        <div className="flex flex-col pt-1">
-                          <span
-                            className={`text-sm font-bold ${isDone ? "text-foreground" : "text-muted-foreground"}`}
+                          <div
+                            className={`z-10 flex h-10 w-10 items-center justify-center rounded-full border-4 transition-all duration-300 ${
+                              isDone
+                                ? "border-primary bg-background text-primary shadow-sm"
+                                : "border-muted bg-background text-muted-foreground"
+                            }`}
                           >
-                            {step.label}
-                          </span>
-                          {isCurrent && (
-                            <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full w-fit mt-1">
-                              Posisi Saat Ini
+                            {isDone && idx !== safeStatusIndex ? (
+                              <CheckCircle2 className="w-5 h-5" />
+                            ) : (
+                              <Icon
+                                className={`w-5 h-5 ${isCurrent ? "animate-pulse" : ""}`}
+                              />
+                            )}
+                          </div>
+                          <div className="flex flex-col pt-1">
+                            <span
+                              className={`text-sm font-bold ${isDone ? "text-foreground" : "text-muted-foreground"}`}
+                            >
+                              {step.label}
                             </span>
-                          )}
+                            {isCurrent && (
+                              <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full w-fit mt-1">
+                                Posisi Saat Ini
+                              </span>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </CardContent>
-          </Card>
+                      );
+                    })}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           )}
         </div>
       </div>

@@ -16,7 +16,7 @@ export const updateCategory = async (id, payload) => {
 };
 
 export const deleteCategory = async (id) => {
-  const res = await api.delete(`/menus/categories/${id}?force-delete=true`);
+  const res = await api.delete(`/menus/categories/${id}`);
   return res.data;
 };
 export const disableCategory = async (id) => {

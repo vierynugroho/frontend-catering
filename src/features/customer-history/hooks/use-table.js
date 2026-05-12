@@ -33,13 +33,13 @@ export function useTableData() {
     ...(debouncedSearchParams && { search: debouncedSearchParams }),
     limit: 10,
     ...(queryParams.shipping_status !== "" && {
-      shipping_status: queryParams.shipping_status,
+      shipping_status: queryParams?.shipping_status,
     }),
     ...(queryParams.order_status !== "" && {
-      order_status: queryParams.order_status,
+      order_status: queryParams?.order_status,
     }),
     ...(queryParams.delivery_method !== "" && {
-      delivery_method: queryParams.delivery_method,
+      delivery_method: queryParams?.delivery_method,
     }),
     ...(range?.from && {
       from: range?.from,
@@ -80,6 +80,24 @@ export function useTableData() {
             >
               {row.original.code}
             </Button>
+          );
+        },
+      },
+      {
+        accessorKey: "ordered_by",
+        header: () => {
+          return <p className="ps-3">Nama</p>;
+        },
+        cell: ({ row }) => {
+          return (
+            <div className="ps-3 ">
+              <p className="sm:text-sm text-xs font-semibold ">
+                {row.original.ordered_by.fullname}
+              </p>
+              <p className="sm:text-sm text-xs ">
+                {row.original.ordered_by.email}
+              </p>
+            </div>
           );
         },
       },
@@ -131,7 +149,7 @@ export function useTableData() {
       },
       {
         accessorKey: "shipping_status",
-        header: "Status Pesanan",
+        header: "Status Pengirimin",
         cell: ({ row }) => {
           const status = row.original.shipping_status;
 

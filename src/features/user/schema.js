@@ -12,6 +12,7 @@ export const userSchema = z.object({
 
   phone: z.string().optional(),
   address: z.string().optional(),
+  is_active: z.boolean().optional(),
 
   customer_type: z.enum(["new_customer", "reguler_customer"], {
     message: "Tipe pelanggan tidak valid",
@@ -28,6 +29,7 @@ export const defaultValues = {
   fullname: "",
   password: "",
   phone: "",
+  is_active: "Aktif",
   address: "",
   customer_type: "new_customer",
   role: "customer",

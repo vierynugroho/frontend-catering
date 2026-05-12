@@ -16,6 +16,10 @@ export const updateUser = async (id, payload) => {
 };
 
 export const deleteUser = async (id) => {
+  const res = await api.delete(`/admin/users/${id}?force-delete=true`);
+  return res.data;
+};
+export const disableUser = async (id) => {
   const res = await api.delete(`/admin/users/${id}`);
   return res.data;
 };

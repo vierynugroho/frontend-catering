@@ -30,8 +30,8 @@ export const TableToolbar = ({
               <SearchIcon className="h-5 w-5" />
             </span>
             <Input
-              placeholder="Cari berdasarkan nama..."
-              value={queryParams.search}
+              placeholder="Cari berdasarkan kode atau nama..."
+              value={queryParams?.search}
               onChange={(e) =>
                 setQueryParams((prev) => ({
                   ...prev,
@@ -56,12 +56,12 @@ export const TableToolbar = ({
         {/* Baris Bawah: Kumpulan Filter ComboBox */}
         <div className="flex flex-col sm:flex-row flex-wrap items-center gap-3 w-full">
           <FormComboBox
-            containerClassName="w-full sm:w-[260px]"
+            containerClassName="w-full sm:w-[300px]"
             name="shipping_status"
             required
             placeholder="Status Pengiriman"
             options={ShippingStatus}
-            value={queryParams.shipping_status}
+            value={queryParams?.shipping_status}
             onChange={(val) =>
               setQueryParams((prev) => ({
                 ...prev,
@@ -76,7 +76,7 @@ export const TableToolbar = ({
             required
             placeholder="Status Pesanan"
             options={OrderStatus}
-            value={queryParams.order_status}
+            value={queryParams?.order_status}
             onChange={(val) =>
               setQueryParams((prev) => ({
                 ...prev,
@@ -94,7 +94,7 @@ export const TableToolbar = ({
               { label: "Dikirim", value: "dikirim" },
               { label: "Ambil Sendiri", value: "ambil_sendiri" },
             ]}
-            value={queryParams.delivery_method}
+            value={queryParams?.delivery_method}
             onChange={(val) =>
               setQueryParams((prev) => ({
                 ...prev,

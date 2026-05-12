@@ -96,6 +96,7 @@ export function useTableData({ onDelete }) {
             </Button>
           );
         },
+
         cell: ({ row }) => {
           return (
             <Button
@@ -105,6 +106,34 @@ export function useTableData({ onDelete }) {
             >
               {row.original.code}
             </Button>
+          );
+        },
+      },
+      {
+        accessorKey: "ordered_by",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Nama Pelanggan
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+        cell: ({ row }) => {
+          return (
+            <div className="ps-3 ">
+              <p className="sm:text-sm text-xs font-semibold ">
+                {row.original.ordered_by.fullname}
+              </p>
+              <p className="sm:text-sm text-xs ">
+                {row.original.ordered_by.email}
+              </p>
+            </div>
           );
         },
       },
@@ -127,25 +156,7 @@ export function useTableData({ onDelete }) {
           return <p className="ps-3">{formatWIB(row.original.order_date)}</p>;
         },
       },
-      {
-        accessorKey: "customer_name",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              onClick={() =>
-                column.toggleSorting(column.getIsSorted() === "asc")
-              }
-            >
-              Nama Pelanggan
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-        cell: ({ row }) => {
-          return <p className="ps-3">{row.original.customer_name}</p>;
-        },
-      },
+
       {
         accessorKey: "items",
         header: ({ column }) => {
