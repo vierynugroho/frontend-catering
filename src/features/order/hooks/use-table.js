@@ -110,6 +110,31 @@ export function useTableData({ onDelete }) {
         },
       },
       {
+        accessorKey: "customer_name",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Pemesan
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+        cell: ({ row }) => {
+          return (
+            <div className="ps-3 ">
+              <p className="sm:text-sm text-xs ">
+                {row.original.customer_name}
+              </p>
+            </div>
+          );
+        },
+      },
+      {
         accessorKey: "ordered_by",
         header: ({ column }) => {
           return (
@@ -119,7 +144,7 @@ export function useTableData({ onDelete }) {
                 column.toggleSorting(column.getIsSorted() === "asc")
               }
             >
-              Nama Pelanggan
+              Dipesankan oleh
               <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
           );

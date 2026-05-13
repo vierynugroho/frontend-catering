@@ -84,9 +84,24 @@ export function useTableData() {
         },
       },
       {
+        accessorKey: "customer_name",
+        header: () => {
+          return <p className="ps-3">Pemesan</p>;
+        },
+        cell: ({ row }) => {
+          return (
+            <div className="ps-3 ">
+              <p className="sm:text-sm text-xs ">
+                {row.original.customer_name}
+              </p>
+            </div>
+          );
+        },
+      },
+      {
         accessorKey: "ordered_by",
         header: () => {
-          return <p className="ps-3">Nama</p>;
+          return <p className="ps-3">Dipesankan Oleh</p>;
         },
         cell: ({ row }) => {
           return (
