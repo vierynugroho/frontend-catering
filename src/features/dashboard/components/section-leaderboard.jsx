@@ -163,7 +163,7 @@ export function SectionLeaderboards({ customerReport, menuReport }) {
                       variant="secondary"
                       className="text-[10px] font-normal px-1.5"
                     >
-                      {menu.category.name}
+                      {menu?.category?.name}
                     </Badge>
                   </div>
                   <div className="text-right shrink-0">
@@ -211,7 +211,7 @@ export function SectionLeaderboards({ customerReport, menuReport }) {
                       variant="outline"
                       className="text-[10px] font-normal px-1.5 text-muted-foreground"
                     >
-                      {menu.category.name}
+                      {menu?.category?.name}
                     </Badge>
                   </div>
                   <div className="text-right shrink-0">
