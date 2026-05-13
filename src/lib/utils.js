@@ -5,7 +5,7 @@ export function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
 
-export function formatWIB(dateString) {
+export function formatWIB(dateString, withTime = false) {
   const date = new Date(dateString);
 
   return new Intl.DateTimeFormat("id-ID", {
@@ -13,9 +13,12 @@ export function formatWIB(dateString) {
     day: "2-digit",
     month: "long",
     year: "numeric",
+    ...(withTime && {
+      hour: "2-digit",
+      minute: "2-digit",
+    }),
   }).format(date);
 }
-
 export function formatRupiah(number) {
   return new Intl.NumberFormat("id-ID", {
     style: "currency",

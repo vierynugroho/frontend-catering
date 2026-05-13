@@ -23,7 +23,12 @@ export default function OrderHistoryTableData() {
   return (
     <>
       {/* toolbar */}
-      <TableToolbar queryParams={queryParams} setQueryParams={setQueryParams} />
+      <TableToolbar
+        queryParams={queryParams}
+        setRange={setRange}
+        range={range}
+        setQueryParams={setQueryParams}
+      />
       {/* table */}
       <TableData
         table={table}

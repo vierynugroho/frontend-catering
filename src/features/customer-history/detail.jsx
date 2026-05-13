@@ -138,7 +138,7 @@ export default function OrderDetailHistoryTableData() {
                 </h1>
                 <div className="flex items-center gap-2 text-muted-foreground text-sm mt-1">
                   <Clock className="w-4 h-4" />
-                  <span>{formatWIB(orderData.order_date)}</span>
+                  <span>{formatWIB(orderData.order_date, true)}</span>
                 </div>
               </div>
               <Badge

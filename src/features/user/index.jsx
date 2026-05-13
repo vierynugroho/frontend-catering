@@ -138,6 +138,7 @@ export default function UserTableData() {
   } = useTableData({
     onEdit: handleOpenEditModal,
     onDelete: handleOpenDeleteModal,
+    onDisable: handleOpenDisableModal,
   });
 
   return (
