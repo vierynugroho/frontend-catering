@@ -1,8 +1,8 @@
 export default function Footer() {
   return (
-    <footer className="flex z-99 items-center justify-center px-14 py-4 border-t bg-muted fixed bottom-0 w-full">
+    <footer className="flex z-99 items-center justify-center px-14 py-4 border-t bg-muted  w-full">
       <div className="text-center">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-xs sm:text-sm text-muted-foreground">
           ©2026 Catering Dhewi. All rights reserved.
         </p>
         <p className="text-xs text-muted-foreground mt-1">

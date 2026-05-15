@@ -24,7 +24,7 @@ export default function MenuData() {
           queryParams={queryParams}
           setQueryParams={setQueryParams}
         />
-        <ScrollArea className="flex-1 mt-6">
+        <ScrollArea className="flex-1 mt-6 min-h-0">
           <div className="sm:pr-4">
             <CardData queryParams={queryParams} />
           </div>

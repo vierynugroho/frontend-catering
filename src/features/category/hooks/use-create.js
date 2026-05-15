@@ -9,6 +9,7 @@ export function useCreateCategory({ onSuccessCallback } = {}) {
   const create = useMutation({
     mutationFn: createCategory,
     onSuccess: (res) => {
+      queryClient.invalidateQueries({ queryKey: ["admin-category-all"] });
       queryClient.invalidateQueries({ queryKey: ["admin-category"] });
       toast.success(res.message);
 
