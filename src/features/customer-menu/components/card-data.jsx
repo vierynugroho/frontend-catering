@@ -25,32 +25,13 @@ import { formatRupiah } from "@/lib/utils";
 import useCartStore from "@/store/use-cart-store";
 import Autoplay from "embla-carousel-autoplay";
 import { ShoppingCart } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-export const CardData = ({ queryParams }) => {
+export const CardData = ({ data, isPending }) => {
   const addToCart = useCartStore((state) => state.addToCart);
-  const [debouncedSearchParams, setDebouncedSearchParams] = useState("");
-
-  // State untuk menyimpan item yang dipilih untuk ditampilkan di Modal
   const [selectedItem, setSelectedItem] = useState(null);
 
-  const { data, isLoading } = usePublicMenu({
-    limit: 200,
-    ...(debouncedSearchParams && { name: debouncedSearchParams }),
-    ...(queryParams.from && { from: queryParams.from }),
-    ...(queryParams.to && { to: queryParams.to }),
-    ...(queryParams.category_id && { category_id: queryParams.category_id }),
-  });
-
-  useEffect(() => {
-    const timer = setTimeout(
-      () => setDebouncedSearchParams(queryParams.search),
-      1000,
-    );
-    return () => clearTimeout(timer);
-  }, [queryParams.search]);
-
-  if (isLoading) {
+  if (isPending) {
     return (
       <div className="flex w-full justify-center">
         <Spinner className="w-10 h-10" />
@@ -60,11 +41,11 @@ export const CardData = ({ queryParams }) => {
 
   return (
     <>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-3 lg:gap-4 pb-20">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-3 lg:gap-4 ">
         {data?.data?.map((item) => (
           <Card
             key={item.id}
-            className="relative rounded-md w-full pt-0 hover:shadow-lg transition-shadow overflow-hidden flex flex-col"
+            className="relative rounded-md w-full pt-0 hover:shadow-lg transition-shadow overflow-hidden flex flex-col pb-6"
           >
             {item.category?.name && (
               <div className="absolute top-2 right-2 z-30">

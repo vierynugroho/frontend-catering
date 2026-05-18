@@ -9,7 +9,7 @@ export default function DashboardLayout({ children }) {
 
   return (
     <AuthProvider>
-      <div className="min-h-screen">
+      <div className="">
         <Navbar user={user} />
         <main className="w-full max-w-[90rem] mx-auto px-10 py-6">
           {children}

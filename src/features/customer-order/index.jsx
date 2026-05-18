@@ -78,8 +78,8 @@ export default function OrderPageData() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 h-[calc(100vh-12rem)] min-h-0 overflow-hidden">
-      <div className="flex-1 min-w-0 flex flex-col overflow-hidden">
+    <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 sm:h-[calc(100vh-12rem)] ">
+      <div className="flex-1 min-w-0 flex flex-col overflow-y-auto">
         <FormData
           payloadData={payloadData}
           setPayloadData={setPayloadData}

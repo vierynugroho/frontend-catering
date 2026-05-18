@@ -22,7 +22,7 @@ export const FormData = ({
       <CardHeader>
         <CardTitle className="font-semibold">Data Diri</CardTitle>
       </CardHeader>
-      <CardContent className="px-4 grid grid-cols-1 gap-6 pb-10">
+      <CardContent className="px-4 grid grid-cols-1 gap-6 pb-8">
         <FormDateTimePicker
           label="Waktu Pengambilan Pesanan"
           required
