@@ -38,7 +38,7 @@ export default function MenuData() {
 
   const { data, isPending } = usePublicMenu({
     page: currentPage,
-    limit: 8, // sesuaikan
+    limit: 16,
     ...(debouncedSearch && { name: debouncedSearch }),
     ...(queryParams.from && { from: queryParams.from }),
     ...(queryParams.to && { to: queryParams.to }),

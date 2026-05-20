@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { FormData } from "./components/form-data";
 import { Cart } from "./components/cart";
 import { FloatingCart } from "./components/floating-cart";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { orderSchema } from "./schema";
 import { useCheckOrderStock } from "./hooks/use-check-order-stock";
 import useCartStore from "@/store/use-cart-store";
@@ -78,8 +77,8 @@ export default function OrderPageData() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 sm:h-[calc(100vh-12rem)] ">
-      <div className="flex-1 min-w-0 flex flex-col overflow-y-auto">
+    <div className="flex flex-col gap-4 lg:h-[calc(100dvh-12rem)] lg:min-h-0 lg:flex-row lg:gap-6">
+      <div className="flex min-w-0 flex-1 flex-col lg:min-h-0 lg:overflow-y-auto lg:pr-2">
         <FormData
           payloadData={payloadData}
           setPayloadData={setPayloadData}
@@ -90,7 +89,7 @@ export default function OrderPageData() {
       </div>
 
       {/* Desktop Cart Sidebar */}
-      <div className="hidden lg:flex lg:w-3/12 flex-col gap-4 group-data-[theme-content-layout=centered]/layout:h-[calc(100vh-8rem)] group-data-[theme-content-layout=full]/layout:h-[calc(100vh-6rem)]">
+      <div className="hidden min-h-0 flex-col gap-4 lg:flex lg:h-full lg:w-3/12">
         <Cart orderIsPending={create.isPending} handleOrder={handleOrder} />
       </div>
 

@@ -128,12 +128,28 @@ const useDropzone = (props) => {
 
   const _uploadFile = useCallback(
     async (file, id, tries = 0) => {
-      const result = await pOnDropFile(file);
+      const maxTries = maxRetryCount ?? Infinity;
+      let currentTry = tries;
 
-      if (result.status === "error") {
-        if (autoRetry === true && tries < (maxRetryCount ?? Infinity)) {
+      while (true) {
+        const result = await pOnDropFile(file);
+
+        if (result.status !== "error") {
+          if (pOnFileUploaded !== undefined) {
+            pOnFileUploaded(result.result);
+          }
+          dispatch({
+            type: "update-status",
+            id,
+            ...result,
+          });
+          return;
+        }
+
+        if (autoRetry === true && currentTry < maxTries) {
           dispatch({ type: "update-status", id, status: "pending" });
-          return _uploadFile(file, id, tries + 1);
+          currentTry += 1;
+          continue;
         }
 
         dispatch({
@@ -150,14 +166,6 @@ const useDropzone = (props) => {
         }
         return;
       }
-      if (pOnFileUploaded !== undefined) {
-        pOnFileUploaded(result.result);
-      }
-      dispatch({
-        type: "update-status",
-        id,
-        ...result,
-      });
     },
     [
       autoRetry,
@@ -311,7 +319,6 @@ const DropZoneArea = forwardRef(
 
     return (
       // A11y behavior is handled through Trigger. All of these are only relevant to drag and drop which means this should be fine?
-      // eslint-disable-next-line jsx-a11y/no-static-element-interactions
       <div
         ref={(instance) => {
           // TODO: test if this actually works?

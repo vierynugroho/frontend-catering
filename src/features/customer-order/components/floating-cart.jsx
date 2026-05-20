@@ -52,12 +52,12 @@ export const FloatingCart = ({
 
       {/* Drawer */}
       <Drawer open={isOpen} onOpenChange={onOpenChange}>
-        <DrawerContent className="h-3/4">
+        <DrawerContent className="h-3/4 flex flex-col">
           <DrawerHeader>
             <DrawerTitle>Keranjang Saya</DrawerTitle>
           </DrawerHeader>
 
-          <ScrollArea className="flex-1 px-4">
+          <ScrollArea className="flex-1 overflow-hidden px-4">
             <div className="space-y-4 pr-4">
               {cart.length !== 0 ? (
                 cart.map((item) => (

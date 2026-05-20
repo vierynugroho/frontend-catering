@@ -1,4 +1,5 @@
 import { extractErrorMessage } from "@/lib/utils";
+import { invalidateDashboardReports } from "@/features/dashboard/hooks/use-reports";
 import { createOrder } from "@/services/order";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -12,6 +13,7 @@ export function useCreateOrder({ onSuccessCallback } = {}) {
     mutationFn: createOrder,
     onSuccess: (res) => {
       queryClient.invalidateQueries({ queryKey: ["admin-order"] });
+      invalidateDashboardReports(queryClient);
       toast.success(res.message);
       route.push(`/admin/order`);
       onSuccessCallback?.();

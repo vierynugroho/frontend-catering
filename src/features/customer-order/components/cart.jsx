@@ -12,12 +12,12 @@ export const Cart = ({ handleOrder, orderIsPending }) => {
 
   return (
     <>
-      <Card className="rounded-md flex-1 overflow-auto ring-0">
+      <Card className="min-h-0 flex-1 overflow-auto rounded-md ring-0">
         <CardHeader>
           <CardTitle className="font-semibold">Keranjang</CardTitle>
         </CardHeader>
 
-        <CardContent className="px-6 flex-1 overflow-auto">
+        <CardContent className="min-h-0 flex-1 overflow-auto px-6">
           <div className="space-y-4">
             {cart.length != 0 &&
               cart.map((item) => (

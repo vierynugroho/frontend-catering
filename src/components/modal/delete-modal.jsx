@@ -18,7 +18,7 @@ export function DeleteModal({
   selectedData,
   isPending,
   title = "Hapus Data",
-  mode,
+  mode = "delete",
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

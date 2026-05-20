@@ -12,7 +12,6 @@ export const Cart = () => {
 
   const router = useRouter();
 
-  
   return (
     <>
       <Card className="rounded-md flex-1 overflow-auto">
@@ -56,7 +55,7 @@ export const Cart = () => {
                           const val = parseInt(e.target.value);
                           updateQuantity(item.id, isNaN(val) ? 0 : val);
                         }}
-                        className="w-8 md:w-12 h-5 md:h-6 p-0.5 md:p-1 text-center text-xs md:text-sm"
+                        className="w-10 md:w-16 h-5 md:h-6 p-0.5 md:p-1 text-center text-xs md:text-sm"
                       />
                       <Button
                         variant="outline"

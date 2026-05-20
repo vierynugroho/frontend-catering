@@ -1,4 +1,5 @@
 import { extractErrorMessage } from "@/lib/utils";
+import { invalidateDashboardReports } from "@/features/dashboard/hooks/use-reports";
 import { confirmPublicOrder } from "@/services/order";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -15,6 +16,7 @@ export function useConfirmOrder({ onSuccessCallback } = {}) {
       queryClient.invalidateQueries({
         queryKey: ["customer-order-history"],
       });
+      invalidateDashboardReports(queryClient);
       toast.success(res.message);
 
       onSuccessCallback?.();

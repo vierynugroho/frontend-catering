@@ -1,4 +1,5 @@
 import { extractErrorMessage } from "@/lib/utils";
+import { invalidateDashboardReports } from "@/features/dashboard/hooks/use-reports";
 import { createCategory } from "@/services/category";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -11,6 +12,7 @@ export function useCreateCategory({ onSuccessCallback } = {}) {
     onSuccess: (res) => {
       queryClient.invalidateQueries({ queryKey: ["admin-category-all"] });
       queryClient.invalidateQueries({ queryKey: ["admin-category"] });
+      invalidateDashboardReports(queryClient);
       toast.success(res.message);
 
       onSuccessCallback?.();
