@@ -29,7 +29,7 @@ export const defaultValues = {
   fullname: "",
   password: "",
   phone: "",
-  is_active: "Aktif",
+  is_active: true,
   address: "",
   customer_type: "new_customer",
   role: "customer",

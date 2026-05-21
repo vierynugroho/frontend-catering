@@ -124,7 +124,6 @@ export function CreateEditModal({
               label="Status"
               name="status"
               placeholder="Select status"
-              required
               value={payloadData.is_active}
               onChange={(val) =>
                 setPayloadData((prev) => ({

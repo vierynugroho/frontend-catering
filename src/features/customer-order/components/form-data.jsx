@@ -100,7 +100,6 @@ export const FormData = ({
               name="destination"
               type="text"
               placeholder="Jakarta, Bandung, dsb"
-              required
               value={payloadData.destination}
               onChange={(e) =>
                 setPayloadData((prev) => ({
@@ -114,7 +113,6 @@ export const FormData = ({
         </div>
 
         <FormTextarea
-          required
           label="Catatan"
           name="note"
           placeholder="Masukan catatan"

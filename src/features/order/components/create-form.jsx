@@ -151,7 +151,6 @@ export default function CreateOrderForm({
                 name="destination"
                 type="text"
                 placeholder="Jakarta, Bandung, dsb"
-                required
                 value={payloadData.destination}
                 onChange={(e) =>
                   setPayloadData((prev) => ({
@@ -164,7 +163,6 @@ export default function CreateOrderForm({
             )}
           </div>
           <FormTextarea
-            required
             label="Catatan"
             name="note"
             placeholder="Masukan catatan"

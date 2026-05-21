@@ -74,7 +74,6 @@ export function CreateEditModal({
               label="Password"
               name="password"
               type="password"
-              required
               value={payloadData.password}
               onChange={(e) =>
                 setPayloadData((prev) => ({
@@ -89,7 +88,6 @@ export function CreateEditModal({
               name="phone"
               type="text"
               placeholder="08123423223"
-              required
               value={payloadData.phone}
               onChange={(e) =>
                 setPayloadData((prev) => ({
@@ -103,7 +101,6 @@ export function CreateEditModal({
               label="Role"
               name="role"
               placeholder="Select role"
-              required
               value={payloadData.role}
               onChange={(val) =>
                 setPayloadData((prev) => ({
@@ -122,7 +119,6 @@ export function CreateEditModal({
                 label="Tipe pelanggan"
                 name="customer_type"
                 placeholder="Pilih tipe pelanggan"
-                required
                 value={payloadData.customer_type}
                 onChange={(val) =>
                   setPayloadData((prev) => ({
@@ -141,7 +137,6 @@ export function CreateEditModal({
               label="Status"
               name="status"
               placeholder="Select status"
-              required
               value={payloadData.is_active}
               onChange={(val) =>
                 setPayloadData((prev) => ({
