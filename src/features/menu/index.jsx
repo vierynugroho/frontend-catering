@@ -65,6 +65,7 @@ export default function MenuTableData() {
       is_active: data.is_active,
       category_id: data.category?.id,
       price: data.price.toString(),
+      min_order: data.min_order ?? 1,
       description: data.description,
       images: data.images,
     });
@@ -105,6 +106,7 @@ export default function MenuTableData() {
       formData.append("is_active", payloadData.is_active);
       formData.append("category_id", payloadData.category_id);
       formData.append("price", payloadData.price);
+      formData.append("min_order", payloadData.min_order);
       formData.append("description", payloadData.description);
 
       if (payloadData.images) {
@@ -124,6 +126,7 @@ export default function MenuTableData() {
       formData.append("is_active", payload.is_active);
       formData.append("category_id", payload.category_id);
       formData.append("price", payload.price);
+      formData.append("min_order", payload.min_order);
       formData.append("description", payload.description);
 
       if (payload.images && payload.images.length > 0) {

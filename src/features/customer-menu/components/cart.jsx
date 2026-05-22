@@ -39,6 +39,11 @@ export const Cart = () => {
                       <p className="text-xs md:text-sm">
                         {formatRupiah(item.price * item.quantity)}
                       </p>
+                      {item.min_order > 1 && (
+                        <p className="text-[10px] md:text-xs text-muted-foreground">
+                          Min. {item.min_order} porsi
+                        </p>
+                      )}
                     </div>
                     <div className="flex gap-2 md:gap-4 w-full items-center">
                       <Button

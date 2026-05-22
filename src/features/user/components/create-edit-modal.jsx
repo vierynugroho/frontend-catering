@@ -88,6 +88,7 @@ export function CreateEditModal({
               name="phone"
               type="text"
               placeholder="08123423223"
+              required
               value={payloadData.phone}
               onChange={(e) =>
                 setPayloadData((prev) => ({

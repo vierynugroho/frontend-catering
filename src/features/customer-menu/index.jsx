@@ -27,14 +27,19 @@ export default function MenuData() {
   const [showMobileCart, setShowMobileCart] = useState(false);
   const [debouncedSearch, setDebouncedSearch] = useState("");
 
-  // debounce search di parent
+  // debounce search di parent, reset page ke 1 saat search berubah
   useEffect(() => {
-    const timer = setTimeout(
-      () => setDebouncedSearch(queryParams.search),
-      1000,
-    );
+    const timer = setTimeout(() => {
+      setDebouncedSearch(queryParams.search);
+      setCurrentPage(1);
+    }, 1000);
     return () => clearTimeout(timer);
   }, [queryParams.search]);
+
+  // reset page ke 1 saat filter non-search berubah
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [queryParams.category_id, queryParams.from, queryParams.to]);
 
   const { data, isPending } = usePublicMenu({
     page: currentPage,

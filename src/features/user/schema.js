@@ -10,7 +10,7 @@ export const userSchema = z.object({
 
   password: z.string().optional(),
 
-  phone: z.string().optional(),
+  phone: z.string().min(1, "Nomor telepon wajib diisi"),
   address: z.string().optional(),
   is_active: z.boolean().optional(),
 

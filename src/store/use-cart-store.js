@@ -7,6 +7,7 @@ const useCartStore = create((set, get) => ({
   addToCart: (product) => {
     const { cart } = get();
     const isExist = cart.find((item) => item.id === product.id);
+    const minOrder = product.min_order ?? 1;
 
     if (isExist) {
       set({
@@ -22,10 +23,11 @@ const useCartStore = create((set, get) => ({
           ...cart,
           {
             id: product.id,
-            quantity: 1,
+            quantity: minOrder,
             price: product.price,
             name: product.name,
             images: product.images,
+            min_order: minOrder,
           },
         ],
       });
@@ -35,16 +37,21 @@ const useCartStore = create((set, get) => ({
   // Action: Update Quantity Langsung (Input Manual)
   updateQuantity: (productId, newQuantity) => {
     const { cart } = get();
+    const targetItem = cart.find((item) => item.id === productId);
+    const minOrder = targetItem?.min_order ?? 1;
 
-    // Validasi: Jika quantity 0 atau kurang, hapus dari cart
+    // Jika 0 atau kurang, hapus dari cart
     if (newQuantity <= 0) {
       set({ cart: cart.filter((item) => item.id !== productId) });
       return;
     }
 
+    // Jika kurang dari min_order, paksa ke min_order
+    const safeQuantity = newQuantity < minOrder ? minOrder : newQuantity;
+
     set({
       cart: cart.map((item) =>
-        item.id === productId ? { ...item, quantity: newQuantity } : item,
+        item.id === productId ? { ...item, quantity: safeQuantity } : item,
       ),
     });
   },
@@ -53,8 +60,9 @@ const useCartStore = create((set, get) => ({
   removeFromCart: (productId) => {
     const { cart } = get();
     const targetItem = cart.find((item) => item.id === productId);
+    const minOrder = targetItem?.min_order ?? 1;
 
-    if (targetItem?.quantity === 1) {
+    if (targetItem?.quantity <= minOrder) {
       set({ cart: cart.filter((item) => item.id !== productId) });
     } else {
       set({

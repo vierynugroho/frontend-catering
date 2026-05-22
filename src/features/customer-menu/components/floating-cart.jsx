@@ -68,6 +68,11 @@ export const FloatingCart = ({ isOpen, onOpenChange }) => {
                         <p className="text-sm">
                           {formatRupiah(item.price * item.quantity)}
                         </p>
+                        {item.min_order > 1 && (
+                          <p className="text-xs text-muted-foreground">
+                            Min. {item.min_order} porsi
+                          </p>
+                        )}
                       </div>
                       <div className="flex gap-2 w-full items-center">
                         <Button

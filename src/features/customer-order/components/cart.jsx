@@ -33,6 +33,11 @@ export const Cart = ({ handleOrder, orderIsPending }) => {
                     <div className="mb-0 space-y-1 lg:mb-1">
                       <h3 className="font-semibold">{item.name}</h3>
                       <p>{formatRupiah(item.price * item.quantity)}</p>
+                      {item.min_order > 1 && (
+                        <p className="text-xs text-muted-foreground">
+                          Min. {item.min_order} porsi
+                        </p>
+                      )}
                     </div>
                     <div className="flex gap-4 w-full items-center">
                       <Button

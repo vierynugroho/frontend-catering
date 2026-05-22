@@ -104,6 +104,22 @@ export function CreateEditModal({
               }
               error={errors?.price?.[0]}
             />
+            <FormInput
+              label="Min. Order"
+              name="min_order"
+              type="number"
+              placeholder="1"
+              required
+              min={1}
+              value={payloadData.min_order}
+              onChange={(e) =>
+                setPayloadData((prev) => ({
+                  ...prev,
+                  min_order: e.target.value === "" ? "" : Number(e.target.value),
+                }))
+              }
+              error={errors?.min_order?.[0]}
+            />
             <FormComboBox
               label="Kategori"
               name="category_id"

@@ -100,9 +100,16 @@ export const CardData = ({ data, isPending }) => {
                 </div>
 
                 <div className="flex sm:flex-row sm:justify-between flex-col gap-2 mt-2">
-                  <p className="text-xs sm:text-sm font-semibold flex items-center">
-                    {formatRupiah(item.price)}
-                  </p>
+                  <div className="flex flex-col gap-0.5">
+                    <p className="text-xs sm:text-sm font-semibold flex items-center">
+                      {formatRupiah(item.price)}
+                    </p>
+                    {item.min_order > 1 && (
+                      <p className="text-[10px] sm:text-xs text-muted-foreground">
+                        Min. {item.min_order} porsi
+                      </p>
+                    )}
+                  </div>
                   <Button
                     variant="outline"
                     onClick={() => addToCart(item)}
@@ -169,13 +176,20 @@ export const CardData = ({ data, isPending }) => {
                   </div>
 
                   <div className="flex items-center justify-between pt-4 border-t">
-                    <p className="text-lg font-bold">
-                      {formatRupiah(selectedItem.price)}
-                    </p>
+                    <div className="flex flex-col gap-0.5">
+                      <p className="text-lg font-bold">
+                        {formatRupiah(selectedItem.price)}
+                      </p>
+                      {selectedItem.min_order > 1 && (
+                        <p className="text-xs text-muted-foreground">
+                          Min. {selectedItem.min_order} porsi
+                        </p>
+                      )}
+                    </div>
                     <Button
                       onClick={() => {
                         addToCart(selectedItem);
-                        setSelectedItem(null); // Tutup modal setelah masuk keranjang (opsional)
+                        setSelectedItem(null);
                       }}
                     >
                       <ShoppingCart className="w-4 h-4 mr-2" />

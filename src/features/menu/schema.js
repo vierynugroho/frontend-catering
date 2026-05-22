@@ -8,6 +8,10 @@ export const menuSchema = z.object({
   category_id: z.string().min(1, "Kategori wajib diisi"),
 
   price: z.string().min(1, "Harga wajib diisi"),
+  min_order: z.coerce
+    .number({ invalid_type_error: "Min order harus angka" })
+    .int("Min order harus bilangan bulat")
+    .min(1, "Min order minimal 1"),
   description: z.string().optional(),
 
   is_active: z.boolean(),
@@ -38,6 +42,7 @@ export const defaultValues = {
   is_active: true,
   category_id: "",
   price: "",
+  min_order: 1,
   description: "",
   images: [],
 };
