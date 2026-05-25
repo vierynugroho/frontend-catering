@@ -38,6 +38,7 @@ export default function MenuData() {
 
   // reset page ke 1 saat filter non-search berubah
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCurrentPage(1);
   }, [queryParams.category_id, queryParams.from, queryParams.to]);
 

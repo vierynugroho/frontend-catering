@@ -63,6 +63,10 @@ export function useTableData() {
     setCurrentPage(1);
   }, [debouncedSearchParams]);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [queryParams.shipping_status, queryParams.order_status, queryParams.delivery_method, range]);
+
   const table = useReactTable({
     data: data?.data || [],
     columns: [

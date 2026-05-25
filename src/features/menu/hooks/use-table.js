@@ -66,6 +66,10 @@ export function useTableData({ onEdit, onDelete, onDisable }) {
     setCurrentPage(1);
   }, [debouncedSearchParams]);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [queryParams.category_id, queryParams.from, queryParams.to]);
+
   const table = useReactTable({
     data: data?.data || [],
     columns: [
