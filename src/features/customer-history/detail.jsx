@@ -92,6 +92,10 @@ export default function OrderDetailHistoryTableData() {
   ];
 
   const isPickup = orderData.delivery_method === "ambil_sendiri";
+  const locationLabel = isPickup ? "Lokasi Pengambilan" : "Lokasi Pengiriman";
+  const locationValue = isPickup
+    ? "Catering Dhewi"
+    : orderData.destination || "-";
   const isCancelled =
     orderData.order_status === "pesanan_dibatalkan" ||
     (!isPickup && orderData.shipping_status === "pesanan_dibatalkan");
@@ -177,13 +181,11 @@ export default function OrderDetailHistoryTableData() {
                   <div className="p-1.5 bg-secondary rounded-md">
                     <MapPin className="w-4 h-4 text-secondary-foreground" />
                   </div>
-                  {orderData.destination
-                    ? "Lokasi Pengiriman"
-                    : "Lokasi Pengambilan"}
+                  {locationLabel}
                 </div>
                 <div className="pl-9 space-y-2">
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    {orderData.destination || "Catering Dhewi"}
+                    {locationValue}
                   </p>
                   {orderData.note && (
                     <div className="bg-amber-500/10 border border-amber-500/20 p-3 rounded-lg text-xs text-amber-600 dark:text-amber-400 italic">
