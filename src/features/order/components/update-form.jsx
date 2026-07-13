@@ -19,10 +19,23 @@ export default function UpdateOrderForm({
   checkStockResult,
   handleOrder,
   isPending,
+  canMarkSelesai,
 }) {
   const route = useRouter();
   const isStockUnavailable =
     checkStockResult && checkStockResult?.data?.is_available === false;
+
+  const orderStatusOptions = useMemo(() => {
+    return OrderStatus.map((option) =>
+      option.value === "pesanan_selesai" && !canMarkSelesai
+        ? {
+            ...option,
+            disabled: true,
+            disabledReason: "Pesanan belum dikonfirmasi diterima oleh customer",
+          }
+        : option,
+    );
+  }, [canMarkSelesai]);
 
   const menuOptions = useMemo(() => {
     return (
@@ -90,21 +103,29 @@ export default function UpdateOrderForm({
           />
 
           <div className="grid grid-cols-2 gap-6">
-            <FormComboBox
-              name="order_status"
-              required
-              label="Status Pesanan"
-              placeholder="Pilih status Pesanan..."
-              options={OrderStatus}
-              value={payloadData.order_status}
-              onChange={(val) =>
-                setPayloadData((prev) => ({
-                  ...prev,
-                  order_status: val,
-                }))
-              }
-              error={errors?.order_status?.[0]}
-            />
+            <div className="space-y-1">
+              <FormComboBox
+                name="order_status"
+                required
+                label="Status Pesanan"
+                placeholder="Pilih status Pesanan..."
+                options={orderStatusOptions}
+                value={payloadData.order_status}
+                onChange={(val) =>
+                  setPayloadData((prev) => ({
+                    ...prev,
+                    order_status: val,
+                  }))
+                }
+                error={errors?.order_status?.[0]}
+              />
+              {!canMarkSelesai && (
+                <p className="text-xs text-muted-foreground">
+                  Pesanan belum dikonfirmasi diterima oleh customer, status
+                  &quot;Selesai&quot; belum bisa dipilih.
+                </p>
+              )}
+            </div>
 
             <FormInput
               label="Diskon"

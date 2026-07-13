@@ -22,6 +22,13 @@ export default function UpdateOrderData() {
   });
   const { update } = useUpdateOrder();
 
+  // Status "Pesanan Selesai" hanya boleh diset admin jika pesanan sudah
+  // dikonfirmasi diterima oleh customer, kecuali pesanan memang sudah
+  // berstatus selesai sebelumnya (data lama sebelum field ini tersedia).
+  const canMarkSelesai =
+    Boolean(detailData?.is_confirmed) ||
+    detailData?.order_status === "pesanan_selesai";
+
   // state
   const [payloadData, setPayloadData] = useState({
     customer_name: detailData?.customer_name ?? "",
@@ -68,6 +75,13 @@ export default function UpdateOrderData() {
     if (checkStockResult && !checkStockResult?.data?.is_available) {
       toast.error(
         "Stok tidak tersedia pada tanggal ini, silakan pilih tanggal lain",
+      );
+      return;
+    }
+
+    if (result.data.order_status === "pesanan_selesai" && !canMarkSelesai) {
+      toast.error(
+        "Pesanan belum dikonfirmasi diterima oleh customer, status tidak bisa diset menjadi Selesai",
       );
       return;
     }
@@ -128,6 +142,7 @@ export default function UpdateOrderData() {
         errors={errors}
         checkStock={checkStock}
         checkStockResult={checkStockResult}
+        canMarkSelesai={canMarkSelesai}
       />
     </div>
   );

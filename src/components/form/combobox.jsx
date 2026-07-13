@@ -113,7 +113,10 @@ export function FormComboBox({
                       key={option.value}
                       value={`${option.label} ${option.value}`}
                       className="relative pr-8"
+                      disabled={option.disabled}
+                      title={option.disabled ? option.disabledReason : undefined}
                       onSelect={() => {
+                        if (option.disabled) return;
                         onChange?.(option.value);
                         setOpen(false);
                       }}
