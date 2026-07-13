@@ -5,6 +5,11 @@ export const getStock = async (params) => {
   return res.data;
 };
 
+export const getStockCalendar = async (params) => {
+  const res = await api.get("/stocks/calendar", { params });
+  return res.data;
+};
+
 export const createStock = async (payload) => {
   const res = await api.post("/admin/order-stocks", payload);
   return res.data;

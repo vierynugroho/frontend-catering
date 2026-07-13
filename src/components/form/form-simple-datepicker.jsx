@@ -7,6 +7,7 @@ import { id } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { isoToUTCDateOnly } from "@/components/calendar";
 import { Field, FieldLabel, FieldDescription } from "@/components/ui/field";
 import {
   Popover,
@@ -14,6 +15,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { useStockCalendar } from "@/hooks/use-stock-calendar";
 
 export function FormDateTimePicker({
   label,
@@ -32,6 +34,23 @@ export function FormDateTimePicker({
 
   const hours = Array.from({ length: 12 }, (_, i) => i + 1);
   const minutes = Array.from({ length: 12 }, (_, i) => i * 5);
+
+  const { data: stockCalendarData } = useStockCalendar(undefined, {
+    enabled: open,
+  });
+
+  const stockByDate = React.useMemo(() => {
+    const map = new Map();
+    for (const it of stockCalendarData?.data ?? []) {
+      map.set(isoToUTCDateOnly(it.event_date), it);
+    }
+    return map;
+  }, [stockCalendarData]);
+
+  const getStockForDay = React.useCallback(
+    (date) => stockByDate.get(format(date, "yyyy-MM-dd")),
+    [stockByDate],
+  );
 
   const handleDateSelect = (selectedDate) => {
     if (selectedDate) {
@@ -99,13 +118,40 @@ export function FormDateTimePicker({
         <PopoverContent className="w-auto p-0" align="start">
           <div className="sm:flex">
             {/* Bagian Kalender */}
-            <Calendar
-              mode="single"
-              selected={value}
-              onSelect={handleDateSelect}
-              initialFocus
-              locale={id}
-            />
+            <div className="flex flex-col">
+              <Calendar
+                mode="single"
+                selected={value}
+                onSelect={handleDateSelect}
+                initialFocus
+                locale={id}
+                modifiers={{
+                  stockAvailable: (date) => {
+                    const stock = getStockForDay(date);
+                    return !!stock && stock.current_stock < stock.max_stock;
+                  },
+                  stockFull: (date) => {
+                    const stock = getStockForDay(date);
+                    return !!stock && stock.current_stock >= stock.max_stock;
+                  },
+                  stockUnset: (date) => !getStockForDay(date),
+                }}
+              />
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 border-t px-3 py-2 text-[10px] text-muted-foreground">
+                <span className="flex items-center gap-1">
+                  <span className="size-1.5 rounded-full bg-green-500" />
+                  Tersedia
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="size-1.5 rounded-full bg-red-500" />
+                  Penuh
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="size-1.5 rounded-full bg-muted-foreground/40" />
+                  Belum tersedia
+                </span>
+              </div>
+            </div>
 
             {/* Bagian Seleksi Waktu */}
             <div className="flex flex-col sm:flex-row sm:h-[300px] divide-y sm:divide-y-0 sm:divide-x border-t sm:border-t-0">

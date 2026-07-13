@@ -34,6 +34,7 @@ export default function Navbar({ user }) {
   const navItems = [
     { title: "Riwayat Pemesanan", url: "/customer/history" },
     { title: "Menu", url: "/customer/menu" },
+    { title: "Kalender Stok", url: "/customer/stock-calendar" },
   ];
 
   const handleNavClick = () => {

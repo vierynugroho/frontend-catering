@@ -42,6 +42,7 @@ export function OrderStockCalendar({
   onCreate,
   onUpdate,
   onDelete,
+  readOnly = false,
 }) {
   const [month, setMonth] = React.useState(new Date());
 
@@ -71,6 +72,8 @@ export function OrderStockCalendar({
   }, [items]);
 
   function openForDate(day) {
+    if (readOnly) return;
+
     const utc = new Date(
       Date.UTC(day.getFullYear(), day.getMonth(), day.getDate()),
     );
@@ -165,14 +168,16 @@ export function OrderStockCalendar({
           </div>
         </div>
 
-        <Button
-          size="sm"
-          onClick={() => openForDate(new Date())}
-          className="w-full md:w-auto order-3"
-        >
-          <PlusIcon className="h-4 w-4 mr-1 sm:mr-2" />
-          <span className="text-xs sm:text-sm">Tetapkan Stok</span>
-        </Button>
+        {!readOnly && (
+          <Button
+            size="sm"
+            onClick={() => openForDate(new Date())}
+            className="w-full md:w-auto order-3"
+          >
+            <PlusIcon className="h-4 w-4 mr-1 sm:mr-2" />
+            <span className="text-xs sm:text-sm">Tetapkan Stok</span>
+          </Button>
+        )}
       </div>
 
       <div className="grid grid-cols-7 text-[10px] sm:text-xs text-muted-foreground">
@@ -202,12 +207,13 @@ export function OrderStockCalendar({
               key={key}
               type="button"
               onClick={() => openForDate(day)}
-              disabled={loading}
+              disabled={loading || readOnly}
               className={[
                 "group min-h-[70px] sm:min-h-[110px] border-b border-r p-1 sm:p-2 text-left transition-colors",
                 isTopRow ? "border-t" : "",
                 isLeftCol ? "border-l" : "",
                 "focus:outline-none focus:ring-2 focus:ring-ring focus:z-10 w-full overflow-hidden",
+                readOnly ? "cursor-default" : "",
                 loading ? "opacity-50 cursor-not-allowed" : "",
                 !isCurrent
                   ? "bg-muted/10"
@@ -247,13 +253,17 @@ export function OrderStockCalendar({
                   <div className="flex flex-col gap-1">
                     {isCurrent && (
                       <div className="text-[8px] sm:text-[10px] font-medium text-red-600 bg-red-100/80 dark:bg-red-900/30 dark:text-red-400 px-1 py-0.5 rounded w-fit truncate max-w-full">
-                        <span className="hidden sm:inline">Belum diset</span>
+                        <span className="hidden sm:inline">
+                          {readOnly ? "Belum tersedia" : "Belum diset"}
+                        </span>
                         <span className="sm:hidden">-</span>
                       </div>
                     )}
-                    <div className="text-[8px] sm:text-[10px] font-medium text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity hidden sm:block">
-                      + Set stock
-                    </div>
+                    {!readOnly && (
+                      <div className="text-[8px] sm:text-[10px] font-medium text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity hidden sm:block">
+                        + Set stock
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -262,16 +272,17 @@ export function OrderStockCalendar({
         })}
       </div>
 
-      <Dialog
-        open={open}
-        onOpenChange={(v) => {
-          setOpen(v);
-          if (!v) {
-            setTimeout(() => setEditor(null), 200);
-          }
-        }}
-      >
-        <DialogContent className="sm:max-w-[425px] w-[95vw] rounded-lg">
+      {!readOnly && (
+        <Dialog
+          open={open}
+          onOpenChange={(v) => {
+            setOpen(v);
+            if (!v) {
+              setTimeout(() => setEditor(null), 200);
+            }
+          }}
+        >
+          <DialogContent className="sm:max-w-[425px] w-[95vw] rounded-lg">
           <DialogHeader>
             <DialogTitle>
               {editor?.mode === "edit"
@@ -337,8 +348,9 @@ export function OrderStockCalendar({
               </div>
             </div>
           </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </DialogContent>
+        </Dialog>
+      )}
     </Card>
   );
 }

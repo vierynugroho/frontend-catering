@@ -146,6 +146,7 @@ function CalendarDayButton({
   day,
   modifiers,
   locale,
+  children,
   ...props
 }) {
   const defaultClassNames = getDefaultClassNames()
@@ -154,6 +155,14 @@ function CalendarDayButton({
   React.useEffect(() => {
     if (modifiers.focused) ref.current?.focus()
   }, [modifiers.focused])
+
+  const stockDotClassName = modifiers.stockFull
+    ? "bg-red-500"
+    : modifiers.stockAvailable
+      ? "bg-green-500"
+      : modifiers.stockUnset
+        ? "bg-muted-foreground/40"
+        : null;
 
   return (
     <Button
@@ -175,7 +184,17 @@ function CalendarDayButton({
         defaultClassNames.day,
         className
       )}
-      {...props} />
+      {...props}>
+      {children}
+      {stockDotClassName && (
+        <span
+          className={cn(
+            "pointer-events-none absolute bottom-1 left-1/2 size-1 -translate-x-1/2 rounded-full",
+            stockDotClassName
+          )}
+        />
+      )}
+    </Button>
   );
 }
 
