@@ -100,12 +100,13 @@ export default function OrderDetailHistoryTableData() {
     orderData.order_status === "pesanan_dibatalkan" ||
     (!isPickup && orderData.shipping_status === "pesanan_dibatalkan");
   const isNewOrder = orderData.order_status === "pesanan_diterima";
+  const isShippingReadyToConfirm =
+    orderData.shipping_status === "pesanan_dalam_proses_pengiriman" ||
+    orderData.shipping_status === "pesanan_selesai";
   const canConfirm =
-    orderData.order_status === "pesanan_diproses" &&
-    (isPickup ||
-      orderData.shipping_status === "pesanan_dalam_proses_pengiriman" ||
-      orderData.shipping_status === "pesanan_selesai") &&
-    orderData.order_status !== "pesanan_selesai";
+    (orderData.order_status === "pesanan_diproses" ||
+      orderData.order_status === "pesanan_selesai") &&
+    isShippingReadyToConfirm;
 
   const canReorder =
     orderData.order_status === "pesanan_selesai" ||
