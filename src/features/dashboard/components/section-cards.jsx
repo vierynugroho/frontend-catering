@@ -17,6 +17,7 @@ import {
   AlertTriangle,
   Clock,
   CheckCircle2,
+  PackageCheck,
 } from "lucide-react";
 
 export function SectionCards({ orderReport, shippingReport, stockReport }) {
@@ -103,7 +104,34 @@ export function SectionCards({ orderReport, shippingReport, stockReport }) {
         </CardFooter>
       </Card>
 
-      {/* CARD 4: STOCK WARNING */}
+      {/* CARD 4: READY FOR PICKUP / DELIVERY */}
+      <Card className="@container/card">
+        <CardHeader>
+          <CardDescription>Siap Diambil / Diantar</CardDescription>
+          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+            {(orders?.ready_for_pickup_orders || 0) +
+              (orders?.ready_to_deliver_orders || 0)}
+          </CardTitle>
+          <CardAction>
+            <Badge variant="outline" className="flex items-center gap-1">
+              <PackageCheck className="size-3.5" />
+              Ready
+            </Badge>
+          </CardAction>
+        </CardHeader>
+        <CardFooter className="flex-col items-start gap-1.5 text-sm bg-base">
+          <div className="line-clamp-1 flex items-center gap-2 font-medium text-cyan-600 dark:text-cyan-400">
+            <PackageCheck className="size-4" />
+            {orders?.ready_for_pickup_orders || 0} Siap Diambil
+          </div>
+          <div className="line-clamp-1 flex items-center gap-2 font-medium text-indigo-600 dark:text-indigo-400">
+            <Truck className="size-4" />
+            {orders?.ready_to_deliver_orders || 0} Siap Diantar
+          </div>
+        </CardFooter>
+      </Card>
+
+      {/* CARD 5: STOCK WARNING */}
       <Card
         className={`@container/card ${outOfStockCount > 0 ? "border-red-500/50 bg-red-50/50 dark:bg-red-950/10" : ""}`}
       >

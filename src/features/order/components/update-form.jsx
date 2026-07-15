@@ -28,10 +28,13 @@ export default function UpdateOrderForm({
   const isPickup = payloadData.delivery_method === "ambil_sendiri";
 
   const orderStatusOptions = useMemo(() => {
-    // "Pesanan Siap Diambil" hanya relevan untuk pesanan ambil_sendiri
-    return OrderStatus.filter(
-      (option) => option.value !== "pesanan_siap_diambil" || isPickup,
-    ).map((option) =>
+    // "Pesanan Siap Diambil" hanya relevan untuk ambil_sendiri,
+    // "Pesanan Siap Diantar" hanya relevan untuk dikirim
+    return OrderStatus.filter((option) => {
+      if (option.value === "pesanan_siap_diambil") return isPickup;
+      if (option.value === "pesanan_siap_diantar") return !isPickup;
+      return true;
+    }).map((option) =>
       option.value === "pesanan_selesai" && !canMarkSelesai
         ? {
             ...option,

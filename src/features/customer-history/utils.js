@@ -17,6 +17,11 @@ export const renderOrderStatus = (status) => {
       className:
         "bg-cyan-50 text-cyan-700 border-cyan-200 dark:bg-cyan-900/30 dark:text-cyan-400",
     },
+    pesanan_siap_diantar: {
+      label: "Siap Diantar",
+      className:
+        "bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-900/30 dark:text-indigo-400",
+    },
     pesanan_selesai: {
       label: "Selesai",
       className:

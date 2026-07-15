@@ -159,12 +159,14 @@ export function SectionLeaderboards({ customerReport, menuReport }) {
                     <p className="text-sm font-medium leading-none truncate mb-1.5">
                       {menu.name}
                     </p>
-                    <Badge
-                      variant="secondary"
-                      className="text-[10px] font-normal px-1.5"
-                    >
-                      {menu?.category?.name}
-                    </Badge>
+                    {menu?.category?.name && (
+                      <Badge
+                        variant="secondary"
+                        className="text-[10px] font-normal px-1.5"
+                      >
+                        {menu.category.name}
+                      </Badge>
+                    )}
                   </div>
                   <div className="text-right shrink-0">
                     <p className="text-sm font-bold tabular-nums">
@@ -207,12 +209,14 @@ export function SectionLeaderboards({ customerReport, menuReport }) {
                     <p className="text-sm font-medium leading-none truncate mb-1.5">
                       {menu.name}
                     </p>
-                    <Badge
-                      variant="outline"
-                      className="text-[10px] font-normal px-1.5 text-muted-foreground"
-                    >
-                      {menu?.category?.name}
-                    </Badge>
+                    {menu?.category?.name && (
+                      <Badge
+                        variant="outline"
+                        className="text-[10px] font-normal px-1.5 text-muted-foreground"
+                      >
+                        {menu.category.name}
+                      </Badge>
+                    )}
                   </div>
                   <div className="text-right shrink-0">
                     <p className="text-sm font-medium tabular-nums text-destructive">
