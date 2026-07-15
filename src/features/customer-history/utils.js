@@ -52,22 +52,22 @@ export const renderOrderStatus = (status) => {
 export const renderShippingStatus = (status) => {
   const statusConfig = {
     pesanan_disiapkan: {
-      label: "Pesanan Disiapkan",
+      label: "Disiapkan",
       className:
         "bg-violet-50 text-violet-700 border-violet-200 dark:bg-violet-900/30 dark:text-violet-400",
     },
     pesanan_dalam_proses_pengiriman: {
-      label: "Pesanan Dalam Proses Pengiriman",
+      label: "Dalam Pengiriman",
       className:
         "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400",
     },
     pesanan_selesai: {
-      label: "Pesanan Selesai",
+      label: "Selesai",
       className:
         "bg-green-50 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-400",
     },
     pesanan_dibatalkan: {
-      label: "Pesanan Dibatalkan",
+      label: "Dibatalkan",
       className:
         "bg-red-50 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-400",
     },

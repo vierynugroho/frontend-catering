@@ -168,7 +168,7 @@ export function useTableData() {
       },
       {
         accessorKey: "shipping_status",
-        header: "Status Pengirimin",
+        header: "Status Pengiriman",
         cell: ({ row }) => {
           const status = row.original.shipping_status;
 
