@@ -9,7 +9,7 @@ import {
   DrawerFooter,
   DrawerClose,
 } from "@/components/ui/drawer";
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, X } from "lucide-react";
 import { formatRupiah } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -22,8 +22,14 @@ export const FloatingCart = ({
   handleOrder,
   payloadData,
 }) => {
-  const { cart, addToCart, removeFromCart, getSubtotal, updateQuantity } =
-    useCartStore();
+  const {
+    cart,
+    addToCart,
+    removeFromCart,
+    deleteFromCart,
+    getSubtotal,
+    updateQuantity,
+  } = useCartStore();
   const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
 
   const isFormComplete =
@@ -80,6 +86,7 @@ export const FloatingCart = ({
                         <Button
                           variant="outline"
                           className="p-1 h-6 w-6"
+                          disabled={item.quantity <= (item.min_order ?? 1)}
                           onClick={() => removeFromCart(item.id)}
                         >
                           <Minus className="w-3 h-3" />
@@ -99,6 +106,13 @@ export const FloatingCart = ({
                           onClick={() => addToCart(item)}
                         >
                           <Plus className="w-3 h-3" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          className="p-1 h-6 w-6 ml-auto"
+                          onClick={() => deleteFromCart(item.id)}
+                        >
+                          <X className="w-3 h-3" />
                         </Button>
                       </div>
                     </div>

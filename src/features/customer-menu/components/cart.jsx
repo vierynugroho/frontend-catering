@@ -1,14 +1,20 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, X } from "lucide-react";
 import useCartStore from "@/store/use-cart-store";
 import { formatRupiah } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 
 export const Cart = () => {
-  const { cart, addToCart, removeFromCart, getSubtotal, updateQuantity } =
-    useCartStore();
+  const {
+    cart,
+    addToCart,
+    removeFromCart,
+    deleteFromCart,
+    getSubtotal,
+    updateQuantity,
+  } = useCartStore();
 
   const router = useRouter();
 
@@ -49,6 +55,7 @@ export const Cart = () => {
                       <Button
                         variant="outline"
                         className="p-0.5 h-5 md:h-6 w-5 md:w-6"
+                        disabled={item.quantity <= (item.min_order ?? 1)}
                         onClick={() => removeFromCart(item.id)}
                       >
                         <Minus className="w-2.5 h-2.5 md:w-4 md:h-4" />
@@ -68,6 +75,13 @@ export const Cart = () => {
                         onClick={() => addToCart(item)}
                       >
                         <Plus className="w-2.5 h-2.5 md:w-4 md:h-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="p-0.5 h-5 md:h-6 w-5 md:w-6 ml-auto"
+                        onClick={() => deleteFromCart(item.id)}
+                      >
+                        <X className="w-2.5 h-2.5 md:w-4 md:h-4" />
                       </Button>
                     </div>
                   </div>

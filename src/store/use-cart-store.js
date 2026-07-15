@@ -40,13 +40,7 @@ const useCartStore = create((set, get) => ({
     const targetItem = cart.find((item) => item.id === productId);
     const minOrder = targetItem?.min_order ?? 1;
 
-    // Jika 0 atau kurang, hapus dari cart
-    if (newQuantity <= 0) {
-      set({ cart: cart.filter((item) => item.id !== productId) });
-      return;
-    }
-
-    // Jika kurang dari min_order, paksa ke min_order
+    // Tidak pernah turun di bawah min_order (termasuk 0), paksa ke min_order
     const safeQuantity = newQuantity < minOrder ? minOrder : newQuantity;
 
     set({
@@ -56,23 +50,26 @@ const useCartStore = create((set, get) => ({
     });
   },
 
-  // Action: Kurang / On Delete
+  // Action: Kurangi quantity (tidak pernah menghapus item / turun di bawah min_order)
   removeFromCart: (productId) => {
     const { cart } = get();
     const targetItem = cart.find((item) => item.id === productId);
     const minOrder = targetItem?.min_order ?? 1;
 
-    if (targetItem?.quantity <= minOrder) {
-      set({ cart: cart.filter((item) => item.id !== productId) });
-    } else {
-      set({
-        cart: cart.map((item) =>
-          item.id === productId
-            ? { ...item, quantity: item.quantity - 1 }
-            : item,
-        ),
-      });
-    }
+    if (!targetItem || targetItem.quantity <= minOrder) return;
+
+    set({
+      cart: cart.map((item) =>
+        item.id === productId
+          ? { ...item, quantity: item.quantity - 1 }
+          : item,
+      ),
+    });
+  },
+  // Action: Hapus item dari cart sepenuhnya (tombol X)
+  deleteFromCart: (productId) => {
+    const { cart } = get();
+    set({ cart: cart.filter((item) => item.id !== productId) });
   },
   clearCart: () => set({ cart: [] }),
   // Selector: Menghitung Subtotal

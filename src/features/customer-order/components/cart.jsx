@@ -1,14 +1,20 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, X } from "lucide-react";
 import useCartStore from "@/store/use-cart-store";
 import { formatRupiah } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 
 export const Cart = ({ handleOrder, orderIsPending }) => {
-  const { cart, addToCart, removeFromCart, getSubtotal, updateQuantity } =
-    useCartStore();
+  const {
+    cart,
+    addToCart,
+    removeFromCart,
+    deleteFromCart,
+    getSubtotal,
+    updateQuantity,
+  } = useCartStore();
 
   return (
     <>
@@ -43,6 +49,7 @@ export const Cart = ({ handleOrder, orderIsPending }) => {
                       <Button
                         variant="outline"
                         className="p-1 h-6"
+                        disabled={item.quantity <= (item.min_order ?? 1)}
                         onClick={() => removeFromCart(item.id)}
                       >
                         <Minus />
@@ -61,6 +68,13 @@ export const Cart = ({ handleOrder, orderIsPending }) => {
                         onClick={() => addToCart(item)}
                       >
                         <Plus />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="p-1 h-6 ml-auto"
+                        onClick={() => deleteFromCart(item.id)}
+                      >
+                        <X />
                       </Button>
                     </div>
                   </div>
