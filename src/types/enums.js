@@ -62,6 +62,7 @@ export const navByRole = {
 export const OrderStatus = [
   { label: "Pesanan Diterima", value: "pesanan_diterima" },
   { label: "Pesanan Diproses", value: "pesanan_diproses" },
+  { label: "Pesanan Siap Diambil", value: "pesanan_siap_diambil" },
   { label: "Pesanan Selesai", value: "pesanan_selesai" },
   { label: "Pesanan Dibatalkan", value: "pesanan_dibatalkan" },
 ];
@@ -79,6 +80,7 @@ export const ShippingStatus = [
 export const orderDetailStatusConfig = {
   pesanan_diterima: "bg-blue-500 hover:bg-blue-600",
   pesanan_diproses: "bg-amber-500 hover:bg-amber-600",
+  pesanan_siap_diambil: "bg-cyan-500 hover:bg-cyan-600",
   pesanan_selesai: "bg-emerald-500 hover:bg-emerald-600",
   pesanan_dibatalkan: "bg-rose-500 hover:bg-rose-600",
 };

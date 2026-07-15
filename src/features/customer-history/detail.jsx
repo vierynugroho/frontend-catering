@@ -100,16 +100,19 @@ export default function OrderDetailHistoryTableData() {
     orderData.order_status === "pesanan_dibatalkan" ||
     (!isPickup && orderData.shipping_status === "pesanan_dibatalkan");
   const isNewOrder = orderData.order_status === "pesanan_diterima";
-  // shipping_status tidak relevan untuk pesanan ambil_sendiri, jadi pickup
-  // selalu dianggap siap dikonfirmasi begitu order_status sudah diproses.
-  const isShippingReadyToConfirm =
-    isPickup ||
-    orderData.shipping_status === "pesanan_dalam_proses_pengiriman" ||
-    orderData.shipping_status === "pesanan_selesai";
-  const canConfirm =
+  // Untuk ambil_sendiri, kesiapan konfirmasi mengikuti order_status
+  // "pesanan_siap_diambil" (admin menandai pesanan siap diambil), bukan
+  // shipping_status yang memang tidak relevan untuk pickup.
+  const isPickupReadyToConfirm =
+    orderData.order_status === "pesanan_siap_diambil" ||
+    orderData.order_status === "pesanan_selesai";
+  const isDeliveryReadyToConfirm =
     (orderData.order_status === "pesanan_diproses" ||
       orderData.order_status === "pesanan_selesai") &&
-    isShippingReadyToConfirm &&
+    (orderData.shipping_status === "pesanan_dalam_proses_pengiriman" ||
+      orderData.shipping_status === "pesanan_selesai");
+  const canConfirm =
+    (isPickup ? isPickupReadyToConfirm : isDeliveryReadyToConfirm) &&
     !orderData.is_confirmed;
 
   const canReorder =
@@ -153,7 +156,7 @@ export default function OrderDetailHistoryTableData() {
               <Badge
                 className={`${orderDetailStatusConfig[orderData.order_status] || "bg-slate-500"} text-white border-none px-4 py-1 capitalize`}
               >
-                {orderData.order_status.replace("_", " ")}
+                {orderData.order_status.replace(/_/g, " ")}
               </Badge>
             </div>
 

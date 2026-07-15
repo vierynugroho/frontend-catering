@@ -126,7 +126,7 @@ export default function DetailOrderData() {
               <Badge
                 className={`${orderDetailStatusConfig[orderData.order_status] || "bg-slate-500"} text-white border-none px-4 py-1 capitalize`}
               >
-                {orderData.order_status.replace("_", " ")}
+                {orderData.order_status.replace(/_/g, " ")}
               </Badge>
             </div>
 

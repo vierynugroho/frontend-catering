@@ -25,8 +25,13 @@ export default function UpdateOrderForm({
   const isStockUnavailable =
     checkStockResult && checkStockResult?.data?.is_available === false;
 
+  const isPickup = payloadData.delivery_method === "ambil_sendiri";
+
   const orderStatusOptions = useMemo(() => {
-    return OrderStatus.map((option) =>
+    // "Pesanan Siap Diambil" hanya relevan untuk pesanan ambil_sendiri
+    return OrderStatus.filter(
+      (option) => option.value !== "pesanan_siap_diambil" || isPickup,
+    ).map((option) =>
       option.value === "pesanan_selesai" && !canMarkSelesai
         ? {
             ...option,
@@ -35,7 +40,7 @@ export default function UpdateOrderForm({
           }
         : option,
     );
-  }, [canMarkSelesai]);
+  }, [canMarkSelesai, isPickup]);
 
   const menuOptions = useMemo(() => {
     return (
@@ -71,8 +76,6 @@ export default function UpdateOrderForm({
       items: updatedItems,
     }));
   };
-
-  const isPickup = payloadData.delivery_method === "ambil_sendiri";
 
   return (
     <div className="grid grid-cols-1 gap-6">

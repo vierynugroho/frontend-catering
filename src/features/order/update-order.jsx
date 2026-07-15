@@ -47,11 +47,9 @@ export default function UpdateOrderData() {
 
   const resolvePickupShippingStatus = (orderStatus) => {
     if (orderStatus === "pesanan_dibatalkan") return "pesanan_dibatalkan";
-    if (
-      orderStatus === "pesanan_diproses" ||
-      orderStatus === "pesanan_selesai"
-    ) {
-      return "pesanan_selesai";
+    if (orderStatus === "pesanan_selesai") return "pesanan_selesai";
+    if (orderStatus === "pesanan_siap_diambil") {
+      return "pesanan_dalam_proses_pengiriman";
     }
     return "pesanan_disiapkan";
   };

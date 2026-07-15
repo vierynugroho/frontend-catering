@@ -12,6 +12,11 @@ export const renderOrderStatus = (status) => {
       className:
         "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/30 dark:text-amber-400",
     },
+    pesanan_siap_diambil: {
+      label: "Siap Diambil",
+      className:
+        "bg-cyan-50 text-cyan-700 border-cyan-200 dark:bg-cyan-900/30 dark:text-cyan-400",
+    },
     pesanan_selesai: {
       label: "Selesai",
       className:
@@ -25,7 +30,7 @@ export const renderOrderStatus = (status) => {
   };
 
   const config = statusConfig[status] || {
-    label: status?.replace("_", " ") || "Unknown",
+    label: status?.replace(/_/g, " ") || "Unknown",
     className: "bg-gray-50 text-gray-700 border-gray-200",
   };
 
