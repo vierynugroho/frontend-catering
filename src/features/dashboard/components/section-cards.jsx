@@ -28,7 +28,7 @@ export function SectionCards({ orderReport, shippingReport, stockReport }) {
   const outOfStockCount = stocks?.out_of_stock?.length || 0;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 px-4 lg:px-6 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card *:data-[slot=card]:shadow-xs dark:*:data-[slot=card]:bg-card">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 px-4 lg:px-6 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card *:data-[slot=card]:shadow-xs dark:*:data-[slot=card]:bg-card">
       {/* CARD 1: REVENUE */}
       <Card className="@container/card">
         <CardHeader>
@@ -107,7 +107,7 @@ export function SectionCards({ orderReport, shippingReport, stockReport }) {
       {/* CARD 4: READY FOR PICKUP / DELIVERY */}
       <Card className="@container/card">
         <CardHeader>
-          <CardDescription>Siap Diambil / Diantar</CardDescription>
+          <CardDescription>Status Fulfillment</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
             {(orders?.ready_for_pickup_orders || 0) +
               (orders?.ready_to_deliver_orders || 0)}
