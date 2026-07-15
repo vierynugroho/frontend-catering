@@ -100,19 +100,11 @@ export default function OrderDetailHistoryTableData() {
     orderData.order_status === "pesanan_dibatalkan" ||
     (!isPickup && orderData.shipping_status === "pesanan_dibatalkan");
   const isNewOrder = orderData.order_status === "pesanan_diterima";
-  // Untuk ambil_sendiri, kesiapan konfirmasi mengikuti order_status
-  // "pesanan_siap_diambil" (admin menandai pesanan siap diambil), bukan
-  // shipping_status yang memang tidak relevan untuk pickup.
-  const isPickupReadyToConfirm =
-    orderData.order_status === "pesanan_siap_diambil" ||
-    orderData.order_status === "pesanan_selesai";
-  const isDeliveryReadyToConfirm =
-    (orderData.order_status === "pesanan_diproses" ||
-      orderData.order_status === "pesanan_selesai") &&
-    (orderData.shipping_status === "pesanan_dalam_proses_pengiriman" ||
-      orderData.shipping_status === "pesanan_selesai");
+  // Tombol konfirmasi tetap tampil selama pesanan belum selesai/dibatalkan,
+  // dan belum pernah dikonfirmasi oleh customer.
   const canConfirm =
-    (isPickup ? isPickupReadyToConfirm : isDeliveryReadyToConfirm) &&
+    orderData.order_status !== "pesanan_selesai" &&
+    !isCancelled &&
     !orderData.is_confirmed;
 
   const canReorder =
