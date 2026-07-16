@@ -19,7 +19,6 @@ export default function UpdateOrderForm({
   checkStockResult,
   handleOrder,
   isPending,
-  canMarkSelesai,
 }) {
   const route = useRouter();
   const isStockUnavailable =
@@ -34,16 +33,8 @@ export default function UpdateOrderForm({
       if (option.value === "pesanan_siap_diambil") return isPickup;
       if (option.value === "pesanan_siap_diantar") return !isPickup;
       return true;
-    }).map((option) =>
-      option.value === "pesanan_selesai" && !canMarkSelesai
-        ? {
-            ...option,
-            disabled: true,
-            disabledReason: "Pesanan belum dikonfirmasi diterima oleh customer",
-          }
-        : option,
-    );
-  }, [canMarkSelesai, isPickup]);
+    });
+  }, [isPickup]);
 
   const menuOptions = useMemo(() => {
     return (
@@ -125,12 +116,6 @@ export default function UpdateOrderForm({
                 }
                 error={errors?.order_status?.[0]}
               />
-              {!canMarkSelesai && (
-                <p className="text-xs text-muted-foreground">
-                  Pesanan belum dikonfirmasi diterima oleh customer, status
-                  &quot;Selesai&quot; belum bisa dipilih.
-                </p>
-              )}
             </div>
 
             <FormInput

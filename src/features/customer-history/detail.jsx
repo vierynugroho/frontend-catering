@@ -109,7 +109,8 @@ export default function OrderDetailHistoryTableData() {
   const isDeliveryReadyToConfirm =
     (orderData.order_status === "pesanan_diproses" ||
       orderData.order_status === "pesanan_selesai") &&
-    orderData.shipping_status === "pesanan_selesai";
+    (orderData.shipping_status === "pesanan_dalam_proses_pengiriman" ||
+      orderData.shipping_status === "pesanan_selesai");
   const canConfirm =
     (isPickup ? isPickupReadyToConfirm : isDeliveryReadyToConfirm) &&
     !orderData.is_confirmed;
