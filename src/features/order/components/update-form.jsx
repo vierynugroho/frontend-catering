@@ -19,6 +19,7 @@ export default function UpdateOrderForm({
   checkStockResult,
   handleOrder,
   isPending,
+  canMarkSelesai,
 }) {
   const route = useRouter();
   const isStockUnavailable =
@@ -33,8 +34,28 @@ export default function UpdateOrderForm({
       if (option.value === "pesanan_siap_diambil") return isPickup;
       if (option.value === "pesanan_siap_diantar") return !isPickup;
       return true;
-    });
-  }, [isPickup]);
+    }).map((option) =>
+      option.value === "pesanan_selesai" && !canMarkSelesai
+        ? {
+            ...option,
+            disabled: true,
+            disabledReason: "Pesanan belum dikonfirmasi diterima oleh customer",
+          }
+        : option,
+    );
+  }, [canMarkSelesai, isPickup]);
+
+  const shippingStatusOptions = useMemo(() => {
+    return ShippingStatus.map((option) =>
+      option.value === "pesanan_selesai" && !canMarkSelesai
+        ? {
+            ...option,
+            disabled: true,
+            disabledReason: "Pesanan belum dikonfirmasi diterima oleh customer",
+          }
+        : option,
+    );
+  }, [canMarkSelesai]);
 
   const menuOptions = useMemo(() => {
     return (
@@ -116,6 +137,12 @@ export default function UpdateOrderForm({
                 }
                 error={errors?.order_status?.[0]}
               />
+              {!canMarkSelesai && (
+                <p className="text-xs text-muted-foreground">
+                  Pesanan belum dikonfirmasi diterima oleh customer, status
+                  &quot;Selesai&quot; belum bisa dipilih.
+                </p>
+              )}
             </div>
 
             <FormInput
@@ -134,21 +161,29 @@ export default function UpdateOrderForm({
             />
             {!isPickup && (
               <>
-                <FormComboBox
-                  name="shipping_status"
-                  required
-                  label="Status Pengiriman"
-                  placeholder="Pilih status Pengiriman..."
-                  options={ShippingStatus}
-                  value={payloadData.shipping_status}
-                  onChange={(val) =>
-                    setPayloadData((prev) => ({
-                      ...prev,
-                      shipping_status: val,
-                    }))
-                  }
-                  error={errors?.shipping_status?.[0]}
-                />
+                <div className="space-y-1">
+                  <FormComboBox
+                    name="shipping_status"
+                    required
+                    label="Status Pengiriman"
+                    placeholder="Pilih status Pengiriman..."
+                    options={shippingStatusOptions}
+                    value={payloadData.shipping_status}
+                    onChange={(val) =>
+                      setPayloadData((prev) => ({
+                        ...prev,
+                        shipping_status: val,
+                      }))
+                    }
+                    error={errors?.shipping_status?.[0]}
+                  />
+                  {!canMarkSelesai && (
+                    <p className="text-xs text-muted-foreground">
+                      Pesanan belum dikonfirmasi diterima oleh customer,
+                      status &quot;Selesai&quot; belum bisa dipilih.
+                    </p>
+                  )}
+                </div>
 
                 <FormInput
                   label="Biaya Pengiriman"
