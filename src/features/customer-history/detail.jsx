@@ -106,9 +106,12 @@ export default function OrderDetailHistoryTableData() {
   const isPickupReadyToConfirm =
     orderData.order_status === "pesanan_siap_diambil" ||
     orderData.order_status === "pesanan_selesai";
+  // Untuk dikirim, tombol konfirmasi hanya tampil saat pesanan sudah
+  // "siap diantar" dan pengiriman sedang berjalan atau sudah selesai
+  // (kontrol status pengiriman sepenuhnya di tangan admin). Begitu
+  // pesanan berstatus "selesai", tombol tidak lagi ditampilkan.
   const isDeliveryReadyToConfirm =
-    (orderData.order_status === "pesanan_diproses" ||
-      orderData.order_status === "pesanan_selesai") &&
+    orderData.order_status === "pesanan_siap_diantar" &&
     (orderData.shipping_status === "pesanan_dalam_proses_pengiriman" ||
       orderData.shipping_status === "pesanan_selesai");
   const canConfirm =
